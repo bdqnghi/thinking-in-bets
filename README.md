@@ -2,8 +2,6 @@
 
 # Thinking-in-Bets at Test Time Reduces Sycophantic Revisions in LLM Agents
 
-**Nghi D. Q. Bui** · Google
-
 [![Project Page](https://img.shields.io/badge/Project-Website-0f766e?style=flat-square)](https://thinking-in-bets.github.io/)
 [![arXiv](https://img.shields.io/badge/arXiv-2610.34654-b31b1b?style=flat-square&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2610.34654)
 [![Paper PDF](https://img.shields.io/badge/Paper-PDF-dc2626?style=flat-square&logo=adobeacrobatreader&logoColor=white)](https://arxiv.org/pdf/2610.34654)
