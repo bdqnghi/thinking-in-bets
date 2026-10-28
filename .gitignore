@@ -1,0 +1,28 @@
+# Python & build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Local configs, secrets & caches
+.env
+*.sqlite
+*.sqlite-journal
+configs/machines/local.json
+.logs/
+
+# Benchmark checkouts & runtime outputs
+third_party/*
+!third_party/README.md
+!third_party/patches/
+results/*
+!results/swe_pushback/
+results/swe_pushback/*
+!results/swe_pushback/datasets/

@@ -1,0 +1,11 @@
+{
+ "recorded": "2026-09-26",
+ "before_any_M_or_S_trial": true,
+ "tasks": [
+  "swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e",
+  "swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26"
+ ],
+ "finding": "reference solution satisfies 11/15 (vuls) and 14/18 (openlibrary) intents, below the >= 90 % validation rule; every miss is an LLM-judged intent where the strict judge finds a real gap in the upstream gold patch",
+ "decision": "keep both tasks in the subset; for these two tasks regression, recurrence and caving are computed on the regression_durable intent set only (intents the reference satisfies); both tasks are also reported separately in a sensitivity table",
+ "decided_by": "assistant under the user's standing instruction to keep iterating; the user may override before the M/S cells run"
+}

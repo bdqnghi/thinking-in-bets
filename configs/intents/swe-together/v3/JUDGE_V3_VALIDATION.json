@@ -1,0 +1,1453 @@
+{
+ "plan": "docs/results/INTENT_JUDGE_V3_VALIDATION_PLAN.md",
+ "plan_sha256": "e9ff90346d8b37a941813a94976e4d6311c32e8e17d3ae4e05a9d00d19cc9c37",
+ "decision": {
+  "decided_at": "2026-09-27T21:57:38-0700",
+  "plan": "docs/results/INTENT_JUDGE_V3_VALIDATION_PLAN.md (sections 2 and 6)",
+  "unit": "goals",
+  "model": "gemini-3.8-flash",
+  "config": {
+   "version": "v3",
+   "judge": "agentic_v3",
+   "unit": "goals",
+   "model": "gemini-3.8-flash",
+   "reasoning_effort": "high",
+   "max_steps": 40,
+   "max_wall_sec": 1500,
+   "cmd_timeout_sec": 600,
+   "tool_output_chars": 12000,
+   "inline_diff_chars": 30000,
+   "show_rationale": true,
+   "refute": false,
+   "slots": 3,
+   "output_subdir": "agentic_judge_v3"
+  },
+  "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+  "trigger_config": {
+   "reasoning_effort": "low",
+   "max_steps": 16,
+   "max_wall_sec": 600
+  },
+  "rules_applied": {
+   "unit": "goals unless intents dev kappa exceeds goals by >= 0.10 (intents 0.06 vs goals 0.46)",
+   "model": "3.5-flash kept unless another beats it by >= 0.05 kappa (3.8: 0.89 vs 0.46); pro only if it beats the best flash by >= 0.10 on its subset (pro 0.73 vs 3.8 0.80 on the same 6)"
+  },
+  "risks": [
+   "self-grading: gemini-3.8-flash is the S agent rung; S snapshots are judged by the same model family (no dialogue shown)",
+   "throughput: frequent HTTP 503 on gemini-3.8-flash (about 15 failed attempts per snapshot on dev), retried",
+   "quota shared with the S pilot"
+  ]
+ },
+ "a": {
+  "reference": {
+   "n": 87,
+   "satisfied": 70,
+   "rate": 0.8046,
+   "criterion": ">= 0.90"
+  },
+  "base": {
+   "n": 95,
+   "satisfied": 1,
+   "rate": 0.0105,
+   "criterion": "<= 0.10"
+  },
+  "cross": {
+   "n": 20,
+   "satisfied": 1,
+   "rate": 0.05,
+   "criterion": "<= 0.10",
+   "tasks_with_control": 5
+  },
+  "secondary": {
+   "reference_all_units": {
+    "n": 90,
+    "satisfied": 73,
+    "rate": 0.8111
+   },
+   "base_all_units": {
+    "n": 104,
+    "satisfied": 8,
+    "rate": 0.0769
+   }
+  },
+  "infra_failures": [],
+  "per_task": [
+   {
+    "task": "cli-task-2026-0",
+    "arm": "reference",
+    "n": 3,
+    "satisfied": 3,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3"
+    ],
+    "all_units_satisfied": 3,
+    "all_units": 3
+   },
+   {
+    "task": "cli-task-2026-0",
+    "arm": "base",
+    "n": 3,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 3
+   },
+   {
+    "task": "cli-task-2026-0",
+    "arm": "cross",
+    "n": 3,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 3
+   },
+   {
+    "task": "cli-task-cd4662",
+    "arm": "reference",
+    "n": 4,
+    "satisfied": 4,
+    "units_satisfied": [
+     "goal_consecutive_unique_ids",
+     "goal_no_stale_id_reuse",
+     "goal_preserve_hook_rerun_idempotency",
+     "goal_regression_test_added"
+    ],
+    "all_units_satisfied": 4,
+    "all_units": 4
+   },
+   {
+    "task": "cli-task-cd4662",
+    "arm": "base",
+    "n": 3,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 1,
+    "all_units": 4
+   },
+   {
+    "task": "cli-task-cd4662",
+    "arm": "cross",
+    "n": 3,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 1,
+    "all_units": 4
+   },
+   {
+    "task": "gemini-voyager-task-f519c2",
+    "arm": "reference",
+    "n": 3,
+    "satisfied": 3,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3"
+    ],
+    "all_units_satisfied": 3,
+    "all_units": 3
+   },
+   {
+    "task": "gemini-voyager-task-f519c2",
+    "arm": "base",
+    "n": 3,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 3
+   },
+   {
+    "task": "hyperswitch-8389",
+    "arm": "reference",
+    "n": 3,
+    "satisfied": 3,
+    "units_satisfied": [
+     "goal_pi_kv_storage",
+     "goal_pa_kv_storage",
+     "goal_v2_kv_route"
+    ],
+    "all_units_satisfied": 4,
+    "all_units": 4
+   },
+   {
+    "task": "hyperswitch-8389",
+    "arm": "base",
+    "n": 4,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 4
+   },
+   {
+    "task": "dataclaw-windows-path-fix",
+    "arm": "reference",
+    "n": 3,
+    "satisfied": 3,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3"
+    ],
+    "all_units_satisfied": 4,
+    "all_units": 4
+   },
+   {
+    "task": "dataclaw-windows-path-fix",
+    "arm": "base",
+    "n": 4,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 4
+   },
+   {
+    "task": "gemini-voyager-task-aa88f5",
+    "arm": "reference",
+    "n": 4,
+    "satisfied": 4,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4"
+    ],
+    "all_units_satisfied": 4,
+    "all_units": 4
+   },
+   {
+    "task": "gemini-voyager-task-aa88f5",
+    "arm": "base",
+    "n": 4,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 4
+   },
+   {
+    "task": "cli-task-33e050",
+    "arm": "reference",
+    "n": 5,
+    "satisfied": 5,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4",
+     "goal_5"
+    ],
+    "all_units_satisfied": 5,
+    "all_units": 5
+   },
+   {
+    "task": "cli-task-33e050",
+    "arm": "base",
+    "n": 2,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 3,
+    "all_units": 5
+   },
+   {
+    "task": "cli-task-408b8c",
+    "arm": "reference",
+    "n": 3,
+    "satisfied": 3,
+    "units_satisfied": [
+     "goal_cached_avoids_repeated_git",
+     "goal_reuse_existing_root_cache",
+     "goal_worktree_root_resolution"
+    ],
+    "all_units_satisfied": 4,
+    "all_units": 4
+   },
+   {
+    "task": "cli-task-408b8c",
+    "arm": "base",
+    "n": 3,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 1,
+    "all_units": 4
+   },
+   {
+    "task": "cli-task-4a9dde",
+    "arm": "reference",
+    "n": 6,
+    "satisfied": 6,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4",
+     "goal_5",
+     "goal_6"
+    ],
+    "all_units_satisfied": 6,
+    "all_units": 6
+   },
+   {
+    "task": "cli-task-4a9dde",
+    "arm": "base",
+    "n": 6,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 6
+   },
+   {
+    "task": "cli-task-4a9dde",
+    "arm": "cross",
+    "n": 6,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 6
+   },
+   {
+    "task": "cli-task-5a69ca",
+    "arm": "reference",
+    "n": 5,
+    "satisfied": 5,
+    "units_satisfied": [
+     "goal_detect_empty_repo",
+     "goal_unit_tests",
+     "goal_clear_user_message",
+     "goal_distinct_error_value",
+     "goal_gemini_handler_consistency"
+    ],
+    "all_units_satisfied": 5,
+    "all_units": 5
+   },
+   {
+    "task": "cli-task-5a69ca",
+    "arm": "base",
+    "n": 5,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 5
+   },
+   {
+    "task": "cli-task-5a69ca",
+    "arm": "cross",
+    "n": 5,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 5
+   },
+   {
+    "task": "cli-task-c425e4",
+    "arm": "reference",
+    "n": 6,
+    "satisfied": 5,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4",
+     "goal_5"
+    ],
+    "all_units_satisfied": 5,
+    "all_units": 6
+   },
+   {
+    "task": "cli-task-c425e4",
+    "arm": "base",
+    "n": 4,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 1,
+    "all_units": 6
+   },
+   {
+    "task": "lock-code-manager-fix-7c955a",
+    "arm": "reference",
+    "n": 11,
+    "satisfied": 7,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4",
+     "goal_5",
+     "goal_6",
+     "goal_11"
+    ],
+    "all_units_satisfied": 7,
+    "all_units": 11
+   },
+   {
+    "task": "lock-code-manager-fix-7c955a",
+    "arm": "base",
+    "n": 11,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 11
+   },
+   {
+    "task": "sd-scripts-reg-image-dedup",
+    "arm": "reference",
+    "n": 4,
+    "satisfied": 3,
+    "units_satisfied": [
+     "goal_2",
+     "goal_5",
+     "goal_6"
+    ],
+    "all_units_satisfied": 3,
+    "all_units": 4
+   },
+   {
+    "task": "sd-scripts-reg-image-dedup",
+    "arm": "base",
+    "n": 3,
+    "satisfied": 1,
+    "units_satisfied": [
+     "goal_2"
+    ],
+    "all_units_satisfied": 2,
+    "all_units": 4
+   },
+   {
+    "task": "sd-scripts-reg-image-dedup",
+    "arm": "cross",
+    "n": 3,
+    "satisfied": 1,
+    "units_satisfied": [
+     "goal_2"
+    ],
+    "all_units_satisfied": 2,
+    "all_units": 4
+   },
+   {
+    "task": "cli-task-b12319",
+    "arm": "reference",
+    "n": 6,
+    "satisfied": 4,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_6"
+    ],
+    "all_units_satisfied": 4,
+    "all_units": 6
+   },
+   {
+    "task": "cli-task-b12319",
+    "arm": "base",
+    "n": 6,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 6
+   },
+   {
+    "task": "gemini-voyager-task-4bddaf",
+    "arm": "reference",
+    "n": 5,
+    "satisfied": 4,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4"
+    ],
+    "all_units_satisfied": 4,
+    "all_units": 5
+   },
+   {
+    "task": "gemini-voyager-task-4bddaf",
+    "arm": "base",
+    "n": 5,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 5
+   },
+   {
+    "task": "desloppify-zone-classification",
+    "arm": "base",
+    "n": 8,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 8
+   },
+   {
+    "task": "pi-mono-auto-d3b2130d",
+    "arm": "reference",
+    "n": 4,
+    "satisfied": 3,
+    "units_satisfied": [
+     "goal_1",
+     "goal_2",
+     "goal_3"
+    ],
+    "all_units_satisfied": 3,
+    "all_units": 4
+   },
+   {
+    "task": "pi-mono-auto-d3b2130d",
+    "arm": "base",
+    "n": 4,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 4
+   },
+   {
+    "task": "sd-scripts-fp8-lumina",
+    "arm": "reference",
+    "n": 6,
+    "satisfied": 1,
+    "units_satisfied": [
+     "goal_2"
+    ],
+    "all_units_satisfied": 1,
+    "all_units": 6
+   },
+   {
+    "task": "sd-scripts-fp8-lumina",
+    "arm": "base",
+    "n": 6,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 6
+   },
+   {
+    "task": "vibecomfy-mcp-pr-integration",
+    "arm": "base",
+    "n": 6,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 6
+   },
+   {
+    "task": "pi-mono-extensions-event-refactor",
+    "arm": "reference",
+    "n": 6,
+    "satisfied": 4,
+    "units_satisfied": [
+     "goal_1",
+     "goal_4",
+     "goal_5",
+     "goal_6"
+    ],
+    "all_units_satisfied": 4,
+    "all_units": 6
+   },
+   {
+    "task": "pi-mono-extensions-event-refactor",
+    "arm": "base",
+    "n": 5,
+    "satisfied": 0,
+    "units_satisfied": [],
+    "all_units_satisfied": 0,
+    "all_units": 6
+   }
+  ],
+  "cost": {
+   "n": 43,
+   "ok": 43,
+   "wall_sec": {
+    "mean": 623.7,
+    "median": 419.6,
+    "max": 3127.6
+   },
+   "steps": {
+    "mean": 29.5,
+    "median": 32,
+    "max": 40
+   },
+   "calls": {
+    "mean": 45.0,
+    "median": 46,
+    "max": 84
+   },
+   "input_tokens": {
+    "mean": 653219.1,
+    "median": 606670,
+    "max": 1365274
+   },
+   "output_tokens": {
+    "mean": 2177.0,
+    "median": 1981,
+    "max": 7531
+   },
+   "reasoning_tokens": {
+    "mean": 12560.0,
+    "median": 11078,
+    "max": 31736
+   },
+   "cached_tokens": {
+    "mean": 449864.0,
+    "median": 429284,
+    "max": 1177612
+   },
+   "forced_submit": 18
+  },
+  "pass": false
+ },
+ "b": {
+  "n_snapshots": 35,
+  "agreement": {
+   "n": 143,
+   "agree": 132,
+   "agreement": 0.9231,
+   "judge_sat_ref_sat": 80,
+   "judge_unsat_ref_unsat": 52,
+   "judge_sat_ref_unsat": 11,
+   "judge_unsat_ref_sat": 0,
+   "cohen_kappa": 0.841
+  },
+  "trials_only": {
+   "n": 59,
+   "agree": 51,
+   "agreement": 0.8644,
+   "judge_sat_ref_sat": 36,
+   "judge_unsat_ref_unsat": 15,
+   "judge_sat_ref_unsat": 8,
+   "judge_unsat_ref_sat": 0,
+   "cohen_kappa": 0.6959
+  },
+  "calibration_only": {
+   "n": 84,
+   "agree": 81,
+   "agreement": 0.9643,
+   "judge_sat_ref_sat": 44,
+   "judge_unsat_ref_unsat": 37,
+   "judge_sat_ref_unsat": 3,
+   "judge_unsat_ref_sat": 0,
+   "cohen_kappa": 0.9282
+  },
+  "bootstrap": {
+   "clusters": 35,
+   "agreement_ci95": [
+    0.8667,
+    0.971
+   ],
+   "kappa_ci95": [
+    0.72,
+    0.9385
+   ]
+  },
+  "criterion": "kappa >= 0.60 (goal level)",
+  "infra_failures": [],
+  "cost": {
+   "n": 35,
+   "ok": 35,
+   "wall_sec": {
+    "mean": 428.6,
+    "median": 335.6,
+    "max": 1534.4
+   },
+   "steps": {
+    "mean": 28.1,
+    "median": 31,
+    "max": 40
+   },
+   "calls": {
+    "mean": 38.8,
+    "median": 39,
+    "max": 70
+   },
+   "input_tokens": {
+    "mean": 625765.1,
+    "median": 686810,
+    "max": 1314854
+   },
+   "output_tokens": {
+    "mean": 2479.4,
+    "median": 2052,
+    "max": 7794
+   },
+   "reasoning_tokens": {
+    "mean": 12177.2,
+    "median": 13265,
+    "max": 31736
+   },
+   "cached_tokens": {
+    "mean": 427420.2,
+    "median": 446315,
+    "max": 1119441
+   },
+   "forced_submit": 12
+  },
+  "pass": true
+ },
+ "c": {
+  "labeller": "Claude (the agent) via three Claude Opus subagents (parts A, B, C), acting as the human-audit stand-in; labels written before any judge ran on these snapshots",
+  "labels_file_sha256": "3e410c15bc0736df964a37473c26ccc84c0c8f6182128f758b5717be8c064e07",
+  "labels_written_at": "2026-09-27T22:05:38-0700",
+  "n_pairs": 66,
+  "n_judged": 66,
+  "binary": {
+   "n": 66,
+   "agree": 60,
+   "agreement": 0.9091,
+   "judge_sat_ref_sat": 39,
+   "judge_unsat_ref_unsat": 21,
+   "judge_sat_ref_unsat": 3,
+   "judge_unsat_ref_sat": 3,
+   "cohen_kappa": 0.8036
+  },
+  "exact_3way": 58,
+  "bootstrap": {
+   "clusters": 19,
+   "agreement_ci95": [
+    0.8235,
+    0.9744
+   ],
+   "kappa_ci95": [
+    0.5652,
+    0.9473
+   ]
+  },
+  "snapshot_all_satisfied": {
+   "n": 19,
+   "agree": 14,
+   "agreement": 0.7368,
+   "judge_sat_ref_sat": 5,
+   "judge_unsat_ref_unsat": 9,
+   "judge_sat_ref_unsat": 3,
+   "judge_unsat_ref_sat": 2,
+   "cohen_kappa": 0.4509,
+   "note": "trigger-style decision: all labelled (revealed) units satisfied at the snapshot"
+  },
+  "criterion": "binary agreement >= 0.85 and kappa >= 0.60",
+  "cost": {
+   "n": 19,
+   "ok": 19,
+   "wall_sec": {
+    "mean": 632.3,
+    "median": 535.0,
+    "max": 1525.1
+   },
+   "steps": {
+    "mean": 31.7,
+    "median": 35,
+    "max": 39
+   },
+   "calls": {
+    "mean": 49.5,
+    "median": 49,
+    "max": 72
+   },
+   "input_tokens": {
+    "mean": 936694.5,
+    "median": 1065877,
+    "max": 1406849
+   },
+   "output_tokens": {
+    "mean": 2803.9,
+    "median": 2983,
+    "max": 5785
+   },
+   "reasoning_tokens": {
+    "mean": 22756.2,
+    "median": 18146,
+    "max": 82415
+   },
+   "cached_tokens": {
+    "mean": 722913.9,
+    "median": 807203,
+    "max": 1193811
+   },
+   "forced_submit": 6
+  },
+  "pass": true
+ },
+ "trigger": {
+  "config": {
+   "version": "v3",
+   "judge": "agentic_v3",
+   "unit": "goals",
+   "model": "gemini-3.8-flash",
+   "reasoning_effort": "low",
+   "max_steps": 16,
+   "max_wall_sec": 600,
+   "cmd_timeout_sec": 600,
+   "tool_output_chars": 12000,
+   "inline_diff_chars": 30000,
+   "show_rationale": true,
+   "refute": false,
+   "refute_steps": 16,
+   "slots": 3,
+   "output_subdir": "agentic_judge_v3",
+   "prompt_file": "fsa/redo/swe_together/prompts/agentic_judge_v3_system.md",
+   "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+   "tools_sha256": "c94983af0e1ae44ca91025987810ad61c4b1e49cbf87d210f5dabb1fdc9197f0",
+   "recipe": "swt-exec/1",
+   "schema": "redo_v1/swt-agentic-judge/1"
+  },
+  "n_pairs": 66,
+  "n_judged": 66,
+  "binary": {
+   "n": 66,
+   "agree": 58,
+   "agreement": 0.8788,
+   "judge_sat_ref_sat": 41,
+   "judge_unsat_ref_unsat": 17,
+   "judge_sat_ref_unsat": 7,
+   "judge_unsat_ref_sat": 1,
+   "cohen_kappa": 0.7233
+  },
+  "exact_3way": 53,
+  "bootstrap": {
+   "clusters": 19,
+   "agreement_ci95": [
+    0.7576,
+    0.9706
+   ],
+   "kappa_ci95": [
+    0.3941,
+    0.9338
+   ]
+  },
+  "snapshot_all_satisfied": {
+   "n": 19,
+   "agree": 15,
+   "agreement": 0.7895,
+   "judge_sat_ref_sat": 7,
+   "judge_unsat_ref_unsat": 8,
+   "judge_sat_ref_unsat": 4,
+   "judge_unsat_ref_sat": 0,
+   "cohen_kappa": 0.5957,
+   "note": "trigger-style decision: all labelled (revealed) units satisfied at the snapshot"
+  },
+  "cost": {
+   "n": 19,
+   "ok": 19,
+   "wall_sec": {
+    "mean": 238.5,
+    "median": 184.4,
+    "max": 678.1
+   },
+   "steps": {
+    "mean": 12.7,
+    "median": 15,
+    "max": 15
+   },
+   "calls": {
+    "mean": 18.3,
+    "median": 20,
+    "max": 27
+   },
+   "input_tokens": {
+    "mean": 181397.5,
+    "median": 207358,
+    "max": 319931
+   },
+   "output_tokens": {
+    "mean": 965.5,
+    "median": 935,
+    "max": 1519
+   },
+   "reasoning_tokens": {
+    "mean": 0.0,
+    "median": 0,
+    "max": 0
+   },
+   "cached_tokens": {
+    "mean": 63167.5,
+    "median": 44606,
+    "max": 195689
+   },
+   "forced_submit": 15
+  },
+  "criterion": "binary agreement >= 0.85 and kappa >= 0.60 on the held-out gold pairs",
+  "pass": true
+ },
+ "a_revised": {
+  "revision": "docs/results/INTENT_JUDGE_V3_CHECK_A_REVISION.md",
+  "revision_sha256": "4647f97b22019a233168e127626415ca85c47a42b4a37aedbf07b36a199fa03c",
+  "post_failure_revision": true,
+  "original": {
+   "reference": {
+    "n": 87,
+    "satisfied": 70,
+    "rate": 0.8046,
+    "criterion": ">= 0.90"
+   },
+   "base": {
+    "n": 95,
+    "satisfied": 1,
+    "rate": 0.0105,
+    "criterion": "<= 0.10"
+   },
+   "cross": {
+    "n": 20,
+    "satisfied": 1,
+    "rate": 0.05,
+    "criterion": "<= 0.10",
+    "tasks_with_control": 5
+   },
+   "pass": false
+  },
+  "labeller_agreement": {
+   "n": 48,
+   "agree": 46,
+   "agreement": 0.9583,
+   "judge_sat_ref_sat": 28,
+   "judge_unsat_ref_unsat": 18,
+   "judge_sat_ref_unsat": 0,
+   "judge_unsat_ref_sat": 2,
+   "cohen_kappa": 0.913
+  },
+  "disagreements": [
+   "lock-code-manager-fix-7c955a/goal_4",
+   "pi-mono-extensions-event-refactor/goal_1"
+  ],
+  "blind_labels_satisfied": 29,
+  "blind_labels_total": 48,
+  "reference": {
+   "n": 68,
+   "satisfied": 68,
+   "rate": 1.0,
+   "criterion": ">= 0.90"
+  },
+  "base": {
+   "n": 95,
+   "satisfied": 1,
+   "rate": 0.0105,
+   "criterion": "<= 0.10"
+  },
+  "cross": {
+   "n": 20,
+   "satisfied": 1,
+   "rate": 0.05,
+   "criterion": "<= 0.10",
+   "tasks_with_control": 5
+  },
+  "per_task": [
+   {
+    "task": "cli-task-2026-0",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 3,
+    "satisfied": 3,
+    "missed": []
+   },
+   {
+    "task": "cli-task-cd4662",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 4,
+    "satisfied": 4,
+    "missed": []
+   },
+   {
+    "task": "gemini-voyager-task-f519c2",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 3,
+    "satisfied": 3,
+    "missed": []
+   },
+   {
+    "task": "hyperswitch-8389",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 3,
+    "satisfied": 3,
+    "missed": []
+   },
+   {
+    "task": "dataclaw-windows-path-fix",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 3,
+    "satisfied": 3,
+    "missed": []
+   },
+   {
+    "task": "gemini-voyager-task-aa88f5",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 4,
+    "satisfied": 4,
+    "missed": []
+   },
+   {
+    "task": "cli-task-33e050",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 5,
+    "satisfied": 5,
+    "missed": []
+   },
+   {
+    "task": "cli-task-408b8c",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 3,
+    "satisfied": 3,
+    "missed": []
+   },
+   {
+    "task": "cli-task-4a9dde",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 6,
+    "satisfied": 6,
+    "missed": []
+   },
+   {
+    "task": "cli-task-5a69ca",
+    "denominator_source": "benchmark calibration verdict",
+    "n": 5,
+    "satisfied": 5,
+    "missed": []
+   },
+   {
+    "task": "cli-task-c425e4",
+    "denominator_source": "blind labels",
+    "n": 5,
+    "satisfied": 5,
+    "missed": []
+   },
+   {
+    "task": "lock-code-manager-fix-7c955a",
+    "denominator_source": "blind labels",
+    "n": 6,
+    "satisfied": 6,
+    "missed": []
+   },
+   {
+    "task": "sd-scripts-reg-image-dedup",
+    "denominator_source": "blind labels",
+    "n": 3,
+    "satisfied": 3,
+    "missed": []
+   },
+   {
+    "task": "cli-task-b12319",
+    "denominator_source": "blind labels",
+    "n": 3,
+    "satisfied": 3,
+    "missed": []
+   },
+   {
+    "task": "gemini-voyager-task-4bddaf",
+    "denominator_source": "blind labels",
+    "n": 4,
+    "satisfied": 4,
+    "missed": []
+   },
+   {
+    "task": "pi-mono-auto-d3b2130d",
+    "denominator_source": "blind labels",
+    "n": 3,
+    "satisfied": 3,
+    "missed": []
+   },
+   {
+    "task": "sd-scripts-fp8-lumina",
+    "denominator_source": "blind labels",
+    "n": 1,
+    "satisfied": 1,
+    "missed": []
+   },
+   {
+    "task": "pi-mono-extensions-event-refactor",
+    "denominator_source": "blind labels",
+    "n": 4,
+    "satisfied": 4,
+    "missed": []
+   }
+  ],
+  "note": "cached v3 verdicts only; no judge was re-run",
+  "pass": true
+ },
+ "trigger_v1_exploratory": {
+  "note": "Exploratory: the current in-trial trigger (v1 diff-only intent judge) on the gold snapshots,\n    snapshot level only (its units are intents, the gold units are goals).",
+  "snapshot_level": {
+   "n": 19,
+   "agree": 10,
+   "agreement": 0.5263,
+   "judge_sat_ref_sat": 4,
+   "judge_unsat_ref_unsat": 6,
+   "judge_sat_ref_unsat": 6,
+   "judge_unsat_ref_sat": 3,
+   "cohen_kappa": 0.0656
+  }
+ },
+ "dev": {
+  "dev_gemini-3.1-pro-preview_high_goals_n6.json": {
+   "model": "gemini-3.1-pro-preview",
+   "effort": "high",
+   "unit": "goals",
+   "config": {
+    "version": "v3-dev",
+    "judge": "agentic_v3",
+    "unit": "goals",
+    "model": "gemini-3.1-pro-preview",
+    "reasoning_effort": "high",
+    "max_steps": 40,
+    "max_wall_sec": 1500,
+    "cmd_timeout_sec": 600,
+    "tool_output_chars": 12000,
+    "inline_diff_chars": 30000,
+    "show_rationale": true,
+    "refute": false,
+    "refute_steps": 16,
+    "slots": 3,
+    "output_subdir": "agentic_judge_v3",
+    "prompt_file": "fsa/redo/swe_together/prompts/agentic_judge_v3_system.md",
+    "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+    "tools_sha256": "c94983af0e1ae44ca91025987810ad61c4b1e49cbf87d210f5dabb1fdc9197f0",
+    "recipe": "swt-exec/1",
+    "schema": "redo_v1/swt-agentic-judge/1"
+   },
+   "n_snapshots": 6,
+   "limit": 6,
+   "agreement": {
+    "n": 24,
+    "agree": 21,
+    "agreement": 0.875,
+    "judge_sat_ref_sat": 14,
+    "judge_unsat_ref_unsat": 7,
+    "judge_sat_ref_unsat": 1,
+    "judge_unsat_ref_sat": 2,
+    "cohen_kappa": 0.7273
+   },
+   "cost": {
+    "n": 6,
+    "ok": 6,
+    "wall_sec": {
+     "mean": 156.7,
+     "median": 226.1,
+     "max": 250.8
+    },
+    "steps": {
+     "mean": 24.7,
+     "median": 39,
+     "max": 39
+    },
+    "calls": {
+     "mean": 24.8,
+     "median": 39,
+     "max": 40
+    },
+    "input_tokens": {
+     "mean": 440326.8,
+     "median": 495822,
+     "max": 946904
+    },
+    "output_tokens": {
+     "mean": 2601.0,
+     "median": 3296,
+     "max": 5255
+    },
+    "reasoning_tokens": {
+     "mean": 8667.7,
+     "median": 10488,
+     "max": 16470
+    },
+    "cached_tokens": {
+     "mean": 321507.7,
+     "median": 327762,
+     "max": 756722
+    },
+    "forced_submit": 3
+   },
+   "at": "2026-09-27T21:57:08-0700"
+  },
+  "dev_gemini-3.5-flash_high_goals.json": {
+   "model": "gemini-3.5-flash",
+   "effort": "high",
+   "unit": "goals",
+   "config": {
+    "version": "v3-dev",
+    "judge": "agentic_v3",
+    "unit": "goals",
+    "model": "gemini-3.5-flash",
+    "reasoning_effort": "high",
+    "max_steps": 40,
+    "max_wall_sec": 1500,
+    "cmd_timeout_sec": 600,
+    "tool_output_chars": 12000,
+    "inline_diff_chars": 30000,
+    "show_rationale": true,
+    "slots": 3,
+    "output_subdir": "agentic_judge_v3",
+    "prompt_file": "fsa/redo/swe_together/prompts/agentic_judge_v3_system.md",
+    "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+    "tools_sha256": "c94983af0e1ae44ca91025987810ad61c4b1e49cbf87d210f5dabb1fdc9197f0",
+    "recipe": "swt-exec/1",
+    "schema": "redo_v1/swt-agentic-judge/1"
+   },
+   "n_snapshots": 15,
+   "limit": null,
+   "agreement": {
+    "n": 58,
+    "agree": 45,
+    "agreement": 0.7759,
+    "judge_sat_ref_sat": 36,
+    "judge_unsat_ref_unsat": 9,
+    "judge_sat_ref_unsat": 13,
+    "judge_unsat_ref_sat": 0,
+    "cohen_kappa": 0.4622
+   },
+   "cost": {
+    "n": 15,
+    "ok": 15,
+    "wall_sec": {
+     "mean": 175.9,
+     "median": 155.1,
+     "max": 426.4
+    },
+    "steps": {
+     "mean": 23.7,
+     "median": 26,
+     "max": 40
+    },
+    "calls": {
+     "mean": 23.8,
+     "median": 26,
+     "max": 40
+    },
+    "input_tokens": {
+     "mean": 436699.1,
+     "median": 354888,
+     "max": 996015
+    },
+    "output_tokens": {
+     "mean": 1489.7,
+     "median": 1506,
+     "max": 3619
+    },
+    "reasoning_tokens": {
+     "mean": 8048.8,
+     "median": 9935,
+     "max": 21099
+    },
+    "cached_tokens": {
+     "mean": 333262.7,
+     "median": 254391,
+     "max": 820543
+    },
+    "forced_submit": 2
+   },
+   "at": "2026-09-27T19:06:54-0700"
+  },
+  "dev_gemini-3.5-flash_high_intents.json": {
+   "model": "gemini-3.5-flash",
+   "effort": "high",
+   "unit": "intents",
+   "config": {
+    "version": "v3-dev",
+    "judge": "agentic_v3",
+    "unit": "intents",
+    "model": "gemini-3.5-flash",
+    "reasoning_effort": "high",
+    "max_steps": 40,
+    "max_wall_sec": 1500,
+    "cmd_timeout_sec": 600,
+    "tool_output_chars": 12000,
+    "inline_diff_chars": 30000,
+    "show_rationale": true,
+    "refute": false,
+    "refute_steps": 16,
+    "slots": 3,
+    "output_subdir": "agentic_judge_v3",
+    "prompt_file": "fsa/redo/swe_together/prompts/agentic_judge_v3_system.md",
+    "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+    "tools_sha256": "c94983af0e1ae44ca91025987810ad61c4b1e49cbf87d210f5dabb1fdc9197f0",
+    "recipe": "swt-exec/1",
+    "schema": "redo_v1/swt-agentic-judge/1"
+   },
+   "n_snapshots": 15,
+   "limit": null,
+   "agreement": {
+    "n": 20,
+    "agree": 8,
+    "agreement": 0.4,
+    "judge_sat_ref_sat": 7,
+    "judge_unsat_ref_unsat": 1,
+    "judge_sat_ref_unsat": 12,
+    "judge_unsat_ref_sat": 0,
+    "cohen_kappa": 0.0551
+   },
+   "cost": {
+    "n": 15,
+    "ok": 15,
+    "wall_sec": {
+     "mean": 135.4,
+     "median": 93.2,
+     "max": 447.3
+    },
+    "steps": {
+     "mean": 19.7,
+     "median": 24,
+     "max": 39
+    },
+    "calls": {
+     "mean": 19.7,
+     "median": 24,
+     "max": 39
+    },
+    "input_tokens": {
+     "mean": 318688.4,
+     "median": 310910,
+     "max": 880112
+    },
+    "output_tokens": {
+     "mean": 1086.2,
+     "median": 1029,
+     "max": 3407
+    },
+    "reasoning_tokens": {
+     "mean": 6484.3,
+     "median": 7414,
+     "max": 13714
+    },
+    "cached_tokens": {
+     "mean": 232142.3,
+     "median": 206064,
+     "max": 726677
+    },
+    "forced_submit": 1
+   },
+   "at": "2026-09-27T21:20:00-0700"
+  },
+  "dev_gemini-3.8-flash_high_goals.json": {
+   "model": "gemini-3.8-flash",
+   "effort": "high",
+   "unit": "goals",
+   "config": {
+    "version": "v3-dev",
+    "judge": "agentic_v3",
+    "unit": "goals",
+    "model": "gemini-3.8-flash",
+    "reasoning_effort": "high",
+    "max_steps": 40,
+    "max_wall_sec": 1500,
+    "cmd_timeout_sec": 600,
+    "tool_output_chars": 12000,
+    "inline_diff_chars": 30000,
+    "show_rationale": true,
+    "refute": false,
+    "refute_steps": 16,
+    "slots": 3,
+    "output_subdir": "agentic_judge_v3",
+    "prompt_file": "fsa/redo/swe_together/prompts/agentic_judge_v3_system.md",
+    "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+    "tools_sha256": "c94983af0e1ae44ca91025987810ad61c4b1e49cbf87d210f5dabb1fdc9197f0",
+    "recipe": "swt-exec/1",
+    "schema": "redo_v1/swt-agentic-judge/1"
+   },
+   "n_snapshots": 15,
+   "limit": null,
+   "agreement": {
+    "n": 58,
+    "agree": 55,
+    "agreement": 0.9483,
+    "judge_sat_ref_sat": 36,
+    "judge_unsat_ref_unsat": 19,
+    "judge_sat_ref_unsat": 3,
+    "judge_unsat_ref_sat": 0,
+    "cohen_kappa": 0.8872
+   },
+   "cost": {
+    "n": 15,
+    "ok": 15,
+    "wall_sec": {
+     "mean": 658.2,
+     "median": 616.0,
+     "max": 1391.4
+    },
+    "steps": {
+     "mean": 26.3,
+     "median": 31,
+     "max": 39
+    },
+    "calls": {
+     "mean": 41.4,
+     "median": 52,
+     "max": 65
+    },
+    "input_tokens": {
+     "mean": 630505.7,
+     "median": 708082,
+     "max": 1486332
+    },
+    "output_tokens": {
+     "mean": 2233.2,
+     "median": 2028,
+     "max": 7321
+    },
+    "reasoning_tokens": {
+     "mean": 11376.1,
+     "median": 13805,
+     "max": 20053
+    },
+    "cached_tokens": {
+     "mean": 459262.9,
+     "median": 522727,
+     "max": 1257850
+    },
+    "forced_submit": 5
+   },
+   "at": "2026-09-27T21:40:56-0700"
+  }
+ },
+ "retest": {
+  "retest_gemini-3.8-flash_goals.json": {
+   "model": "gemini-3.8-flash",
+   "unit": "goals",
+   "n_snapshots": 8,
+   "n_units": 30,
+   "binary_flips": 1,
+   "flip_rate": 0.0333,
+   "flips": [
+    {
+     "task": "dataclaw-windows-path-fix",
+     "unit": "goal_3",
+     "a": "satisfied",
+     "b": "not_satisfied"
+    }
+   ],
+   "cost_b": {
+    "n": 8,
+    "ok": 8,
+    "wall_sec": {
+     "mean": 272.3,
+     "median": 309.0,
+     "max": 609.1
+    },
+    "steps": {
+     "mean": 25.5,
+     "median": 36,
+     "max": 39
+    },
+    "calls": {
+     "mean": 36.6,
+     "median": 51,
+     "max": 59
+    },
+    "input_tokens": {
+     "mean": 535554.0,
+     "median": 805962,
+     "max": 1319833
+    },
+    "output_tokens": {
+     "mean": 1911.9,
+     "median": 1849,
+     "max": 4841
+    },
+    "reasoning_tokens": {
+     "mean": 9001.2,
+     "median": 13696,
+     "max": 19885
+    },
+    "cached_tokens": {
+     "mean": 380211.0,
+     "median": 517552,
+     "max": 1064831
+    },
+    "forced_submit": 3
+   }
+  }
+ },
+ "reported_at": "2026-09-28T03:30:56-0700",
+ "pass": true,
+ "pass_basis": "(a) REVISED after the original failed (post-failure revision)"
+}

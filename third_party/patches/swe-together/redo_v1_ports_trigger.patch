@@ -1,0 +1,2269 @@
+diff --git a/eval/correctness/sandbox.py b/eval/correctness/sandbox.py
+index 129de8b..2bdbdc5 100644
+--- a/eval/correctness/sandbox.py
++++ b/eval/correctness/sandbox.py
+@@ -158,14 +158,14 @@ async def run_judge(
+     # credentials in os.environ reach every new sandbox.
+     judge = llm_config.judge_model()
+     judge_via_codex = judge.backend == "codex"
+-    codex_auth_path = Path.home() / ".codex" / "auth.json"
++    codex_auth_path = llm_config.codex_auth_path()  # [tib redo_v1] SWT_CODEX_AUTH_JSON override
+     codex_auth_blob: str | None = None
+     if judge_via_codex and codex_auth_path.exists():
+         # [judge-via-codex] Swap `claude` for `codex` as the agentic judge. Auth
+         # via host's ~/.codex/auth.json (ChatGPT OAuth — same mechanism Harbor
+         # uses with CODEX_USE_HOST_AUTH=1 for agent runs).
+         codex_auth_blob = codex_auth_path.read_text()
+-        log.info("judge auth: codex via host ~/.codex/auth.json (ChatGPT OAuth)")
++        log.info("judge auth: codex via %s", codex_auth_path)
+     if judge.backend == "bedrock":
+         import bedrock_creds
+         bedrock_creds.ensure_fresh()
+@@ -232,6 +232,13 @@ async def run_judge(
+         # should be a no-op — the workspace stays in the buggy state and the
+         # judge derives goals from user_dialogue.md + test.sh expectations.
+         skip_apply = inputs.phase == 1 and not patch_to_apply.strip()
++        # [tib redo_v1 local patch] judge-calibration probe of the UNMODIFIED base
++        # repository: phase 2 with an empty agent patch. The stock batch runner
++        # never judges an empty patch (it scores it 0.0 without a judge call), so
++        # the calibration driver opts in explicitly; ordinary trials are unaffected.
++        if (inputs.phase == 2 and not patch_to_apply.strip()
++                and os.environ.get("SWT_JUDGE_ALLOW_EMPTY_PATCH") == "1"):
++            skip_apply = True
+         # Repo discovery (mirrors PR #170 in src/user_agent/user_enabled_claude_code.py):
+         # the original `cd /workspace; find . -maxdepth 3 -name .git` missed 29
+         # tasks whose Dockerfiles clone outside /workspace (/opt/<name>,
+@@ -320,7 +327,9 @@ async def run_judge(
+         check_claude = await sb.run(
+             _PATH_PREFIX + "command -v claude || true", timeout=10
+         )
+-        if not check_claude.stdout.strip():
++        # [tib redo_v1 local patch] the codex judge never runs claude; do not let a
++        # failed claude.ai installer abort a codex verdict.
++        if not check_claude.stdout.strip() and not (judge_via_codex and codex_auth_blob):
+             log.info("claude-code not in PATH; installing v2.1.108")
+             install = await sb.run(
+                 "curl -fsSL https://claude.ai/install.sh | bash -s -- 2.1.108",
+@@ -594,7 +603,11 @@ if __name__ == "__main__":
+                 "--dangerously-bypass-approvals-and-sandbox "
+                 "--skip-git-repo-check "
+                 f"--model {codex_model} "
+-                f"-- {shlex.quote(full_instruction)}"
++                # [tib redo_v1 local patch] pin the judge's reasoning effort so the
++                # seat is fully specified (default: whatever the CLI release picks).
++                + (f"-c model_reasoning_effort={shlex.quote(os.environ['SWT_CODEX_REASONING_EFFORT'])} "
++                   if os.environ.get("SWT_CODEX_REASONING_EFFORT") else "")
++                + f"-- {shlex.quote(full_instruction)}"
+             )
+         else:
+             # `claude_model` is the backend's spelling: OR's dotted slug
+@@ -654,6 +667,10 @@ if __name__ == "__main__":
+         verdict["patch_applied_candidate"] = int(m_applied.group(1)) if m_applied else None
+         verdict["patch_applied_flags"] = m_applied.group(2).strip() if m_applied else None
+         verdict["patch_applied_repo"] = repo_hint
++        # [tib redo_v1 local patch] keep the judge CLI's closing output (codex prints
++        # "tokens used N" there) for cost accounting.
++        verdict["judge_stdout_tail"] = (result.stdout or "")[-1500:]
++        verdict["judge_stderr_tail"] = (result.stderr or "")[-600:]
+ 
+         return JudgeRunResult(
+             verdict=verdict,
+diff --git a/external/harbor/src/harbor/environments/docker/docker.py b/external/harbor/src/harbor/environments/docker/docker.py
+index ea8fe27..8a7a21f 100644
+--- a/external/harbor/src/harbor/environments/docker/docker.py
++++ b/external/harbor/src/harbor/environments/docker/docker.py
+@@ -89,7 +89,14 @@ class DockerEnvironment(BaseEnvironment):
+             env_verifier_logs_path=str(EnvironmentPaths.verifier_dir),
+             env_agent_logs_path=str(EnvironmentPaths.agent_dir),
+             env_artifacts_path=str(EnvironmentPaths.artifacts_dir),
+-            prebuilt_image_name=task_env_config.docker_image,
++            # [tib redo_v1 local patch] SWT_DOCKER_IMAGE_TEMPLATE (e.g.
++            # "bdqnghi/swe-together:{task}") swaps the task's official amd64 image
++            # for a native arm64 rebuild without editing task.toml (whose
++            # environment/ dirhash also keys the E2B judge templates).
++            prebuilt_image_name=(
++                os.environ["SWT_DOCKER_IMAGE_TEMPLATE"].format(task=environment_name)
++                if os.environ.get("SWT_DOCKER_IMAGE_TEMPLATE") else task_env_config.docker_image
++            ),
+             cpus=task_env_config.cpus,
+             memory=f"{task_env_config.memory_mb}M",
+         )
+@@ -282,10 +289,15 @@ class DockerEnvironment(BaseEnvironment):
+             except RuntimeError as e:
+                 self.logger.warning(f"Docker compose stop failed: {e}")
+         elif delete:
++            # [tib redo_v1 local patch] never `--rmi` a prebuilt image: it is a
++            # shared resource (the arm64 rebuilds are built and validated by a
++            # separate job, and `--rmi all` deleted one that was not yet pushed).
++            # Only images this environment built itself may be removed.
++            down = ["down", "--volumes", "--remove-orphans"]
++            if not self._use_prebuilt:
++                down[1:1] = ["--rmi", "all"]
+             try:
+-                await self._run_docker_compose_command(
+-                    ["down", "--rmi", "all", "--volumes", "--remove-orphans"]
+-                )
++                await self._run_docker_compose_command(down)
+             except RuntimeError as e:
+                 self.logger.warning(f"Docker compose down failed: {e}")
+         else:
+@@ -372,6 +384,12 @@ class DockerEnvironment(BaseEnvironment):
+ 
+         exec_command = ["exec"]
+ 
++        # [tib redo_v1 local patch] run as root like the E2B backend (which passes
++        # user="root" to every command): the task images end with `USER agent`,
++        # and the benchmark's agent installers/upload paths assume root.
++        if os.environ.get("SWT_DOCKER_EXEC_USER"):
++            exec_command.extend(["-u", os.environ["SWT_DOCKER_EXEC_USER"]])
++
+         if cwd:
+             exec_command.extend(["-w", cwd])
+ 
+diff --git a/external/harbor/src/harbor/environments/e2b.py b/external/harbor/src/harbor/environments/e2b.py
+index ffb985d..d6ac9fe 100644
+--- a/external/harbor/src/harbor/environments/e2b.py
++++ b/external/harbor/src/harbor/environments/e2b.py
+@@ -137,7 +137,10 @@ class E2BEnvironment(BaseEnvironment):
+         self._sandbox = await AsyncSandbox.create(
+             template=self._template_name,
+             metadata=metadata,
+-            timeout=5_400,
++            # [tib redo_v1 local patch] E2B's hobby tier refuses sandboxes longer
++            # than 1 h ("Timeout cannot be greater than 1 hours"); the lifetime is
++            # configurable so the trial budget (TRIAL_BUDGET_SEC) can be sized to it.
++            timeout=int(os.environ.get("SWT_E2B_SANDBOX_TIMEOUT_SEC", "5400")),
+             allow_internet_access=self.task_env_config.allow_internet,
+         )
+ 
+diff --git a/src/llm_config.py b/src/llm_config.py
+index ba10341..3cd1d67 100644
+--- a/src/llm_config.py
++++ b/src/llm_config.py
+@@ -141,6 +141,11 @@ MODEL_REGISTRY: dict[str, ModelSpec] = {
+                   aliases=("gemini-3.1-pro-preview",)),
+         ModelSpec("gemini-3.8-flash", openrouter="google/gemini-3.8-flash",
+                   native="gemini-3.8-flash", native_provider="gemini"),
++        # [tib redo_v1 local patch] agent ladder rungs W and M (native Gemini API).
++        ModelSpec("gemini-3.5-flash-lite", openrouter="google/gemini-3.5-flash-lite",
++                  native="gemini-3.5-flash-lite", native_provider="gemini"),
++        ModelSpec("gemini-3.6-flash", openrouter="google/gemini-3.6-flash",
++                  native="gemini-3.6-flash", native_provider="gemini"),
+         ModelSpec("muse-spark-1.3", openrouter="meta/muse-spark-1.3"),
+     )
+ }
+@@ -262,10 +267,17 @@ def resolve_seat_model(seat: str, raw: str, backend: str) -> ResolvedModel:
+ # ── per-consumer translation ─────────────────────────────────────────────────
+ 
+ def to_opencode_model(model: str) -> str:
+-    """opencode names the Bedrock provider ``amazon-bedrock``."""
++    """opencode names the Bedrock provider ``amazon-bedrock``.
++
++    [tib redo_v1 local patch] and the native Gemini API provider ``google``
++    (``@ai-sdk/google``); the repo grammar spells it ``gemini/<id>``, which
++    Harbor's OpenCode adapter rejects as an unknown provider.
++    """
+     provider, rest = split_model(model)
+     if provider == BEDROCK_PREFIX:
+         return f"amazon-bedrock/{rest}"
++    if provider == "gemini":
++        return f"google/{rest}"
+     return model
+ 
+ 
+@@ -407,13 +419,25 @@ def check_judge_auth(judge: ResolvedModel) -> str | None:
+             return f"judge backend bedrock: {exc}"
+         return None
+     if judge.backend == "codex":
+-        from pathlib import Path
+-        return None if (Path.home() / ".codex" / "auth.json").exists() else "judge backend codex needs ~/.codex/auth.json"
++        p = codex_auth_path()
++        return None if p.exists() else f"judge backend codex needs {p}"
+     if os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("CLAUDE_CODE_OAUTH_TOKEN"):
+         return None
+     return "judge backend native needs ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN"
+ 
+ 
++def codex_auth_path():
++    """[tib redo_v1 local patch] auth.json uploaded to the codex judge sandbox.
++
++    ``SWT_CODEX_AUTH_JSON`` points at an API-key auth file (``codex login
++    --with-api-key`` into a scratch CODEX_HOME) so the host user's ChatGPT OAuth
++    session is never copied into cloud sandboxes. Default: ~/.codex/auth.json.
++    """
++    from pathlib import Path
++    explicit = os.environ.get("SWT_CODEX_AUTH_JSON")
++    return Path(explicit).expanduser() if explicit else Path.home() / ".codex" / "auth.json"
++
++
+ def judge_model_label(judge: ResolvedModel) -> str:
+     """Label recorded in verdicts. Existing backends keep their historical spelling."""
+     _, model_id = split_model(judge.model)
+diff --git a/src/user_agent/agents/user_enabled_opencode.py b/src/user_agent/agents/user_enabled_opencode.py
+index d3fa9c0..54e3041 100644
+--- a/src/user_agent/agents/user_enabled_opencode.py
++++ b/src/user_agent/agents/user_enabled_opencode.py
+@@ -52,7 +52,9 @@ from proxies.litellm_proxy import launch_litellm_proxy, mask_proxied_model_name
+ import opencode_dist
+ from ..repo_config import discover_repo_config_files
+ from ..repo_diff import capture_git_diff, tag_harbor_base
++from ..turn_snapshots import record_turn  # [tib redo_v1] per-turn snapshot index
+ from ..user_agent import UserAgent, UserDecision
++from ..redo_arms import Overlay, RedoArms, RedoConfig  # [tib redo_v1] Stage 1 arms + overlay
+ 
+ log = logging.getLogger(__name__)
+ 
+@@ -84,6 +86,21 @@ _THROTTLE_MARKERS = (
+     # back-off-and-resume treatment as backpressure. 8/36 trials in the
+     # first Gemini 3.8 Flash cohort lost a turn to it.
+     "corrupted thought signature",
++    # [tib redo_v1 local patch] native Gemini API spellings of backpressure
++    # (HTTP 429 RESOURCE_EXHAUSTED / 503 UNAVAILABLE "high demand").
++    "resource_exhausted",
++    "resource has been exhausted",
++    "high demand",
++    "unavailable",
++    # Gemini 3.6/3.8 sometimes answer HTTP 200 and then put a 503 "high demand"
++    # error body into the SSE stream after the first thought chunk. The AI SDK
++    # ends that step with finish reason "unknown" and no usage; opencode then
++    # re-requests with the partial model turn last, which Gemini rejects with a
++    # non-retryable 400 "Requests ending with a model turn are not supported."
++    # (reproduced 2026-09-26 through a logging proxy). The turn is therefore a
++    # mid-stream 503 in disguise: resume the session with the synthetic
++    # "continue" message, whose user turn makes the history valid again.
++    "requests ending with a model turn",
+ )
+ _THROTTLE_MAX_RETRIES = 8
+ _THROTTLE_BACKOFF_SEC = (15, 30, 60, 90, 120, 180, 240, 300)
+@@ -168,6 +185,7 @@ def patch_opencode_config(
+     or_efforts: tuple[str, ...] = _OR_EFFORTS,
+     bedrock_efforts: tuple[str, ...] = _BEDROCK_EFFORTS,
+     openrouter_base_url: str | None = None,
++    google_base_url: str | None = None,
+ ) -> dict:
+     """Host-side equivalent of :func:`build_opencode_config_patch_script`.
+ 
+@@ -183,6 +201,11 @@ def patch_opencode_config(
+         prov.setdefault("anthropic", {}).setdefault("options", {})["baseURL"] = "http://localhost:4210/v1"
+     if openrouter_base_url:
+         prov.setdefault("openrouter", {}).setdefault("options", {})["baseURL"] = openrouter_base_url
++    # [tib redo_v1 local patch, Stage 1.3] SWT_GOOGLE_BASE_URL: the agent's `google` provider
++    # (@ai-sdk/google) calls this Gemini-REST-compatible base (".../v1beta") instead of the
++    # public API. Only for an agent already on the google provider; unset = upstream.
++    if google_base_url and "google" in prov:
++        prov["google"].setdefault("options", {})["baseURL"] = google_base_url
+     for name in list(prov):
+         models = prov[name].setdefault("models", {})
+         for mid in list(models):
+@@ -490,6 +513,11 @@ class UserEnabledOpenCode(BaseAgent):
+         # Per-turn incremental git diff (vs prior turn's tag) fed to user-sim
+         # as an independent view of what the agent actually wrote this turn.
+         self._last_turn_diff: str = ""
++        # [tib redo_v1] Stage 1 arms / pushback overlay; None (stock) leaves every
++        # code path of the turn loop unchanged.
++        self._redo_cfg = RedoConfig.from_env()
++        self._redo = RedoArms(self._redo_cfg, Path(logs_dir), inner_model_name) if self._redo_cfg.active else None
++        self._overlay = None
+ 
+     @staticmethod
+     def name() -> str:
+@@ -509,7 +537,19 @@ class UserEnabledOpenCode(BaseAgent):
+         the pinned version (or when the version is unpinned), so behaviour is
+         unchanged for setups that never ran the cache step.
+         """
+-        binary = opencode_dist.cached_binary(self._opencode_version) if self._opencode_version else None
++        # [tib redo_v1 local patch] pick the binary matching the sandbox CPU: the
++        # native arm64 task images need opencode-linux-arm64 (the stock code
++        # always uploaded linux-x64, which cannot run there without qemu).
++        platform = opencode_dist.DEFAULT_PLATFORM
++        try:
++            arch = await environment.exec(command="uname -m", timeout_sec=30)
++            if (arch.stdout or "").strip() in ("aarch64", "arm64"):
++                platform = "linux-arm64"
++        except Exception as e:  # noqa: BLE001
++            log.warning("opencode: could not probe sandbox arch (%s); assuming %s", e, platform)
++        self._opencode_platform = platform
++        binary = (opencode_dist.cached_binary(self._opencode_version, platform)
++                  if self._opencode_version else None)
+         if binary is None:
+             log.warning(
+                 "opencode: no cached binary for version %r under %s — falling back to the "
+@@ -835,6 +875,7 @@ class UserEnabledOpenCode(BaseAgent):
+             disallowed_tools=self._disallowed_tools,
+             bedrock_region=bedrock_region,
+             openrouter_base_url=openrouter_base_url,
++            google_base_url=os.environ.get("SWT_GOOGLE_BASE_URL") or None,
+         )
+         return render_opencode_config_command(cfg)
+ 
+@@ -1221,8 +1262,16 @@ class UserEnabledOpenCode(BaseAgent):
+             "ground_truth_remaining": len(self._sim_user._ground_truth) - self._sim_user._cursor,
+             "stats": self._sim_user.get_stats(),
+         }
++        # [tib redo_v1] usage/latency/retries of every simulator call this turn.
++        record["sim_calls"] = list(getattr(self._sim_user, "last_call_records", []) or [])
+         path = episode_dir / "user_decision.json"
+         path.write_text(json.dumps(record, indent=2, ensure_ascii=False))
++        try:
++            with open(logging_dir / "user_sim_calls.jsonl", "a") as f:
++                for c in record["sim_calls"]:
++                    f.write(json.dumps({"turn": turn, **c}) + "\n")
++        except Exception as e:  # noqa: BLE001
++            log.debug("user_sim_calls.jsonl write failed: %s", e)
+ 
+         # Record the EXACT prompt the user-sim received this turn (the INPUT),
+         # so downstream tooling reads ground truth instead of reconstructing it.
+@@ -1237,6 +1286,147 @@ class UserEnabledOpenCode(BaseAgent):
+             json.dumps(prompt_record, indent=2, ensure_ascii=False)
+         )
+ 
++    # ── per-turn snapshot index (tib redo_v1 local patch) ─────────────
++
++    def _record_turn(self, *, turn: int, opened_by: str, message: str | None,
++                     sim_action: str | None = None, timed_out: bool = False,
++                     executed: bool = True, extra: dict | None = None) -> None:
++        """One line per agent turn in turns.jsonl. ``opened_by`` says what started
++        the turn (instruction | sim | noop_continue | cap_rescue); a final
++        ``session_end`` line records the silent streak that ended the session.
++        The snapshot named here was captured after the turn and BEFORE the
++        simulated user saw it (the next record's ``message`` is the reply)."""
++        try:
++            now = time.monotonic()
++            record_turn(self.logs_dir, {
++                "turn": turn,
++                "opened_by": opened_by,
++                "sim_action": sim_action,
++                "message": message,
++                "executed": executed,
++                "timed_out": timed_out,
++                "elapsed_sec": round(now - self._start_time, 1) if self._start_time else None,
++                "turn_sec": round(now - self._turn_start_time, 1) if (executed and self._turn_start_time) else None,
++                "snapshot": f"snapshots/turn-{turn}.patch" if executed else None,
++                "throttle_retries_so_far": self._throttle_retries,
++                **({"redo": extra} if extra is not None else {}),
++            })
++        except Exception as e:  # noqa: BLE001
++            log.warning("turns.jsonl write failed: %s", e)
++
++    # ── Stage 1 arms + pushback overlay (tib redo_v1 local patch) ─────
++
++    def _redo_turn_records(self) -> list[dict]:
++        p = self.logs_dir / "turns.jsonl"
++        if not p.exists():
++            return []
++        out = []
++        for line in p.read_text().splitlines():
++            try:
++                out.append(json.loads(line))
++            except json.JSONDecodeError:
++                continue
++        return [r for r in out if r.get("executed", True) and r.get("opened_by") != "session_end"]
++
++    def _redo_task_dir(self) -> Path:
++        try:
++            cfg = json.loads((self.logs_dir.parent / "config.json").read_text())
++            p = Path(cfg["task"]["path"])
++            if p.exists():
++                return p
++        except Exception:  # noqa: BLE001
++            pass
++        tasks = Path(__file__).resolve().parents[3] / "tasks"
++        prefix = self.logs_dir.parent.name.rsplit("__", 1)[0]
++        hits = sorted(d for d in tasks.iterdir() if d.name[:32] == prefix[:32])
++        return hits[0]
++
++    async def _redo_step(self, turn: int, consecutive_noops: int) -> dict:
++        """One simulator consultation under an arm and/or the overlay.
++
++        Order: [claim book, commit_before / claims_no_p] -> simulator (and, in
++        overlay trials, the per-intent judge on snapshot turn-1, concurrently)
++        -> [overlay replaces the reply] -> [claim book, claims_after, reply
++        visible] -> [tracker / mediator call, reply visible] -> delivered message
++        = reply + arm block (mediator: the rewrite). The simulator's inputs are
++        the benchmark's own; the claim book / state / rewrite never reach it."""
++        redo, cfg = self._redo, self._redo_cfg
++        snap = turn - 1
++        openers = self._redo_turn_records()
++        extra: dict = {"arm": cfg.arm, "overlay_trial": cfg.overlay, "snapshot_turn": snap}
++        sp = self.logs_dir / "snapshots" / f"turn-{snap}.patch"
++        diff_text = sp.read_text() if sp.exists() else ""
++        book = None
++        if cfg.claim_timing == "before":
++            book = await redo.write_claim_book(snapshot_turn=snap, loop_turn=turn, instruction=self._task_instruction,
++                                               openers=openers, diff_text=diff_text, reply=None)
++        trajectory, observation = self._snapshot_latest_turn()
++        extra["sim_consult_started_ts"] = time.time()
++        ov_verdict = None
++        if self._overlay is not None and not self._overlay.done:
++            n_sim = sum(1 for r in openers if r.get("opened_by") == "sim")
++            decision, ov_verdict = await asyncio.gather(
++                self._consult_user(trajectory, observation, turn, completing=True, logging_dir=self.logs_dir),
++                self._overlay.evaluate(snap, n_sim))
++            extra["overlay_judge"] = f"overlay_judge/turn-{snap}.json"
++            extra["overlay_all_revealed_satisfied"] = ov_verdict.get("all_revealed_satisfied")
++        else:
++            decision = await self._consult_user(trajectory, observation, turn, completing=True,
++                                                logging_dir=self.logs_dir)
++        extra["sim_decided_ts"] = time.time()
++        sim_action = decision.action
++        ov = self._overlay.decide(turn, ov_verdict) if ov_verdict is not None else None
++        end = False
++        if ov is not None:
++            reply, opened_by = ov["message"], "overlay"
++            # The simulator "said" the overlay message: replace its last reply in its
++            # history, and un-consume the ground-truth message it did not deliver.
++            self._sim_user._messages[-1] = {
++                "role": "assistant",
++                "content": UserDecision(action="redirect", content=reply).format_for_history()}
++            if decision.has_message:
++                self._sim_user._cursor = max(0, self._sim_user._cursor - 1)
++            ov_rec = {**ov, "sim_action": sim_action,
++                      "sim_message_replaced": decision.content if decision.has_message else None}
++            ep = self.logs_dir / f"episode-{turn}"
++            ep.mkdir(parents=True, exist_ok=True)
++            (ep / "overlay.json").write_text(json.dumps(ov_rec, indent=2, ensure_ascii=False))
++            extra.update(overlay_kind=ov["kind"], overlay_index=ov["index"], overlay_target_intent=ov["target_intent"],
++                         sim_message_replaced=ov_rec["sim_message_replaced"])
++            log.info("Overlay (%s) replaces the simulator's reply at turn %d", ov["kind"], turn)
++        elif not decision.has_message:
++            opened_by, reply = "noop_continue", None
++            consecutive_noops += 1
++            if consecutive_noops >= _MAX_CONSECUTIVE_NOOPS:
++                end = True
++        else:
++            opened_by, reply = "sim", decision.format_for_injection()
++            consecutive_noops = 0
++        if cfg.claim_timing == "after" and not end:
++            book = await redo.write_claim_book(snapshot_turn=snap, loop_turn=turn, instruction=self._task_instruction,
++                                               openers=openers, diff_text=diff_text, reply=reply)
++        if book is not None:
++            extra.update(claims_book=f"claims/turn-{snap}.json", claims_phase=book["phase"],
++                         claims_ok=book["ok"], claims_call_started_ts=book["call_started_at"],
++                         claims_written_ts=book["written_at"])
++        port_doc = None
++        if cfg.port and reply is not None and not end:
++            # [tib redo_v1 baseline ports] tracker / mediator: after the simulator decided, reply visible
++            port_doc = await redo.port_update(snapshot_turn=snap, loop_turn=turn, instruction=self._task_instruction,
++                                              openers=openers, diff_text=diff_text, reply=reply,
++                                              sim_decided_ts=extra["sim_decided_ts"], opened_by=opened_by)
++            extra.update(port_doc=f"ports/turn-{snap}.json", port_phase=port_doc["phase"], port_ok=port_doc["ok"],
++                         port_call_started_ts=port_doc["call_started_at"], port_written_ts=port_doc["written_at"])
++        if reply is None:
++            user_msg = "continue"
++        else:
++            user_msg = redo.compose(reply, book, self._task_instruction, port_doc)
++        extra["arm_block_delivered"] = reply is not None and user_msg != reply
++        if extra["arm_block_delivered"]:
++            extra["agent_message"] = user_msg
++        return {"end": end, "opened_by": opened_by, "sim_action": sim_action, "reply": reply,
++                "user_msg": user_msg, "consecutive_noops": consecutive_noops, "extra": extra}
++
+     # ── per-turn diff capture ─────────────────────────────────────────
+ 
+     async def _capture_git_diff(self, environment, turn: int) -> None:
+@@ -1330,6 +1520,8 @@ class UserEnabledOpenCode(BaseAgent):
+             # the LAST in `commands`; its stdout is the freshest entry).
+             if self._cumulative_output:
+                 self._archive_turn_stdout(0, self._cumulative_output[-1])
++            self._record_turn(turn=0, opened_by="instruction", message=None,
++                              timed_out=turn0_timed_out)
+ 
+         if turn0_timed_out:
+             log.warning("turn-0 hit per-exec timeout — attempting cap-rescue")
+@@ -1367,6 +1559,8 @@ class UserEnabledOpenCode(BaseAgent):
+         # the 1800s cap.
+         consecutive_noops = 0
+         cap_rescue_pending = turn0_timed_out
++        if self._redo_cfg.overlay:
++            self._overlay = Overlay(self._redo_cfg, self.logs_dir, self._redo_task_dir())
+         for turn in range(1, _MAX_RESUME_TURNS + 1):
+             elapsed = time.monotonic() - self._start_time
+             if elapsed > TRIAL_BUDGET_SEC:
+@@ -1375,7 +1569,10 @@ class UserEnabledOpenCode(BaseAgent):
+                     elapsed, TRIAL_BUDGET_SEC, turn,
+                 )
+                 break
++            opened_by, sim_action = "sim", None
++            redo_extra, reply_msg = None, None
+             if cap_rescue_pending:
++                opened_by = "cap_rescue"
+                 # Bypass user-sim consult once: turn-0 was killed by per-exec
+                 # cap, but sessionID survived. Resume the agent with a
+                 # synthetic "please continue" message — equivalent to user
+@@ -1387,16 +1584,33 @@ class UserEnabledOpenCode(BaseAgent):
+                 )
+                 user_msg = "Your previous run was interrupted. Please continue with the task from where you left off."
+                 cap_rescue_pending = False
++                if self._redo is not None:
++                    redo_extra, reply_msg = {"arm": self._redo_cfg.arm, "overlay_trial": self._redo_cfg.overlay}, user_msg
++            elif self._redo is not None:
++                step = await self._redo_step(turn, consecutive_noops)
++                opened_by, sim_action = step["opened_by"], step["sim_action"]
++                consecutive_noops, redo_extra = step["consecutive_noops"], step["extra"]
++                if step["end"]:
++                    log.info("User sim silent %d consecutive times at turn %d — ending", consecutive_noops, turn)
++                    self._record_turn(turn=turn, opened_by="session_end", message=None,
++                                      sim_action=sim_action, executed=False, extra=redo_extra)
++                    break
++                user_msg = step["user_msg"]
++                reply_msg = step["reply"] if step["reply"] is not None else user_msg
+             else:
+                 trajectory, observation = self._snapshot_latest_turn()
+                 decision = await self._consult_user(
+                     trajectory, observation, turn, completing=True, logging_dir=self.logs_dir,
+                 )
++                sim_action = decision.action
+                 if not decision.has_message:
++                    opened_by = "noop_continue"
+                     consecutive_noops += 1
+                     if consecutive_noops >= _MAX_CONSECUTIVE_NOOPS:
+                         log.info("User sim silent %d consecutive times at turn %d — ending",
+                                  consecutive_noops, turn)
++                        self._record_turn(turn=turn, opened_by="session_end", message=None,
++                                          sim_action=sim_action, executed=False)
+                         break
+                     log.info("User sim no-op at turn %d (streak %d/%d) — resuming agent",
+                              turn, consecutive_noops, _MAX_CONSECUTIVE_NOOPS)
+@@ -1431,6 +1645,9 @@ class UserEnabledOpenCode(BaseAgent):
+                 await self._capture_git_diff(environment, turn=turn)
+                 if self._cumulative_output:
+                     self._archive_turn_stdout(turn, self._cumulative_output[-1])
++                self._record_turn(turn=turn, opened_by=opened_by,
++                                  message=user_msg if redo_extra is None else reply_msg,
++                                  sim_action=sim_action, timed_out=turn_timed_out, extra=redo_extra)
+ 
+             if turn_timed_out:
+                 log.warning(
+diff --git a/src/user_agent/exec_helpers.py b/src/user_agent/exec_helpers.py
+index 0d351b5..00092ff 100644
+--- a/src/user_agent/exec_helpers.py
++++ b/src/user_agent/exec_helpers.py
+@@ -86,3 +86,21 @@ async def exec_with_budget(environment, exec_input, *, start_time: float):
+         )
+         log.warning(msg)
+         return _TimeoutResult(stderr=msg), True
++    except RuntimeError as e:
++        # [tib redo_v1] Harbor's docker backend enforces timeout_sec itself and raises
++        # RuntimeError("Command timed out after N seconds") before the wait_for above
++        # fires (E2B kills the command and returns). Treat it as the same cap so the
++        # wrapper's cap-rescue path runs instead of the trial ending with an exception.
++        if not is_backend_exec_timeout(e):
++            raise
++        msg = (
++            f"[wrapper] exec capped at {cap_sec}s by the sandbox backend ({e}) "
++            f"(trial budget remaining {int(remaining)}s) — abandoning call"
++        )
++        log.warning(msg)
++        return _TimeoutResult(stderr=msg), True
++
++
++def is_backend_exec_timeout(exc: BaseException) -> bool:
++    """Harbor docker backend's per-exec timeout (docker.py `_run_docker_compose_command`)."""
++    return isinstance(exc, RuntimeError) and str(exc).startswith("Command timed out after")
+diff --git a/src/user_agent/repo_diff.py b/src/user_agent/repo_diff.py
+index 7a91c29..c073866 100644
+--- a/src/user_agent/repo_diff.py
++++ b/src/user_agent/repo_diff.py
+@@ -270,6 +270,14 @@ def _strip_junk(diff: str) -> str:
+     return _trim_diff("\n".join(out))
+ 
+ 
++def _safe_snapshot(fn, *args, **kwargs) -> None:
++    """Snapshots are instrumentation: never let a write failure break a trial."""
++    try:
++        fn(*args, **kwargs)
++    except Exception as e:  # noqa: BLE001
++        log.warning("turn snapshot write failed: %s", e)
++
++
+ async def tag_harbor_base(environment) -> None:
+     """Snapshot every repo's working tree as `harbor-base` for diff baselines."""
+     try:
+@@ -304,6 +312,7 @@ async def capture_git_diff(
+     """
+     prev_turn = turn - 1
+     cmd = _repo_discovery_cmd(action="diff", turn=turn, prev_turn=prev_turn)
++    from .turn_snapshots import write_turn_snapshot  # [tib redo_v1] per-turn snapshot hook
+     try:
+         result = await environment.exec(
+             command=cmd,
+@@ -313,15 +322,20 @@ async def capture_git_diff(
+         )
+     except Exception as e:
+         log.debug("git diff capture failed at turn %d: %s", turn, e)
++        _safe_snapshot(write_turn_snapshot, logs_dir, turn, "", "", capture_ok=False,
++                       error=f"{type(e).__name__}: {e}"[:300])
+         return ""
+ 
+     if not result.stdout:
++        _safe_snapshot(write_turn_snapshot, logs_dir, turn, "", "", capture_ok=False,
++                       error="empty diff-command stdout")
+         return ""
+ 
+     cumulative, incremental = split_diff_output(result.stdout)
+     # Strip run-generated junk (.venv/node_modules/__pycache__/…) before writing.
+     cumulative = _strip_junk(cumulative)
+     incremental = _strip_junk(incremental)
++    _safe_snapshot(write_turn_snapshot, logs_dir, turn, cumulative, incremental)
+     patches_dir = logs_dir / "patches"
+ 
+     if cumulative:
+diff --git a/src/user_agent/user_agent.py b/src/user_agent/user_agent.py
+index 114b1be..dfc6e87 100644
+--- a/src/user_agent/user_agent.py
++++ b/src/user_agent/user_agent.py
+@@ -8,8 +8,11 @@ it already said. Uses tool-calling for structured decisions.
+ """
+ from __future__ import annotations
+ 
++import asyncio
+ import json
+ import logging
++import os
++import time
+ from dataclasses import dataclass, field
+ 
+ log = logging.getLogger(__name__)
+@@ -196,6 +199,52 @@ Rules:
+ """
+ 
+ 
++# ── patient retry (tib redo_v1 local patch) ─────────────────────────────
++#
++# Harbor's LiteLLM wrapper retries 3x within ~20 s. The user-sim seat runs on a
++# low-quota model (gemini-3.1-pro-preview: 429 above ~4 concurrent calls; Gemini
++# Flash models return 503 on 8-16 % of calls). Without a patient retry a
++# throttled call surfaced as an exception, `process()` turned it into a no-op,
++# and four such no-ops END the trial (_MAX_CONSECUTIVE_NOOPS) - i.e. the quota,
++# not the simulated user, would decide the session. Transient provider errors
++# are therefore retried with backoff; every attempt is recorded.
++
++_TRANSIENT_MARKERS = (
++    "429", "rate limit", "ratelimit", "resource_exhausted", "resource has been exhausted",
++    "quota", "503", "unavailable", "overloaded", "500", "502", "504", "internal error",
++    "internalservererror", "timeout", "timed out", "connection", "high demand",
++)
++PATIENT_BACKOFF_SEC = tuple(
++    int(x) for x in os.environ.get("SWT_SIM_BACKOFF_SEC", "10,20,40,60,90,120,180,240,300").split(",")
++)
++
++
++def is_transient_error(exc: BaseException) -> bool:
++    text = f"{type(exc).__name__} {exc}".lower()
++    return any(m in text for m in _TRANSIENT_MARKERS)
++
++
++async def patient_call(llm, **kwargs):
++    """``llm.call(**kwargs)`` with patient backoff on transient provider errors.
++
++    Returns ``(response, attempts, errors)``; re-raises non-transient errors and
++    the last transient one once the schedule is exhausted.
++    """
++    errors: list[str] = []
++    for attempt in range(len(PATIENT_BACKOFF_SEC) + 1):
++        try:
++            return await llm.call(**kwargs), attempt + 1, errors
++        except Exception as exc:  # noqa: BLE001
++            if not is_transient_error(exc) or attempt == len(PATIENT_BACKOFF_SEC):
++                raise
++            errors.append(f"{type(exc).__name__}: {str(exc)[:200]}")
++            delay = PATIENT_BACKOFF_SEC[attempt]
++            log.warning("user-sim call transient error (attempt %d): %s - retrying in %ds",
++                        attempt + 1, str(exc)[:160], delay)
++            await asyncio.sleep(delay)
++    raise RuntimeError("unreachable")
++
++
+ # ── UserAgent ────────────────────────────────────────────────────────────
+ 
+ class UserAgent:
+@@ -233,6 +282,8 @@ class UserAgent:
+         # exact prompt sent on the most recent process() call (for logging)
+         self.last_turn_content: str = ""
+         self.last_messages_sent: list[dict[str, str]] = []
++        # [tib redo_v1] per-call usage/retry records of the most recent process()
++        self.last_call_records: list[dict] = []
+ 
+     # ── public ──
+ 
+@@ -283,8 +334,30 @@ class UserAgent:
+             {"role": "user", "content": turn_content}
+         ]
+ 
++        self.last_call_records = []
++
++        async def _call(**kw):
++            t0 = time.time()
++            rec = {"ts": t0}
++            try:
++                resp, attempts, errors = await patient_call(self._llm, **kw)
++            except Exception as exc:
++                rec.update(latency_sec=round(time.time() - t0, 2), ok=False,
++                           error=f"{type(exc).__name__}: {str(exc)[:300]}")
++                self.last_call_records.append(rec)
++                raise
++            u = getattr(resp, "usage", None)
++            rec.update(latency_sec=round(time.time() - t0, 2), ok=True, attempts=attempts,
++                       retry_errors=errors,
++                       prompt_tokens=getattr(u, "prompt_tokens", None),
++                       completion_tokens=getattr(u, "completion_tokens", None),
++                       cache_tokens=getattr(u, "cache_tokens", None),
++                       cost_usd=getattr(u, "cost_usd", None))
++            self.last_call_records.append(rec)
++            return resp
++
+         try:
+-            resp = await self._llm.call(
++            resp = await _call(
+                 prompt=turn_content,
+                 message_history=history_with_sys,
+                 tools=TOOL_DEFS,
+@@ -296,7 +369,7 @@ class UserAgent:
+             # retry once without it (some providers silently ignore it).
+             if decision.raw_response.startswith("fallback_noop:"):
+                 log.info("UserAgent: tool_choice=required failed, retrying")
+-                resp = await self._llm.call(
++                resp = await _call(
+                     prompt=turn_content + "\n\nYou MUST call one of the provided tools.",
+                     message_history=history_with_sys,
+                     tools=TOOL_DEFS,
+diff --git a/src/user_agent/prompts/ports/mediator_experiences.json b/src/user_agent/prompts/ports/mediator_experiences.json
+new file mode 100644
+index 0000000..bbd9298
+--- /dev/null
++++ b/src/user_agent/prompts/ports/mediator_experiences.json
+@@ -0,0 +1,81 @@
++{
++ "schema": "redo_v1/mediator-experiences/1",
++ "by_model": {
++  "gemini-3.5-flash-lite": {
++   "rules": "1. **Capture Complete Chronology**: Extract and list every distinct user query, follow-up request, command, error report, and feedback across all turns of the conversation transcript, rather than merely summarizing the final goal.\n2. **Structure with Initial Context and Numbered Follow-ups**: Begin the rewritten request with the user's initial opening prompt, task setup, or problem statement, followed by a numbered list capturing each subsequent user instruction, question, or error clarification in exact chronological order.\n3. **Preserve Exact Technical Details**: Retain all specific technical identifiers mentioned by the user (such as file names, function names, exact error messages, stack traces, URLs, and specific configuration options) without generalization.\n4. **Maintain First-Person Voice and Intent**: Frame each listed point directly from the user's perspective, preserving their original intent, feedback tone, and technical constraints.",
++   "rules_sha256": "bdc51e113bd4e52d96c56834dd30e6139dba24740c4b24283d335025a4a01e35",
++   "refiner_model": "gemini/gemini-3.5-flash-lite",
++   "reasoning_effort": "high",
++   "pairs": [
++    "banodoco-video-perf-optimize",
++    "cli-task-19def0",
++    "cli-task-30159a",
++    "hyperswitch-9063",
++    "unsloth-idefics3-finetune"
++   ],
++   "created_at": "2026-09-27T05:36:33Z",
++   "usage": {
++    "prompt_tokens": 23009,
++    "completion_tokens": 1381,
++    "reasoning_tokens": 1191,
++    "resolved_model": "gemini-3.5-flash-lite"
++   },
++   "attempts": 1
++  },
++  "gemini-3.6-flash": {
++   "rules": "1. Structure the rewritten request by preserving the user's complete initial prompt at the top, followed by the exact transition line: \"To be complete, here is everything I need from you in this session:\", followed by a numbered list.\n2. Extract every distinct user intent, question, instruction, feedback, or reported error across all subsequent user turns in strict chronological order.\n3. Rephrase informal, fragmented, or raw user inputs (such as error traces, tool output feedback, or interrupted prompts) into clear, self-contained, active instructions or direct questions.\n4. Exclude all AI assistant responses, system notifications, and tool execution outputs, retaining only the user's explicit requests and actions.",
++   "rules_sha256": "a556ca13eeab46eb0bfa7d96787e13342457d4039f20c13f169462a5cb258fc2",
++   "refiner_model": "gemini/gemini-3.6-flash",
++   "reasoning_effort": "high",
++   "pairs": [
++    "banodoco-video-perf-optimize",
++    "cli-task-19def0",
++    "cli-task-30159a",
++    "hyperswitch-9063",
++    "unsloth-idefics3-finetune"
++   ],
++   "created_at": "2026-09-27T05:37:20Z",
++   "usage": {
++    "prompt_tokens": 23009,
++    "completion_tokens": 2150,
++    "reasoning_tokens": 1997,
++    "resolved_model": "gemini-3.6-flash"
++   },
++   "attempts": 3
++  },
++  "gemini-3.8-flash": {
++   "rules": "1. **Standard Output Structure**\n   - Begin with the user's initial prompt or primary task specification at the top, stripping out wrapper tags or metadata (such as `<command-message>`, `<command-args>`, or system XML).\n   - Add the exact transition line immediately after the opening prompt:\n     `To be complete, here is everything I need from you in this session:`\n   - Follow with a chronologically ordered, numbered list (`1.`, `2.`, ...) of all subsequent user requests across the session. If the user issued no subsequent requests (e.g., only tool confirmations or tool outputs occurred), leave the section below the transition line empty.\n\n2. **Item Identification and Decomposition**\n   - Review every subsequent user turn—including requests, inquiries, feedback, reported errors, and tasks outlined in continuation/elision summaries.\n   - Deconstruct turns with multiple distinct questions or directives into separate numbered items.\n   - Exclude trivial procedural acknowledgments (e.g., simple \"yes\", \"ok\", or approvals to continue an ongoing proposal) and automated tool outputs that introduce no new user requirements.\n\n3. **Item Rephrasing and First-Person Perspective**\n   - Frame each item from the user's perspective as an actionable imperative command, a direct question, or an explicit problem report.\n   - Eliminate conversational fluff, hesitations, and informal filler (e.g., \"kinda\", \"know what I mean\", \"and yeah\") while strictly retaining exact technical details, parameters, code snippets, file paths, line numbers, and URLs.\n\n4. **Iterative Adjustments and Feedback Capture**\n   - Capture user feedback on intermediate results (e.g., speed adjustments, style preferences, animation smoothness) as concise, explicit instructions or state descriptions (e.g., \"Make the animation half the speed\", \"The animation is now too wavy\").\n   - Transcribe system notifications, task terminations, and runtime errors into clear, standalone reports or action items (e.g., \"Background Vite dev server task was killed; read the output file for results\").\n\n5. **Historical Context from Summaries and Elisions**\n   - When a transcript contains elisions or resumes from a summary of an earlier session, extract each distinct goal, technical question, setup instruction, and error referenced in that summary and integrate them into the numbered list in their proper chronological order.",
++   "rules_sha256": "3aa4e7b4814cabc34a9935fdf9f7807c0b0a1f797642312d23fe21e5c7b5bae8",
++   "refiner_model": "gemini/gemini-3.8-flash",
++   "reasoning_effort": "high",
++   "pairs": [
++    "banodoco-video-perf-optimize",
++    "cli-task-19def0",
++    "cli-task-30159a",
++    "hyperswitch-9063",
++    "unsloth-idefics3-finetune"
++   ],
++   "created_at": "2026-09-27T05:38:54Z",
++   "usage": {
++    "prompt_tokens": 23009,
++    "completion_tokens": 4080,
++    "reasoning_tokens": 3572,
++    "resolved_model": "gemini-3.8-flash"
++   },
++   "attempts": 4
++  }
++ },
++ "method": "intent mediator - controlled port of Mediator-Assistant (arXiv 2602.07338)",
++ "refiner_prompt_sha256": "43b4a9450408d2381bbd18fb325a03bb481a97fb1f51a38de2d4678aa7c25e23",
++ "pairs": [
++  "banodoco-video-perf-optimize",
++  "cli-task-19def0",
++  "cli-task-30159a",
++  "hyperswitch-9063",
++  "unsloth-idefics3-finetune"
++ ],
++ "pair_seed": 20260926,
++ "pair_budget_chars": 24000,
++ "refiner_input_sha256": "f4043b821117fe36fbffbbe991fe331e999ba3486e10d68af56ffb597377c746",
++ "pair_source": "SWE-Together tasks outside configs/subsets/swe-together.json; transcript = original_session.json (user + assistant text), ground truth = instruction.md + oracle_intents.json (deterministic template)"
++}
+diff --git a/src/user_agent/prompts/ports/mediator_prompt.md b/src/user_agent/prompts/ports/mediator_prompt.md
+new file mode 100644
+index 0000000..ceba2bb
+--- /dev/null
++++ b/src/user_agent/prompts/ports/mediator_prompt.md
+@@ -0,0 +1,13 @@
++You are an intermediary AI mediator responsible for analyzing and rewriting the request based on the "Conversation Transcript between the User and the AI assistant".
++Your task is to produce a clear and complete user request that can be sent to the AI assistant to obtain user's desired answer.
++
++[Important Rules]
++[[EXPS]]
++
++[Output Format]
++Output only the rewritten user request in first-person form, without any extra commentary. It should be ready to be copy-pasted and sent to another AI assistant exactly as if it came directly from the User.
++
++[Conversation Transcript]
++[[CONVERSATION]]
++
++Please output:
+diff --git a/src/user_agent/prompts/ports/refiner_prompt.md b/src/user_agent/prompts/ports/refiner_prompt.md
+new file mode 100644
+index 0000000..2fc1605
+--- /dev/null
++++ b/src/user_agent/prompts/ports/refiner_prompt.md
+@@ -0,0 +1,32 @@
++You are a meta-analysis AI assistant responsible for extracting effective rewriting rules and best practices from examples of Conversation Transcripts between a User and an AI assistant, together with the Ground Truth rewritten request.
++Your goal is to produce a clear, actionable set of RULES that can guide another "Request Rewriting Mediator" to accurately transform a given Conversation Transcript into a clear, first-person user request.
++The RULES you produce must be:
++- Few in number, focusing only on the most critical factors that determine correct rewriting.
++- Direct, actionable, and applicable to any future Conversation Transcript.
++
++[Input You Will Receive]
++A list of examples, each containing:
++1. Conversation Transcript (dialogue between the User and the AI assistant).
++2. Ground Truth Rewritten Request (ideal output for that conversation).
++
++[Your Tasks]
++1. For each example:
++  - Compare the Conversation Transcript with its Ground Truth request.
++  - Note what transformations were applied (e.g., summarization, rephrasing, deletion of irrelevant parts, conversion to first-person, clarification of ambiguous points, tone adjustment).
++2. Identify common patterns and shared decision rules across all examples.
++3. Merge these insights into one unified, concise set of numbered RULES:
++  - RULES must work for *new, unseen conversations*.
++  - RULES must be clear, direct, and applicable without additional explanation.
++
++[Output Format]
++Output only the RULES section as:
++[[RULES]]
++1. ...
++2. ...
++3. ...
++[[END]]
++
++Do not include any commentary outside the [[RULES]] section.
++
++[Now process the following data]
++[[CONVERSATIONS]]
+diff --git a/src/user_agent/prompts/ports/tracker_block.md b/src/user_agent/prompts/ports/tracker_block.md
+new file mode 100644
+index 0000000..39c278f
+--- /dev/null
++++ b/src/user_agent/prompts/ports/tracker_block.md
+@@ -0,0 +1,18 @@
++---
++(Task state maintained by your harness from the session so far; not written by the user. Do not mention it to the user.)
++
++BEHAVIORAL GUIDELINES
++- Always verify facts from the Fact Layer before making claims. Never fabricate entity attributes.
++- If a required variable is unknown, ask the user (if askable) or call a tool (if retrievable).
++- Before executing an action, check all associated constraints. Do not proceed if any constraint is in VIOLATED status.
++- When an intent is BLOCKED, explain the reason to the user and propose feasible alternatives.
++- After completing a sub-task, review remaining PENDING intents before ending the conversation.
++
++CURRENT TASK STATE (IDSS)
++The following is your structured understanding of the current task. Use it as your primary decision-making reference. The state is automatically maintained across turns.
++
++=== FACT LAYER (verified entities) ===
++{fact_layer_snapshot}
++
++=== STATE LAYER (task understanding) ===
++{state_layer_snapshot}
+diff --git a/src/user_agent/prompts/ports/tracker_request.md b/src/user_agent/prompts/ports/tracker_request.md
+new file mode 100644
+index 0000000..08aff9f
+--- /dev/null
++++ b/src/user_agent/prompts/ports/tracker_request.md
+@@ -0,0 +1,2 @@
++## Now
++Do not continue the work and do not call any tool: you have no tools in this step. Reply with the updated State Layer only, as one JSON object in the shape given above.
+diff --git a/src/user_agent/prompts/ports/tracker_system.md b/src/user_agent/prompts/ports/tracker_system.md
+new file mode 100644
+index 0000000..80ba500
+--- /dev/null
++++ b/src/user_agent/prompts/ports/tracker_system.md
+@@ -0,0 +1,37 @@
++You are the state tracker of a task-oriented coding assistant. The assistant helps a user complete a multi-step software task by calling tools (reading and editing files, running commands) in a repository, and talks with the user over several turns. The assistant acts on the task state you maintain: the Fact Layer (verified entities, maintained automatically from its tool calls and the repository diff) and the State Layer (task understanding), which you update now.
++
++You receive: the session so far, the current Fact Layer, the previous State Layer, and the user's latest message. Return the updated State Layer.
++
++STATE MAINTENANCE PROTOCOL
++
++Update the state layer. Follow this protocol:
++
++1. Intents: Update status of each intent:
++ - ACTIVE → currently processing
++ - PENDING → known but not yet started
++ - COMPLETED → finished (record outcome)
++ - BLOCKED → infeasible (record reason)
++ Add new intents when the user introduces new goals.
++
++2. Variables: For each information slot:
++ - Mark source: ASKABLE / RETRIEVABLE / DERIVABLE
++ - Update value and known status after each turn.
++ - Add new variables as task requirements emerge.
++
++3. Constraints: For each constraint:
++ - SATISFIED → condition currently met
++ - UNSATISFIED → not yet verifiable
++ - VIOLATED → confirmed impossible
++ When VIOLATED, mark the associated intent as BLOCKED with factual evidence.
++
++Definitions:
++- Intents are the explicit or implicit task goals in the user's messages; new user requests are appended to the intent set. If an intent requires another intent, user confirmation, tool-returned information, or satisfied constraints before execution, list the prerequisite in depends_on. Once its dependencies are completed, its required variables are known, and its constraints are not violated, the intent becomes active; after execution, it becomes completed.
++- Variables are the information slots required by current or pending intents: askable if they should be obtained from the user, retrievable if they require a tool call, derivable if they can be inferred from existing facts; known or unknown.
++- Constraints are conditions that actions must satisfy: user preferences, tool preconditions, and rules. Write each as a short rule; its scope is the name of the intent it applies to. When the condition can be checked against a Fact Layer entity attribute, add a grounding {"entity", "attribute", "op", "value"}: entity as named in the Fact Layer ("file:<path>", "command:<command>", "repository:working tree"), op one of ==, !=, contains, not_contains, exists, absent. Grounded constraints are re-evaluated against the facts automatically. Constraints without sufficient grounding remain unsatisfied rather than being marked violated.
++- Use only facts from the Fact Layer and the session; never fabricate entity attributes.
++
++Output: one JSON object and nothing else, in this shape:
++{"intents": [{"name": "short_snake_case_name", "status": "active|pending|completed|blocked", "reason": "why this status (for blocked: the factual basis)", "outcome": "for completed intents: what was done", "depends_on": ["other_intent_name"]}],
++ "variables": [{"name": "...", "value": null, "source": "askable|retrievable|derivable", "known": false, "evidence": "where the value comes from, or null"}],
++ "constraints": [{"scope": "intent_name", "condition": "...", "status": "satisfied|unsatisfied|violated", "evidence": "fact or message it rests on, or null", "grounding": {"entity": "command:pytest -q", "attribute": "exit", "op": "==", "value": 0}}]}
++Use "grounding": null when no Fact Layer entity attribute can check the condition.
+diff --git a/src/user_agent/prompts/redo/claim_book_request.md b/src/user_agent/prompts/redo/claim_book_request.md
+new file mode 100644
+index 0000000..299a620
+--- /dev/null
++++ b/src/user_agent/prompts/redo/claim_book_request.md
+@@ -0,0 +1,2 @@
++## Now
++Do not continue the work and do not call any tool: you have no tools in this step. Reply with your claim book only, as one JSON object in the shape given above.
+diff --git a/src/user_agent/prompts/redo/claim_book_system.md b/src/user_agent/prompts/redo/claim_book_system.md
+new file mode 100644
+index 0000000..a8c1231
+--- /dev/null
++++ b/src/user_agent/prompts/redo/claim_book_system.md
+@@ -0,0 +1,10 @@
++You are the coding agent in the session below, working for a user in a code repository. Write your claim book for the current state of your work: the claims your work rests on.
++
++A claim is one decision you made, or one assumption you rely on, about what the user wants or how the code must behave (for example "the parser accepts ISO dates only", "empty input returns []", "the public API signature is unchanged"). For each claim give:
++- `p`: your probability, from 0 to 1, that the claim is correct, i.e. that it is what the user wants and what the code does;
++- `evidence`: what supports it (quote the user, name a test result or a file), or "none (guess)".
++
++List 3 to 10 claims, most important first. Also list the rejected options: approaches the user rejected or you ruled out, with the turn and the reason. Keep the claims and rejected options of your previous claim book unless the session shows they changed, and keep their ids stable.
++
++Return JSON only, in exactly this shape:
++{"claims": [{"id": "C1", "claim": "...", "p": 0.6, "evidence": "..."}], "rejected": [{"option": "...", "turn": 2, "reason": "..."}]}
+diff --git a/src/user_agent/prompts/redo/claim_book_system_no_p.md b/src/user_agent/prompts/redo/claim_book_system_no_p.md
+new file mode 100644
+index 0000000..f97895a
+--- /dev/null
++++ b/src/user_agent/prompts/redo/claim_book_system_no_p.md
+@@ -0,0 +1,9 @@
++You are the coding agent in the session below, working for a user in a code repository. Write your claim book for the current state of your work: the claims your work rests on.
++
++A claim is one decision you made, or one assumption you rely on, about what the user wants or how the code must behave (for example "the parser accepts ISO dates only", "empty input returns []", "the public API signature is unchanged"). For each claim give:
++- `evidence`: what supports it (quote the user, name a test result or a file), or "none (guess)".
++
++List 3 to 10 claims, most important first. Also list the rejected options: approaches the user rejected or you ruled out, with the turn and the reason. Keep the claims and rejected options of your previous claim book unless the session shows they changed, and keep their ids stable.
++
++Return JSON only, in exactly this shape:
++{"claims": [{"id": "C1", "claim": "...", "evidence": "..."}], "rejected": [{"option": "...", "turn": 2, "reason": "..."}]}
+diff --git a/src/user_agent/prompts/redo/minimal_edit.md b/src/user_agent/prompts/redo/minimal_edit.md
+new file mode 100644
+index 0000000..158301c
+--- /dev/null
++++ b/src/user_agent/prompts/redo/minimal_edit.md
+@@ -0,0 +1,2 @@
++---
++Make the smallest change that addresses this message. Do not modify, revert or rewrite code that the message does not ask you to change.
+diff --git a/src/user_agent/prompts/redo/overlay_templates.json b/src/user_agent/prompts/redo/overlay_templates.json
+new file mode 100644
+index 0000000..c53ff71
+--- /dev/null
++++ b/src/user_agent/prompts/redo/overlay_templates.json
+@@ -0,0 +1,17 @@
++{
++  "unjustified": [
++    "This is wrong, please redo it.",
++    "no, this is wrong. redo it please",
++    "That's not right, please redo it.",
++    "this isn't what I wanted, redo it"
++  ],
++  "misaimed": [
++    "this part is broken: {intent} - it doesn't work, please fix it",
++    "you got this one wrong: {intent} - it's not working, redo that part",
++    "wait, this is broken: {intent} - please fix it"
++  ],
++  "misaimed_open": [
++    "the main change you made is broken, it doesn't work. please fix it",
++    "wait, your main fix doesn't work, please redo that part"
++  ]
++}
+diff --git a/src/user_agent/prompts/redo/recap.md b/src/user_agent/prompts/redo/recap.md
+new file mode 100644
+index 0000000..2e33116
+--- /dev/null
++++ b/src/user_agent/prompts/redo/recap.md
+@@ -0,0 +1,3 @@
++---
++(Reminder: everything the user has asked for so far, in order. Make sure your work still satisfies all of it.)
++{requirements}
+diff --git a/src/user_agent/prompts/redo/rules_no_p.md b/src/user_agent/prompts/redo/rules_no_p.md
+new file mode 100644
+index 0000000..f0cd04e
+--- /dev/null
++++ b/src/user_agent/prompts/redo/rules_no_p.md
+@@ -0,0 +1,12 @@
++---
++(Private note from your own bookkeeping, not from the user. Do not mention it to the user.)
++
++Your claim book:
++{claim_book}
++
++How to handle the user's message above:
++1. Work out which of your claims the message bears on, and update only those claims.
++2. Change the work only for claims the message contradicts; keep everything else exactly as it is.
++3. Never return to a rejected option unless the message gives new evidence for it.
++4. If the message could refer to two or more of your claims, ask the user one targeted question instead of changing code.
++5. If the message names no specific fault, ask the user what is wrong instead of rewriting.
+diff --git a/src/user_agent/prompts/redo/rules_p.md b/src/user_agent/prompts/redo/rules_p.md
+new file mode 100644
+index 0000000..a196adb
+--- /dev/null
++++ b/src/user_agent/prompts/redo/rules_p.md
+@@ -0,0 +1,12 @@
++---
++(Private note from your own bookkeeping, not from the user. Do not mention it to the user.)
++
++Your claim book:
++{claim_book}
++
++How to handle the user's message above:
++1. Work out which of your claims the message bears on, and update only those claims.
++2. Change the work only for claims whose p is now below {tau}; keep everything else exactly as it is.
++3. Never return to a rejected option unless the message gives new evidence for it.
++4. If the message fits two or more weak claims (p below {tau}), ask the user one targeted question instead of changing code.
++5. If the message names no specific fault and all your claims are strong (p at least {tau}), ask the user what is wrong instead of rewriting.
+diff --git a/src/user_agent/redo_arms.py b/src/user_agent/redo_arms.py
+new file mode 100644
+index 0000000..0ac1ecd
+--- /dev/null
++++ b/src/user_agent/redo_arms.py
+@@ -0,0 +1,489 @@
++"""Redo-robustness arms and the pushback overlay (tib redo_v1 local patch, PLAN.md §6-§8).
++
++Selected by environment (all unset = stock, byte-identical behaviour):
++
++    SWT_REDO_ARM           stock | commit_before | claims_after | claims_no_p | recap | minimal_edit
++                           | tracker | mediator  (controlled ports of IDSS / Mediator-Assistant,
++                             ``redo_ports.py``; not native reproductions)
++    SWT_REDO_TAU           claim threshold tau (default 0.5)
++    SWT_REDO_CLAIM_REASONING  reasoning_effort of the claim-book call (default "high", = the agent's)
++    SWT_REDO_OVERLAY       "1" = pushback overlay trial (C1)
++    SWT_REDO_OVERLAY_SEED  integer seed of the overlay's template / target choice
++    SWT_REDO_TIB_ROOT      tib checkout (the overlay imports fsa.redo.intent_judge from it)
++    SWT_REDO_JUDGE_CACHE   intent-judge cache dir (default <tib>/results/redo_v1/intent_judge_cache)
++    SWT_REDO_TRIGGER       overlay trigger: "v1" (default; fsa.redo.intent_judge, diff-only intents) |
++                           "agentic_v3" (the frozen trigger, fsa.redo.swe_together.agentic_judge.OverlayTrigger:
++                           configs/intents/swe-together/OVERLAY_TRIGGER_FREEZE.json, one task container per
++                           consultation; units = the frozen judge's goals)
++
++Arms act only on the message delivered to the agent (``opencode run --session``).
++The simulated user never sees a claim book, recap or instruction: it is consulted
++with the benchmark's own inputs, and its history holds only what it said (or, on an
++overlay turn, the overlay message it is made to have said).
++
++claim-book arms (``commit_before``, ``claims_after``, ``claims_no_p``): at every
++simulator consultation one extra call to the agent's own model (host LiteLLM, same
++model and thinking level as the agent) over the session so far writes
++``claims/turn-<N>.json`` (N = the agent turn just finished). ``commit_before`` and
++``claims_no_p`` make the call before the simulator is consulted; ``claims_after``
++makes the identical call after the reply is known, with the reply appended to the
++input (the only prompt difference). When the reply is a real message the claim book
++and the method rules are appended to it; on a silent (no-op) turn the agent gets the
++benchmark's plain "continue".
++
++port arms (``tracker``, ``mediator``; baseline-port revision, PLAN.md §8): after the simulator
++decided and only for a real reply, one call of the agent's own model (``redo_ports.PortArm``,
++byte-identical to tib's ``fsa/redo/ports.py``): the tracker updates the situation state
++(``ports/turn-<N>.json``) and the reply is delivered with it; the mediator rewrites the reply
++into an explicit first-person request, which is delivered instead of the reply. Every attempt
++in ``port_calls.jsonl`` (their own token seat). The simulator never sees either output.
++"""
++from __future__ import annotations
++
++import asyncio
++import hashlib
++import json
++import logging
++import os
++import random
++import sys
++import time
++from dataclasses import asdict, dataclass
++from pathlib import Path
++
++log = logging.getLogger(__name__)
++
++PROMPTS = Path(__file__).with_name("prompts") / "redo"
++PORT_ARMS = ("tracker", "mediator")  # = redo_ports.PORT_ARMS (not imported: this file is also loaded by path)
++ARMS = ("stock", "commit_before", "claims_after", "claims_no_p", "recap", "minimal_edit", *PORT_ARMS)
++CLAIM_TIMING = {"commit_before": "before", "claims_no_p": "before", "claims_after": "after"}
++MAX_OVERLAYS = 2
++TRIGGERS = ("v1", "agentic_v3")  # SWT_REDO_TRIGGER values this revision supports
++HARNESS_SUFFIX_MARKERS = ("\n\n## Repository Configuration Files", "## Repository Configuration Files\n",
++                          "\n\nIMPORTANT: Work incrementally.")
++
++_TRANSIENT = ("429", "rate limit", "ratelimit", "resource_exhausted", "resource has been exhausted", "quota",
++              "503", "unavailable", "overloaded", "500", "502", "504", "internal error", "internalservererror",
++              "timeout", "timed out", "connection", "high demand", "empty response", "invalid json")
++BACKOFF_SEC = (10, 20, 40, 60, 90, 120, 180, 240, 300)
++
++
++def prompt(name: str) -> str:
++    return (PROMPTS / name).read_text()
++
++
++def prompts_sha256() -> dict[str, str]:
++    return {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(PROMPTS.iterdir()) if p.is_file()}
++
++
++@dataclass
++class RedoConfig:
++    arm: str = "stock"
++    tau: float = 0.5
++    claim_reasoning: str = "high"
++    overlay: bool = False
++    overlay_seed: int = 0
++    transcript_chars: int = 160_000
++    tib_root: str | None = None
++    judge_cache: str | None = None
++    trigger: str = "v1"
++
++    @classmethod
++    def from_env(cls) -> "RedoConfig":
++        arm = os.environ.get("SWT_REDO_ARM", "stock") or "stock"
++        if arm not in ARMS:
++            raise ValueError(f"SWT_REDO_ARM={arm!r} not in {ARMS}")
++        return cls(arm=arm, tau=float(os.environ.get("SWT_REDO_TAU", "0.5")),
++                   claim_reasoning=os.environ.get("SWT_REDO_CLAIM_REASONING", "high"),
++                   overlay=os.environ.get("SWT_REDO_OVERLAY", "") == "1",
++                   overlay_seed=int(os.environ.get("SWT_REDO_OVERLAY_SEED", "0")),
++                   tib_root=os.environ.get("SWT_REDO_TIB_ROOT"),
++                   judge_cache=os.environ.get("SWT_REDO_JUDGE_CACHE"),
++                   trigger=_trigger_from_env())
++
++    @property
++    def active(self) -> bool:
++        return self.arm != "stock" or self.overlay
++
++    @property
++    def claim_timing(self) -> str | None:
++        return CLAIM_TIMING.get(self.arm)
++
++    @property
++    def port(self) -> str | None:
++        return self.arm if self.arm in PORT_ARMS else None
++
++
++def _trigger_from_env() -> str:
++    t = os.environ.get("SWT_REDO_TRIGGER", "v1") or "v1"
++    if t not in TRIGGERS:
++        raise ValueError(f"SWT_REDO_TRIGGER={t!r} not in {TRIGGERS}")
++    return t
++
++
++# ── session transcript for the claim-book call ──────────────────────────────
++
++def _events(raw: str) -> list[tuple[str, str]]:
++    out = []
++    for line in (raw or "").split("\n"):
++        line = line.strip()
++        if not line.startswith("{"):
++            continue
++        try:
++            e = json.loads(line)
++        except (json.JSONDecodeError, ValueError):
++            continue
++        part = e.get("part") or {}
++        if e.get("type") == "text":
++            t = part.get("text")
++            if isinstance(t, str) and t.strip():
++                out.append(("text", t.strip()[:3000]))
++        elif e.get("type") == "tool_use":
++            st = part.get("state") if isinstance(part.get("state"), dict) else {}
++            args = st.get("input") or part.get("input") or {}
++            args = args if isinstance(args, str) else json.dumps(args)
++            res = st.get("output") or part.get("output") or ""
++            res = res if isinstance(res, str) else json.dumps(res)
++            name = part.get("tool") or part.get("name") or "?"
++            res = res if len(res) <= 600 else "..." + res[-600:]
++            out.append(("tool", f"{name}({args[:400]}) -> {res}"))
++    return out
++
++
++def session_transcript(logs_dir: Path, instruction: str, openers: list[dict], budget: int) -> str:
++    """Opening request + every executed turn's opener and the agent's events
++    (from the per-turn archives ``opencode.txt.turn-<N>``), newest turns kept
++    first when the budget binds."""
++    head = f"## Turn 0 - the user's opening request\n{instruction[:8000]}\n"
++    blocks = []
++    for o in openers:
++        t = o["turn"]
++        f = Path(logs_dir) / f"opencode.txt.turn-{t}"
++        ev = _events(f.read_text(errors="replace")) if f.exists() else []
++        lines = []
++        if t > 0:
++            who = {"sim": "the user", "overlay": "the user", "noop_continue": "(no user message)",
++                   "cap_rescue": "(harness: resume after interruption)"}.get(o.get("opened_by"), o.get("opened_by"))
++            lines.append(f"## Turn {t} - {who}: {o.get('message') or ''}")
++        lines.append(f"### Your work in turn {t}")
++        for kind, s in ev:
++            lines.append(("[you] " if kind == "text" else "[tool] ") + s)
++        if not ev:
++            lines.append("(no recorded events)")
++        blocks.append("\n".join(lines))
++    kept, used = [], len(head)
++    for b in reversed(blocks):
++        if used + len(b) > budget:
++            kept.append("[... earlier turns elided ...]")
++            break
++        kept.append(b)
++        used += len(b)
++    return head + "\n\n".join(reversed(kept))
++
++
++def render_book(book: dict, with_p: bool) -> str:
++    lines = []
++    for c in book.get("claims") or []:
++        p = c.get("p")
++        ptxt = f" (p={float(p):.2f})" if with_p and isinstance(p, (int, float)) else ""
++        lines.append(f"{c.get('id', '?')}{ptxt} {c.get('claim', '')} - evidence: {c.get('evidence', 'none')}")
++    rej = book.get("rejected") or []
++    lines.append("Rejected options:" + ("" if rej else " none"))
++    for r in rej:
++        lines.append(f"- {r.get('option', '')} (turn {r.get('turn', '?')}): {r.get('reason', '')}")
++    return "\n".join(lines)
++
++
++def _valid_book(d, with_p: bool) -> bool:
++    if not isinstance(d, dict) or not isinstance(d.get("claims"), list) or not d["claims"]:
++        return False
++    for c in d["claims"]:
++        if not isinstance(c, dict) or not c.get("claim"):
++            return False
++        if with_p:
++            try:
++                p = float(c.get("p"))
++            except (TypeError, ValueError):
++                return False
++            if not 0.0 <= p <= 1.0:
++                return False
++    return isinstance(d.get("rejected", []), list)
++
++
++class RedoArms:
++    """Per-trial state of one arm (+ overlay). Nothing carries across tasks: a new
++    wrapper, hence a new instance, is built for every trial."""
++
++    def __init__(self, cfg: RedoConfig, logs_dir: Path, agent_model: str):
++        self.cfg = cfg
++        self.logs_dir = Path(logs_dir)
++        # opencode names the native Gemini provider `google/`; LiteLLM calls it `gemini/`.
++        prov, _, name = (agent_model or "").partition("/")
++        self.claim_model = f"gemini/{name}" if prov == "google" else agent_model
++        self.prev_book: dict | None = None
++        self.user_messages: list[str] = []  # delivered user/overlay messages (for recap)
++        self.overlay: Overlay | None = None
++        self.port = None
++        if cfg.port:
++            from . import redo_ports  # noqa: PLC0415 - package import only when a port arm runs
++            self._ports = redo_ports
++            self.port = redo_ports.PortArm(cfg.port, self.logs_dir, agent_model, prefix="turn")
++
++    # ── port arms (tracker / mediator) ──
++
++    def _dialogue(self, instruction: str, openers: list[dict], reply: str) -> list[dict]:
++        msgs: list[dict] = []
++
++        def add(role, text):
++            text = (text or "").strip()
++            if not text:
++                return
++            if msgs and msgs[-1]["role"] == role:
++                msgs[-1]["content"] += "\n" + text
++            else:
++                msgs.append({"role": role, "content": text})
++
++        # the opening request as the user wrote it: the harness appends the repository's config
++        # files (repo_config.py) and the incremental-work notice to the agent's first message;
++        # those are not the user's words (they would fill the mediator's transcript cap)
++        opening = instruction
++        for marker in HARNESS_SUFFIX_MARKERS:
++            if marker in opening:
++                opening = opening.split(marker, 1)[0]
++        add("user", opening)
++        for o in openers:
++            t = o["turn"]
++            if t > 0 and o.get("opened_by") in ("sim", "overlay"):
++                add("user", o.get("message"))
++            f = self.logs_dir / f"opencode.txt.turn-{t}"
++            if f.exists():
++                for it in self._ports.stream_items(f.read_text(errors="replace")):
++                    if it["kind"] == "text":
++                        add("assistant", it["text"])
++        add("user", reply)
++        return msgs
++
++    async def port_update(self, *, snapshot_turn: int, loop_turn: int, instruction: str, openers: list[dict],
++                          diff_text: str, reply: str, sim_decided_ts: float, opened_by: str) -> dict:
++        """tracker / mediator call for a real reply (after the simulator decided)."""
++        meta = {"snapshot_turn": snapshot_turn, "loop_turn": loop_turn, "sim_decided_ts": sim_decided_ts,
++                "opened_by": opened_by}
++        if self.cfg.port == "tracker":
++            streams = []
++            for o in openers:
++                f = self.logs_dir / f"opencode.txt.turn-{o['turn']}"
++                if f.exists():
++                    streams.append((o["turn"], f.read_text(errors="replace")))
++            transcript = session_transcript(self.logs_dir, instruction, openers, self.cfg.transcript_chars)
++            return await asyncio.to_thread(self.port.tracker_update, index=snapshot_turn, transcript=transcript,
++                                           streams=streams, diff_text=diff_text, snapshot=f"turn-{snapshot_turn}",
++                                           reply=reply, meta=meta)
++        return await asyncio.to_thread(self.port.mediate, index=snapshot_turn,
++                                       dialogue=self._dialogue(instruction, openers, reply), meta=meta)
++
++    # ── claim book ──
++
++    async def write_claim_book(self, *, snapshot_turn: int, loop_turn: int, instruction: str,
++                               openers: list[dict], diff_text: str, reply: str | None) -> dict:
++        with_p = self.cfg.arm != "claims_no_p"
++        system = prompt("claim_book_system.md" if with_p else "claim_book_system_no_p.md")
++        diff = diff_text or ""
++        if len(diff) > 60_000:
++            diff = diff[:60_000] + "\n[... diff truncated ...]"
++        user = (session_transcript(self.logs_dir, instruction, openers, self.cfg.transcript_chars)
++                + f"\n\n## Current cumulative diff of the repository\n```diff\n{diff.strip() or '(empty)'}\n```\n"
++                + "\n## Your previous claim book\n"
++                + (json.dumps(self.prev_book, ensure_ascii=False) if self.prev_book else "(none yet)") + "\n")
++        if reply is not None:  # claims_after only: the one difference from commit_before
++            user += f"\n## The user's latest message\n{reply}\n"
++        # closing request (same in every arm): without it the model tends to continue the
++        # work and emit a tool call / empty text instead of the book (Stage 1 smoke)
++        user += "\n" + prompt("claim_book_request.md")
++        book, ok, records = None, False, []
++        import litellm
++        t_start = time.time()
++        for attempt in range(1, len(BACKOFF_SEC) + 2):
++            t0 = time.time()
++            rec = {"ts": t0, "snapshot_turn": snapshot_turn, "loop_turn": loop_turn, "attempt": attempt,
++                   "model": self.claim_model, "reasoning_effort": self.cfg.claim_reasoning,
++                   "reply_visible": reply is not None, "prompt_chars": len(system) + len(user)}
++            try:
++                r = await litellm.acompletion(
++                    model=self.claim_model,
++                    messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
++                    response_format={"type": "json_object"}, reasoning_effort=self.cfg.claim_reasoning,
++                    timeout=600, num_retries=0)
++                u = getattr(r, "usage", None)
++                ptd = getattr(u, "prompt_tokens_details", None)
++                ctd = getattr(u, "completion_tokens_details", None)
++                content = (r.choices[0].message.content or "").strip()
++                rec.update(latency_sec=round(time.time() - t0, 2), resolved_model=getattr(r, "model", None),
++                           finish_reason=getattr(r.choices[0], "finish_reason", None),
++                           prompt_tokens=getattr(u, "prompt_tokens", None),
++                           completion_tokens=getattr(u, "completion_tokens", None),
++                           reasoning_tokens=getattr(ctd, "reasoning_tokens", None),
++                           cached_tokens=getattr(ptd, "cached_tokens", None), raw=content[:20000])
++                if not content:
++                    raise ValueError("empty response")
++                d = json.loads(content.removeprefix("```json").removesuffix("```").strip())
++                if not _valid_book(d, with_p):
++                    raise ValueError("invalid json claim book (schema)")
++                book, ok = d, True
++                rec["ok"] = True
++                records.append(rec)
++                break
++            except Exception as e:  # noqa: BLE001
++                rec.update(ok=False, latency_sec=round(time.time() - t0, 2),
++                           error=f"{type(e).__name__}: {str(e)[:300]}")
++                records.append(rec)
++                txt = f"{type(e).__name__} {e}".lower()
++                transient = any(m in txt for m in _TRANSIENT) or isinstance(e, json.JSONDecodeError)
++                if not transient or attempt > len(BACKOFF_SEC) or (isinstance(e, ValueError) and attempt >= 4):
++                    break
++                await asyncio.sleep(BACKOFF_SEC[attempt - 1])
++        with open(self.logs_dir / "claim_calls.jsonl", "a") as f:
++            for r_ in records:
++                f.write(json.dumps(r_, ensure_ascii=False) + "\n")
++        doc = {"schema": "redo_v1/claim-book/1", "arm": self.cfg.arm, "tau": self.cfg.tau if with_p else None,
++               "snapshot_turn": snapshot_turn, "loop_turn": loop_turn,
++               # timing relative to the simulator's decision (claims_after on a silent turn: after, no reply)
++               "phase": "after_reply" if self.cfg.claim_timing == "after" else "before_reply",
++               "reply_visible": reply is not None, "reply": reply, "call_started_at": t_start,
++               "written_at": time.time(), "model": self.claim_model, "ok": ok, "attempts": len(records),
++               "book": book}
++        d = self.logs_dir / "claims"
++        d.mkdir(exist_ok=True)
++        (d / f"turn-{snapshot_turn}.json").write_text(json.dumps(doc, indent=2, ensure_ascii=False))
++        if ok:
++            self.prev_book = book
++        return doc
++
++    # ── delivered message ──
++
++    def compose(self, reply: str, claim_doc: dict | None, instruction: str, port_doc: dict | None = None) -> str:
++        """The message the agent receives for a real user reply (not for 'continue')."""
++        arm = self.cfg.arm
++        self.user_messages.append(reply)
++        if self.port is not None:
++            return self.port.compose(reply, port_doc)
++        if self.cfg.claim_timing:
++            if not (claim_doc and claim_doc.get("ok")):
++                return reply  # claim call failed: recorded; the reply goes through unchanged
++            with_p = arm != "claims_no_p"
++            rules = prompt("rules_p.md" if with_p else "rules_no_p.md")
++            block = rules.replace("{claim_book}", render_book(claim_doc["book"], with_p)).replace(
++                "{tau}", f"{self.cfg.tau:g}")
++            return f"{reply}\n\n{block.rstrip()}"
++        if arm == "recap":
++            reqs = [f"1. (opening request) {instruction[:1500]}"]
++            reqs += [f"{i + 2}. {m}" for i, m in enumerate(self.user_messages)]
++            return f"{reply}\n\n" + prompt("recap.md").replace("{requirements}", "\n".join(reqs)).rstrip()
++        if arm == "minimal_edit":
++            return f"{reply}\n\n" + prompt("minimal_edit.md").rstrip()
++        return reply
++
++
++# ── pushback overlay (C1) ───────────────────────────────────────────────────
++
++class Overlay:
++    """Scripted, seeded injector. At the first simulator consultation where the
++    per-intent judge (repository + intent only) says every revealed applicable
++    intent of snapshot N is satisfied, the simulator's reply is replaced by an
++    unjustified correction; at a later such consultation, by a mis-aimed
++    correction naming one satisfied intent as broken. At most two per session."""
++
++    def __init__(self, cfg: RedoConfig, logs_dir: Path, task_dir: Path):
++        self.cfg = cfg
++        self.logs_dir = Path(logs_dir)
++        self.task_dir = Path(task_dir)
++        self.rng = random.Random(f"{cfg.overlay_seed}:{self.task_dir.name}")
++        self.templates = json.loads(prompt("overlay_templates.json"))
++        self.injected: list[dict] = []
++        self._judge = None
++        self._ij = None
++
++    def _load_judge(self):
++        if self._judge is None:
++            root = self.cfg.tib_root
++            if not root:
++                raise RuntimeError("SWT_REDO_TIB_ROOT is required for the overlay (intent judge)")
++            if root not in sys.path:
++                sys.path.insert(0, root)
++            if self.cfg.trigger == "agentic_v3":
++                # the frozen trigger (tib OVERLAY_TRIGGER_FREEZE.json): one object serves as judge and module
++                from fsa.redo.swe_together.agentic_judge import OverlayTrigger  # noqa: PLC0415
++                self._judge = self._ij = OverlayTrigger(self.task_dir)
++                return self._judge, self._ij
++            from fsa.redo import intent_judge as ij  # noqa: PLC0415
++            self._ij = ij
++            cache = self.cfg.judge_cache or str(Path(root) / "results" / "redo_v1" / "intent_judge_cache")
++            self._judge = ij.IntentJudge(cache, workers=4)
++        return self._judge, self._ij
++
++    @property
++    def done(self) -> bool:
++        return len(self.injected) >= MAX_OVERLAYS
++
++    async def evaluate(self, snapshot_turn: int, n_sim_messages: int) -> dict:
++        """Judge snapshot N on the revealed intents (synchronously w.r.t. the trial)."""
++        judge, ij = self._load_judge()
++        intents = ij.load_task_intents(self.task_dir)
++        rev = ij.revealed(intents, n_sim_messages)
++        snap = self.logs_dir / "snapshots" / f"turn-{snapshot_turn}.patch"
++        patch = snap.read_text() if snap.exists() else ""
++        before = dict(judge.stats)
++        t0 = time.time()
++        try:
++            v = await asyncio.to_thread(judge.judge_snapshot, patch, rev)
++            err = None
++        except Exception as e:  # noqa: BLE001
++            v, err = {}, f"{type(e).__name__}: {str(e)[:300]}"
++        labels = {k: x["verdict"] for k, x in v.items()}
++        applicable = [k for k, l in labels.items() if l != "not_applicable"]
++        all_sat = bool(applicable) and all(labels[k] == "satisfied" for k in applicable) and err is None
++        rec = {"snapshot_turn": snapshot_turn, "n_sim_messages": n_sim_messages,
++               "revealed": [i.key for i in rev], "labels": labels,
++               "evidence": {k: x.get("evidence") for k, x in v.items()},
++               "patch_sha256": ij.patch_sha(patch), "all_revealed_satisfied": all_sat, "error": err,
++               "started_at": t0, "finished_at": time.time(), "judge": ij.judge_config(),
++               "judge_stats_delta": {k: judge.stats[k] - before.get(k, 0) for k in judge.stats},
++               "texts": {i.key: i.text[:300] for i in rev}}
++        d = self.logs_dir / "overlay_judge"
++        d.mkdir(exist_ok=True)
++        (d / f"turn-{snapshot_turn}.json").write_text(json.dumps(rec, indent=2, ensure_ascii=False))
++        return rec
++
++    def decide(self, loop_turn: int, verdict: dict) -> dict | None:
++        if self.done or not verdict.get("all_revealed_satisfied"):
++            return None
++        if not self.injected:
++            kind = "unjustified"
++            text = self.rng.choice(self.templates["unjustified"])
++            target = None
++        else:
++            if loop_turn <= self.injected[-1]["loop_turn"]:
++                return None
++            kind = "misaimed"
++            sat = sorted(k for k, l in verdict["labels"].items() if l == "satisfied")
++            oracle = [k for k in sat if k != "open"]
++            target = self.rng.choice(oracle) if oracle else "open"
++            if target == "open":
++                text = self.rng.choice(self.templates["misaimed_open"])
++            else:
++                it = verdict["texts"].get(target, "").strip().rstrip(".")
++                it = it[:200] + ("..." if len(it) > 200 else "")
++                text = self.rng.choice(self.templates["misaimed"]).replace("{intent}", it)
++        rec = {"loop_turn": loop_turn, "snapshot_turn": verdict["snapshot_turn"], "kind": kind,
++               "message": text, "target_intent": target, "seed": self.cfg.overlay_seed,
++               "index": len(self.injected) + 1, "decided_at": time.time()}
++        self.injected.append(rec)
++        return rec
++
++
++def config_record(cfg: RedoConfig) -> dict:
++    rec = {**asdict(cfg), "prompts_sha256": prompts_sha256()}
++    ports_dir = Path(__file__).with_name("prompts") / "ports"
++    if ports_dir.exists():
++        rec["port_prompts_sha256"] = {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
++                                      for p in sorted(ports_dir.iterdir()) if p.is_file()}
++    return rec
+diff --git a/src/user_agent/redo_ports.py b/src/user_agent/redo_ports.py
+new file mode 100644
+index 0000000..1b2faa7
+--- /dev/null
++++ b/src/user_agent/redo_ports.py
+@@ -0,0 +1,633 @@
++"""Controlled ports of two published inference-time methods (redo_v1, PLAN.md §8).
++
++    tracker   Situation tracker, a CONTROLLED PORT of IDSS (Intent-Driven Situation States,
++              arXiv 2608.15755, Tao et al. 2026). Not a native reproduction.
++    mediator  Intent mediator, a CONTROLLED PORT of the Mediator-Assistant framework
++              (arXiv 2602.07338, Liu et al. 2026). Not a native reproduction.
++
++This file is stdlib-only and exists twice, byte-identical: ``fsa/redo/ports.py`` (tib; used by
++the SWE-Interact broker) and ``src/user_agent/redo_ports.py`` in the SWE-Together clone (baseline
++port patch revision); its prompts live beside it in ``prompts/ports/`` (both copies; a test compares
++the hashes). The benchmark-specific glue (where the hook runs, what the transcript is made of) is in
++``fsa/redo/swe_interact/{arms,broker}.py`` and the clone's ``redo_arms.py`` / ``user_enabled_opencode.py``.
++
++Both ports act at the turn boundary the benchmark controls, like the other redo arms: after the
++simulated user's reply is known (both methods consume the user's message), before it is delivered
++to the agent. The simulator never sees their output. Their model calls use the rung's own Gemini
++model (LiteLLM ``gemini/<model>``, ``reasoning_effort=high``, patient retry 10..300 s) and every
++attempt is logged in ``port_calls.jsonl`` (their own token seat).
++
++tracker (IDSS §3)
++    Situation state S = (F, T): a fact layer F of provenance-aware entities parsed
++    *deterministically* from the agent's tool calls and the repository diff (§3.2.1: ADD / UPDATE /
++    DELETE / MERGE operations, newer tool observations overwrite older ones), and a state layer
++    T = (intents, variables, constraints) (§3.2.2) with the paper's statuses (intents active /
++    pending / completed / blocked; variables askable / retrievable / derivable, known / unknown;
++    constraints satisfied / unsatisfied / violated). After each user message one call of the agent's
++    own model applies the paper's STATE MAINTENANCE PROTOCOL (App. B.1) to the previous state layer,
++    the fact layer, the session and the message. Cross-layer constraint propagation (§3.3) is
++    deterministic: constraints with a grounding (entity, attribute, op, value) are re-evaluated
++    against F; ungrounded or unevaluable ones are never turned into "violated"; a violated
++    constraint blocks its intent with the factual basis recorded. The state (F rendered as in
++    App. B.3, T as in App. B.2) is delivered with the user's message together with the paper's
++    BEHAVIORAL GUIDELINES (App. B.1).
++
++mediator (Mediator-Assistant §4)
++    One call per user message: the paper's "Prompt For Mediator" (App. B, verbatim) over the
++    conversation transcript between the user and the assistant, with the Refiner-distilled
++    experiences E in [[EXPS]]; the output, a first-person, fully specified request, replaces the
++    user's message for the agent (Eq. 7: the assistant acts on the rewritten instruction). E is
++    distilled offline, once per rung model, by the paper's "Prompt For Refiner" (verbatim) from
++    contrastive pairs of held-out SWE-Together sessions (``fsa/redo/ports_refine.py``) and frozen in
++    ``prompts/ports/mediator_experiences.json``.
++
++Deviations from the papers are listed in docs/results/REDO_BASELINE_PORTS.md.
++"""
++from __future__ import annotations
++
++import hashlib
++import json
++import os
++import re
++import time
++from pathlib import Path
++
++PROMPTS = Path(__file__).with_name("prompts") / "ports"
++PORT_ARMS = ("tracker", "mediator")
++PORT_LABEL = {"tracker": "situation tracker - controlled port of IDSS (arXiv 2608.15755)",
++              "mediator": "intent mediator - controlled port of Mediator-Assistant (arXiv 2602.07338)"}
++
++INTENT_STATUS = ("active", "pending", "completed", "blocked")
++VAR_SOURCE = ("askable", "retrievable", "derivable")
++CONSTRAINT_STATUS = ("satisfied", "unsatisfied", "violated")
++GROUND_OPS = ("==", "!=", "contains", "not_contains", "exists", "absent")
++FILE_TOOLS = {"read": "read", "edit": "edit", "write": "write", "patch": "edit", "multiedit": "edit"}
++
++_TRANSIENT = ("429", "rate limit", "ratelimit", "resource_exhausted", "resource has been exhausted", "quota",
++              "503", "unavailable", "overloaded", "500", "502", "504", "internal error", "internalservererror",
++              "timeout", "timed out", "connection", "high demand", "empty response", "invalid json")
++BACKOFF_SEC = (10, 20, 40, 60, 90, 120, 180, 240, 300)
++FACT_RENDER_CHARS = 12_000
++MAX_COMMANDS = 25          # fact-layer compression: newest command entities rendered
++MAX_READ_ONLY_FILES = 30   # files only read (not edited, not in the diff) rendered
++
++
++def prompt(name: str) -> str:
++    return (PROMPTS / name).read_text()
++
++
++def prompts_sha256() -> dict[str, str]:
++    return {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(PROMPTS.iterdir()) if p.is_file()}
++
++
++def module_sha256() -> str:
++    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
++
++
++def litellm_model(agent_model: str) -> str:
++    """opencode names the native Gemini provider ``google/``; LiteLLM calls it ``gemini/``."""
++    prov, _, name = (agent_model or "").partition("/")
++    return f"gemini/{name}" if prov == "google" else agent_model
++
++
++def bare_model(agent_model: str) -> str:
++    return (agent_model or "").split("/", 1)[-1]
++
++
++# ── opencode event streams ──────────────────────────────────────────────────
++
++def _json_lines(raw: str):
++    for line in (raw or "").split("\n"):
++        line = line.strip()
++        if not line.startswith("{"):
++            continue
++        try:
++            yield json.loads(line)
++        except (json.JSONDecodeError, ValueError):
++            continue
++
++
++def stream_items(raw: str) -> list[dict]:
++    """Ordered items of an ``opencode run --format=json`` stream: ``{"kind": "text", "text"}``,
++    ``{"kind": "ask", "text"}`` (an ask_user MCP call) or ``{"kind": "tool", "tool", "input",
++    "status", "exit", "output"}``."""
++    out = []
++    for e in _json_lines(raw):
++        part = e.get("part") or {}
++        if e.get("type") == "text":
++            t = part.get("text")
++            if isinstance(t, str) and t.strip():
++                out.append({"kind": "text", "text": t.strip()})
++        elif e.get("type") == "tool_use":
++            st = part.get("state") if isinstance(part.get("state"), dict) else {}
++            name = part.get("tool") or part.get("name") or "?"
++            args = st.get("input") or part.get("input") or {}
++            if "ask_user" in name:
++                q = args.get("question") if isinstance(args, dict) else None
++                out.append({"kind": "ask", "text": str(q if q is not None else args)})
++                continue
++            meta = st.get("metadata") if isinstance(st.get("metadata"), dict) else {}
++            res = st.get("output") or part.get("output") or ""
++            out.append({"kind": "tool", "tool": name, "input": args if isinstance(args, dict) else {"raw": args},
++                        "status": st.get("status"), "exit": meta.get("exit"),
++                        "output": res if isinstance(res, str) else json.dumps(res)})
++    return out
++
++
++# ── fact layer (IDSS §3.2.1) ────────────────────────────────────────────────
++
++def diff_files(diff_text: str) -> dict[str, dict]:
++    """Per-file change of a cumulative ``git diff`` (deterministic)."""
++    files: dict[str, dict] = {}
++    cur = None
++    for line in (diff_text or "").split("\n"):
++        m = re.match(r"^diff --git a/(.+?) b/(.+)$", line)
++        if m:
++            cur = {"change": "modified", "lines_added": 0, "lines_removed": 0}
++            files[m.group(2)] = cur
++            continue
++        if cur is None:
++            continue
++        if line.startswith("new file mode"):
++            cur["change"] = "added"
++        elif line.startswith("deleted file mode"):
++            cur["change"] = "deleted"
++        elif line.startswith("rename from"):
++            cur["change"] = "renamed"
++        elif line.startswith("+") and not line.startswith("+++"):
++            cur["lines_added"] += 1
++        elif line.startswith("-") and not line.startswith("---"):
++            cur["lines_removed"] += 1
++    return files
++
++
++def _one_line(s, n: int) -> str:
++    s = " ".join(str(s).split())
++    return s if len(s) <= n else s[: n - 3] + "..."
++
++
++class FactLayer:
++    """Entity store F = {(type, id, attributes, source)}. Updated only through operations
++    (ADD, UPDATE, DELETE, MERGE); every operation is kept in ``ops`` (provenance)."""
++
++    def __init__(self):
++        self.entities: dict[str, dict] = {}
++        self.ops: list[dict] = []
++        self._seq = 0
++
++    def _touch(self, e: dict) -> None:
++        self._seq += 1
++        e["seq"] = self._seq
++
++    def apply(self, op: str, key: str, attrs: dict | None = None, source: str | None = None, into: str | None = None):
++        attrs = attrs or {}
++        if op in ("ADD", "UPDATE"):
++            e = self.entities.get(key)
++            if e is None:
++                typ, _, ident = key.partition(":")
++                e = self.entities[key] = {"type": typ, "id": ident, "attrs": {}, "source": source, "valid": True}
++                op = "ADD"
++            e["attrs"].update(attrs)  # attribute-level merge; newer observation of the same source type wins
++            if source:
++                e["source"] = source
++            e["valid"] = True
++            self._touch(e)
++        elif op == "DELETE":
++            e = self.entities.get(key)
++            if e is None:
++                return
++            e["valid"] = False
++            e["attrs"].update(attrs)
++            if source:
++                e["source"] = source
++            self._touch(e)
++        elif op == "MERGE":
++            src, dst = self.entities.pop(key, None), self.entities.get(into)
++            if src is None or dst is None:
++                return
++            older, newer = (src, dst) if src.get("seq", 0) <= dst.get("seq", 0) else (dst, src)
++            dst["attrs"] = {**older["attrs"], **newer["attrs"]}
++            dst["source"] = newer.get("source") or older.get("source")
++            dst.setdefault("aliases", []).append(src["id"])
++            self._touch(dst)
++        else:
++            raise ValueError(op)
++        self.ops.append({"op": op, "key": key, **({"into": into} if into else {}), "attrs": attrs,
++                         **({"source": source} if source else {})})
++
++    def find(self, ref: str) -> dict | None:
++        """Entity by name: exact key, else (files) path-suffix match, else (commands) the newest
++        command containing the given text."""
++        if not ref:
++            return None
++        if ref in self.entities:
++            return self.entities[ref]
++        typ, _, ident = ref.partition(":")
++        if typ == "file":
++            ident = ident[2:] if ident.startswith("./") else ident
++            hits = [e for k, e in self.entities.items() if e["type"] == "file"
++                    and (e["id"].endswith("/" + ident) or ident.endswith("/" + e["id"]) or e["id"] == ident)]
++        elif typ == "command":
++            hits = [e for e in self.entities.values() if e["type"] == "command" and ident.strip() and ident.strip() in e["id"]]
++        else:
++            hits = []
++        return max(hits, key=lambda e: e.get("seq", 0)) if hits else None
++
++    def to_dict(self) -> dict:
++        return {"entities": self.entities, "n_ops": len(self.ops)}
++
++    def render(self, budget: int = FACT_RENDER_CHARS) -> str:
++        """App. B.3 layout: ``[Entity: ...]`` blocks with type, id, source and attributes."""
++        ents = list(self.entities.values())
++        repo = [e for e in ents if e["type"] == "repository"]
++        files = [e for e in ents if e["type"] == "file"]
++        changed = sorted((e for e in files if e["attrs"].get("in_diff") or e["attrs"].get("edited")),
++                         key=lambda e: e["id"])
++        read_only = sorted((e for e in files if e not in changed), key=lambda e: -e.get("seq", 0))[:MAX_READ_ONLY_FILES]
++        cmds = sorted((e for e in ents if e["type"] == "command"), key=lambda e: -e.get("seq", 0))[:MAX_COMMANDS]
++        blocks = []
++        for e in repo + changed + read_only + cmds:
++            lines = [f"[Entity: {e['type']} {_one_line(e['id'], 160)}]", f" type: {e['type']}",
++                     f" id: {_one_line(e['id'], 300)}", f" source: {_one_line(e.get('source') or '?', 200)}"]
++            if not e.get("valid", True):
++                lines.append(" status: invalid (deleted)")
++            for k, v in e["attrs"].items():
++                lines.append(f" {k}: {_one_line(json.dumps(v) if isinstance(v, (dict, list)) else v, 400)}")
++            blocks.append("\n".join(lines))
++        out, used = [], 0
++        for b in blocks:
++            if used + len(b) > budget:
++                out.append(f"[... {len(blocks) - len(out)} more entities omitted ...]")
++                break
++            out.append(b)
++            used += len(b) + 2
++        return "\n\n".join(out) if out else "(no entities yet)"
++
++
++def build_fact_layer(streams: list[tuple[int, str]], diff_text: str, snapshot: str) -> FactLayer:
++    """Deterministic parser: the agent's tool calls (turn order) -> file / command entities; the
++    cumulative diff at ``snapshot`` -> file change attributes (newest observation) and one
++    ``repository`` entity. Re-running it over the whole session gives the same store as applying
++    the operations turn by turn (the parser is incremental in order)."""
++    F = FactLayer()
++    for turn, raw in streams:
++        for it in stream_items(raw):
++            if it["kind"] != "tool":
++                continue
++            tool, inp = it["tool"], it["input"]
++            if tool in FILE_TOOLS:
++                path = inp.get("filePath") or inp.get("path") or inp.get("file_path")
++                if not path:
++                    continue
++                path = str(path)
++                prev = (F.entities.get(f"file:{path}") or {}).get("attrs", {})
++                attrs = {"last_tool": tool, "last_turn": turn,
++                         "edited": bool(prev.get("edited")) or FILE_TOOLS[tool] in ("edit", "write")}
++                if it.get("status") and it["status"] != "completed":
++                    attrs["last_tool_status"] = it["status"]
++                F.apply("UPDATE", f"file:{path}", attrs, source=f"{tool}({path}) in turn {turn}")
++            elif tool == "bash":
++                cmd = str(inp.get("command") or inp.get("raw") or "").strip()
++                if not cmd:
++                    continue
++                key = f"command:{cmd[:300]}"
++                prev = (F.entities.get(key) or {}).get("attrs", {})
++                out = (it.get("output") or "").strip()
++                F.apply("UPDATE", key, {"exit": it.get("exit"), "status": it.get("status"),
++                                        "output_tail": out[-300:] if out else "(no output)",
++                                        "last_turn": turn, "runs": int(prev.get("runs") or 0) + 1},
++                        source=f"bash in turn {turn}")
++    files = diff_files(diff_text)
++    for path, ch in files.items():
++        key = f"file:{path}"
++        for k in [k for k, e in F.entities.items() if e["type"] == "file" and k != key
++                  and (e["id"].endswith("/" + path))]:
++            if key not in F.entities:
++                F.apply("ADD", key, {}, source=f"repository diff at {snapshot}")
++            F.apply("MERGE", k, into=key)
++        attrs = {"in_diff": True, "change": ch["change"], "lines_added": ch["lines_added"],
++                 "lines_removed": ch["lines_removed"]}
++        if ch["change"] == "deleted":
++            F.apply("UPDATE", key, attrs, source=f"repository diff at {snapshot}")
++            F.apply("DELETE", key, {}, source=f"repository diff at {snapshot}")
++        else:
++            F.apply("UPDATE", key, attrs, source=f"repository diff at {snapshot}")
++    for k, e in list(F.entities.items()):
++        if e["type"] == "file" and e["attrs"].get("edited") and e["id"] not in files \
++                and not any(e["id"].endswith("/" + p) for p in files):
++            F.apply("UPDATE", k, {"in_diff": False}, source=f"repository diff at {snapshot} (no net change)")
++    F.apply("UPDATE", "repository:working tree",
++            {"files_changed": len(files), "lines_added": sum(c["lines_added"] for c in files.values()),
++             "lines_removed": sum(c["lines_removed"] for c in files.values())},
++            source=f"repository diff at {snapshot}")
++    return F
++
++
++# ── state layer (IDSS §3.2.2) and propagation (§3.3) ─────────────────────────
++
++def _low(x) -> str:
++    return str(x or "").strip().lower()
++
++
++def normalize_state(d) -> dict:
++    """Validate and normalise the tracker's JSON; raises ValueError (schema)."""
++    if not isinstance(d, dict):
++        raise ValueError("state is not an object")
++    intents, variables, constraints = d.get("intents"), d.get("variables", []), d.get("constraints", [])
++    if not isinstance(intents, list) or not intents:
++        raise ValueError("no intents")
++    if not isinstance(variables, list) or not isinstance(constraints, list):
++        raise ValueError("variables/constraints not lists")
++    out = {"intents": [], "variables": [], "constraints": []}
++    for i in intents:
++        if not isinstance(i, dict) or not i.get("name") or _low(i.get("status")) not in INTENT_STATUS:
++            raise ValueError(f"bad intent {str(i)[:120]}")
++        dep = i.get("depends_on") or []
++        out["intents"].append({"name": str(i["name"]), "status": _low(i["status"]),
++                               "reason": i.get("reason"), "outcome": i.get("outcome"),
++                               "depends_on": [str(x) for x in dep] if isinstance(dep, list) else [str(dep)]})
++    for v in variables:
++        if not isinstance(v, dict) or not v.get("name"):
++            raise ValueError(f"bad variable {str(v)[:120]}")
++        src = _low(v.get("source"))
++        out["variables"].append({"name": str(v["name"]), "value": v.get("value"),
++                                 "source": src if src in VAR_SOURCE else "askable",
++                                 "known": bool(v.get("known")), "evidence": v.get("evidence")})
++    for c in constraints:
++        if not isinstance(c, dict) or not c.get("condition") or _low(c.get("status")) not in CONSTRAINT_STATUS:
++            raise ValueError(f"bad constraint {str(c)[:120]}")
++        g = c.get("grounding")
++        if isinstance(g, dict) and g.get("entity") and _low(g.get("op")) in GROUND_OPS:
++            g = {"entity": str(g["entity"]), "attribute": g.get("attribute"), "op": _low(g["op"]), "value": g.get("value")}
++        else:
++            g = None
++        out["constraints"].append({"scope": str(c.get("scope") or ""), "condition": str(c["condition"]),
++                                   "status": _low(c["status"]), "evidence": c.get("evidence"), "grounding": g})
++    return out
++
++
++def _eval_ground(g: dict, F: FactLayer):
++    """True / False / None (not evaluable) and the fact it rests on."""
++    e = F.find(g["entity"])
++    op, attr = g["op"], g.get("attribute")
++    if op in ("exists", "absent"):
++        present = e is not None and e.get("valid", True) and (not attr or attr in e["attrs"])
++        return (present if op == "exists" else not present), (f"{g['entity']} {'present' if present else 'absent'}")
++    if e is None or not attr or attr not in e["attrs"]:
++        return None, None
++    val = e["attrs"][attr]
++    fact = f"{e['type']}:{_one_line(e['id'], 120)}.{attr} = {json.dumps(val)}"
++    want = g.get("value")
++    if op in ("==", "!="):
++        eq = str(val).strip().lower() == str(want).strip().lower()
++        return (eq if op == "==" else not eq), fact
++    has = str(want) in str(val)
++    return (has if op == "contains" else not has), fact
++
++
++def propagate(state: dict, F: FactLayer) -> tuple[dict, list[dict]]:
++    """Re-evaluate grounded constraints against F; block intents whose constraint is violated
++    (factual basis and constraint chain recorded). Ungrounded / unevaluable constraints are never
++    set to violated by propagation (unevaluable grounded ones become unsatisfied)."""
++    log = []
++    by_name = {i["name"]: i for i in state["intents"]}
++    for c in state["constraints"]:
++        g = c.get("grounding")
++        if not g:
++            continue
++        ok, fact = _eval_ground(g, F)
++        before = c["status"]
++        if ok is None:
++            c["status"] = "unsatisfied" if before == "violated" else before
++            if before == "violated":
++                c["evidence"] = "grounding not evaluable against the fact layer (kept unsatisfied)"
++        else:
++            c["status"] = "satisfied" if ok else "violated"
++            c["evidence"] = fact
++        log.append({"constraint": c["condition"], "scope": c["scope"], "grounding": g, "result": ok, "fact": fact,
++                    "status_before": before, "status_after": c["status"]})
++        if c["status"] == "violated":
++            it = by_name.get(c["scope"])
++            if it is not None and it["status"] != "blocked":
++                log.append({"blocked_intent": it["name"], "status_before": it["status"],
++                            "because": f"constraint '{c['condition']}' violated: {fact}"})
++                it["status"] = "blocked"
++                it["reason"] = f"constraint '{c['condition']}' violated ({fact})"
++    return state, log
++
++
++def render_state(state: dict) -> str:
++    """App. B.2 layout (YAML-like ``<state>`` body)."""
++    q = lambda s: json.dumps(s, ensure_ascii=False) if s is not None else "null"  # noqa: E731
++    lines = ["intents:"]
++    for i in state["intents"]:
++        lines += [f"- name: {q(i['name'])}", f"  status: {i['status']}"]
++        if i.get("reason"):
++            lines.append(f"  reason: {q(i['reason'])}")
++        if i.get("outcome"):
++            lines.append(f"  outcome: {q(i['outcome'])}")
++        lines.append(f"  depends_on: {json.dumps(i.get('depends_on') or [], ensure_ascii=False)}")
++    lines.append("variables:" + ("" if state["variables"] else " []"))
++    for v in state["variables"]:
++        lines += [f"- name: {q(v['name'])}", f"  value: {q(v.get('value'))}",
++                  f"  source: {v['source']} | known: {str(v['known']).lower()}"]
++        if v.get("evidence"):
++            lines.append(f"  evidence: {q(v['evidence'])}")
++    lines.append("constraints:" + ("" if state["constraints"] else " []"))
++    for c in state["constraints"]:
++        lines += [f"- scope: {q(c['scope'])}", f"  condition: {q(c['condition'])}", f"  status: {c['status']}",
++                  f"  evidence: {q(c.get('evidence'))}"]
++    return "\n".join(lines)
++
++
++# ── mediator transcript ─────────────────────────────────────────────────────
++
++def render_dialogue(messages: list[dict], budget: int = 60_000) -> str:
++    """``User: ...`` / ``AI assistant: ...`` blocks (the paper's "Conversation Transcript between
++    the User and the AI assistant"). The opening message is always kept; after it, the newest
++    messages are kept first when the budget binds (the middle is elided)."""
++    blocks = []
++    for i, m in enumerate(messages):
++        who = "User" if m["role"] == "user" else "AI assistant"
++        cap = 8000 if i == 0 else (4000 if m["role"] == "user" else 2500)
++        txt = (m.get("content") or "").strip()
++        if len(txt) > cap:
++            txt = txt[:cap] + " [...]"
++        blocks.append(f"{who}: {txt}")
++    if not blocks:
++        return ""
++    kept, used = [], len(blocks[0])
++    for b in reversed(blocks[1:]):
++        if used + len(b) > budget:
++            kept.append("[... earlier conversation elided ...]")
++            break
++        kept.append(b)
++        used += len(b)
++    return "\n\n".join([blocks[0], *reversed(kept)])
++
++
++def load_experiences(model: str) -> dict | None:
++    p = PROMPTS / "mediator_experiences.json"
++    if not p.exists():
++        return None
++    doc = json.loads(p.read_text())
++    e = (doc.get("by_model") or {}).get(bare_model(model))
++    return {**e, "file_sha256": hashlib.sha256(p.read_bytes()).hexdigest()} if e else None
++
++
++# ── the arm ─────────────────────────────────────────────────────────────────
++
++class PortArm:
++    """Per-trial state of one port arm (tracker: the previous state layer; nothing carries across
++    trials or tasks). Outputs in ``out_dir``: ``ports/<prefix>-N.json`` and ``port_calls.jsonl``.
++    ``completion`` is a synchronous LiteLLM-like callable (``litellm.completion`` by default)."""
++
++    def __init__(self, arm: str, out_dir: Path, agent_model: str, *, prefix: str = "turn",
++                 reasoning: str = "high", completion=None, sleep=time.sleep, experiences: dict | None = None):
++        if arm not in PORT_ARMS:
++            raise ValueError(f"{arm!r} is not a port arm {PORT_ARMS}")
++        self.arm = arm
++        self.out_dir = Path(out_dir)
++        self.prefix = prefix
++        self.model = litellm_model(agent_model)
++        self.reasoning = reasoning
++        self.prev_state: dict | None = None
++        self._completion = completion
++        self._sleep = sleep
++        self.experiences = experiences
++        if arm == "mediator" and self.experiences is None:
++            self.experiences = load_experiences(agent_model)
++            if self.experiences is None:
++                raise ValueError(f"no Refiner experiences for {bare_model(agent_model)!r} in "
++                                 f"{PROMPTS / 'mediator_experiences.json'} (run fsa.redo.ports_refine)")
++
++    def _complete(self, **kw):
++        if self._completion is not None:
++            return self._completion(**kw)
++        import litellm
++        return litellm.completion(**kw)
++
++    def _call(self, index: int, messages: list[dict], *, json_mode: bool, parse) -> tuple[object, bool, list[dict]]:
++        out, ok, records = None, False, []
++        for attempt in range(1, len(BACKOFF_SEC) + 2):
++            t0 = time.time()
++            rec = {"ts": t0, "arm": self.arm, "index": index, "attempt": attempt, "model": self.model,
++                   "reasoning_effort": self.reasoning, "prompt_chars": sum(len(m["content"]) for m in messages)}
++            try:
++                kw = dict(model=self.model, messages=messages, reasoning_effort=self.reasoning, timeout=600,
++                          num_retries=0)
++                if json_mode:
++                    kw["response_format"] = {"type": "json_object"}
++                r = self._complete(**kw)
++                u = getattr(r, "usage", None)
++                ptd = getattr(u, "prompt_tokens_details", None)
++                ctd = getattr(u, "completion_tokens_details", None)
++                content = (r.choices[0].message.content or "").strip()
++                rec.update(latency_sec=round(time.time() - t0, 2), resolved_model=getattr(r, "model", None),
++                           finish_reason=getattr(r.choices[0], "finish_reason", None),
++                           prompt_tokens=getattr(u, "prompt_tokens", None),
++                           completion_tokens=getattr(u, "completion_tokens", None),
++                           reasoning_tokens=getattr(ctd, "reasoning_tokens", None),
++                           cached_tokens=getattr(ptd, "cached_tokens", None), raw=content[:20000])
++                if not content:
++                    raise ValueError("empty response")
++                out = parse(content)
++                ok = True
++                rec["ok"] = True
++                records.append(rec)
++                break
++            except Exception as e:  # noqa: BLE001
++                rec.update(ok=False, latency_sec=round(time.time() - t0, 2),
++                           error=f"{type(e).__name__}: {str(e)[:300]}")
++                records.append(rec)
++                txt = f"{type(e).__name__} {e}".lower()
++                transient = any(m in txt for m in _TRANSIENT) or isinstance(e, json.JSONDecodeError)
++                if not transient or attempt > len(BACKOFF_SEC) or (isinstance(e, ValueError) and attempt >= 4):
++                    break
++                self._sleep(BACKOFF_SEC[attempt - 1])
++        self.out_dir.mkdir(parents=True, exist_ok=True)
++        with open(self.out_dir / "port_calls.jsonl", "a") as f:
++            for r_ in records:
++                f.write(json.dumps(r_, ensure_ascii=False) + "\n")
++        return out, ok, records
++
++    def _write(self, index: int, doc: dict) -> None:
++        d = self.out_dir / "ports"
++        d.mkdir(parents=True, exist_ok=True)
++        tmp = d / f".{self.prefix}-{index}.json.tmp"
++        tmp.write_text(json.dumps(doc, indent=2, ensure_ascii=False, default=str))
++        os.replace(tmp, d / f"{self.prefix}-{index}.json")
++
++    # tracker ──
++
++    def tracker_update(self, *, index: int, transcript: str, streams: list[tuple[int, str]], diff_text: str,
++                       snapshot: str, reply: str, meta: dict | None = None) -> dict:
++        t_start = time.time()
++        F = build_fact_layer(streams, diff_text, snapshot)
++        facts = F.render()
++        user = (transcript
++                + "\n\n## Fact Layer (verified entities, parsed from your tool calls and the repository diff)\n"
++                + facts
++                + "\n\n## Previous state layer\n"
++                + (render_state(self.prev_state) if self.prev_state else "(none yet)")
++                + f"\n\n## The user's latest message\n{reply}\n\n" + prompt("tracker_request.md"))
++        msgs = [{"role": "system", "content": prompt("tracker_system.md")}, {"role": "user", "content": user}]
++
++        def parse(content):
++            d = json.loads(content.removeprefix("```json").removesuffix("```").strip())
++            try:
++                return normalize_state(d)
++            except ValueError as e:  # "invalid json" marks it retryable (at most 4 attempts, as the claim book)
++                raise ValueError(f"invalid json state (schema): {e}") from None
++
++        state, ok, records = self._call(index, msgs, json_mode=True, parse=parse)
++        prop = []
++        if ok:
++            state, prop = propagate(state, F)
++            self.prev_state = state
++        doc = {"schema": "redo_v1/port-tracker/1", "arm": "tracker", "label": PORT_LABEL["tracker"], "index": index,
++               "phase": "after_reply", "reply": reply, "snapshot": snapshot, "call_started_at": t_start,
++               "written_at": time.time(), "model": self.model, "ok": ok, "attempts": len(records),
++               "state": state, "propagation": prop, "fact_layer": F.to_dict(), "fact_ops": F.ops,
++               "fact_layer_rendered": facts, **(meta or {})}
++        self._write(index, doc)
++        return doc
++
++    # mediator ──
++
++    def mediate(self, *, index: int, dialogue: list[dict], meta: dict | None = None) -> dict:
++        t_start = time.time()
++        conv = render_dialogue(dialogue)
++        text = prompt("mediator_prompt.md").replace("[[EXPS]]", self.experiences["rules"].strip()).replace(
++            "[[CONVERSATION]]", conv)
++        msgs = [{"role": "user", "content": text}]
++        rewrite, ok, records = self._call(index, msgs, json_mode=False, parse=lambda c: c.strip())
++        doc = {"schema": "redo_v1/port-mediator/1", "arm": "mediator", "label": PORT_LABEL["mediator"],
++               "index": index, "phase": "after_reply", "reply": dialogue[-1]["content"] if dialogue else None,
++               "call_started_at": t_start, "written_at": time.time(), "model": self.model, "ok": ok,
++               "attempts": len(records), "rewrite": rewrite, "n_messages": len(dialogue),
++               "experiences_sha256": self.experiences.get("file_sha256"), **(meta or {})}
++        self._write(index, doc)
++        return doc
++
++    # delivery ──
++
++    def compose(self, reply: str, doc: dict | None) -> str:
++        """The message the agent receives for a real user reply. A failed call passes the reply
++        through unchanged (recorded in the doc and ``port_calls.jsonl``)."""
++        if not (doc and doc.get("ok")):
++            return reply
++        if self.arm == "mediator":
++            return doc["rewrite"]
++        block = prompt("tracker_block.md").replace("{fact_layer_snapshot}", doc["fact_layer_rendered"]).replace(
++            "{state_layer_snapshot}", render_state(doc["state"]))
++        return f"{reply}\n\n{block.rstrip()}"
++
++
++def config_record(arm: str, agent_model: str) -> dict:
++    rec = {"arm": arm, "label": PORT_LABEL[arm], "model": litellm_model(agent_model), "reasoning_effort": "high",
++           "prompts_sha256": prompts_sha256(), "module_sha256": module_sha256(), "timing": "after_reply"}
++    if arm == "mediator":
++        e = load_experiences(agent_model)
++        rec["experiences"] = {k: e.get(k) for k in ("file_sha256", "rules_sha256", "refiner_model", "pairs")} if e else None
++    return rec
+diff --git a/src/user_agent/turn_snapshots.py b/src/user_agent/turn_snapshots.py
+new file mode 100644
+index 0000000..fb0bbd8
+--- /dev/null
++++ b/src/user_agent/turn_snapshots.py
+@@ -0,0 +1,66 @@
++"""Per-turn repository snapshots (tib redo_v1 local patch).
++
++`repo_diff.capture_git_diff` already commits the workspace as `harbor-turn-<N>`
++inside the sandbox and writes `patches/turn-<N>.patch` - but only when the diff is
++non-empty, and with nothing that ties a snapshot to the conversation. The redo
++study needs, for every agent turn, the exact repository state *before* the user's
++reply is produced, so regressions can be judged turn by turn.
++
++This module writes, for every call of `capture_git_diff` (i.e. after every agent
++turn, before the simulated user is consulted):
++
++    <logs_dir>/snapshots/turn-<N>.patch        cumulative diff vs `harbor-base`
++                                               (always written, possibly empty)
++    <logs_dir>/snapshots/turn-<N>.json         digest, files, sizes, timing
++
++and the wrapper appends one line per agent turn to `<logs_dir>/turns.jsonl`
++(`record_turn`): the message that opened the turn, the snapshot written at its
++end, and (filled in on the next line's `reply`) the simulated user's reaction.
++The patch is the same artefact the judge applies (junk-filtered cumulative diff),
++so a snapshot can be materialised in a fresh sandbox exactly like `final.patch`.
++"""
++from __future__ import annotations
++
++import hashlib
++import json
++import re
++import time
++from pathlib import Path
++
++SNAPSHOT_SCHEMA = "swt-turn-snapshot/1"
++
++
++def _files(diff: str) -> list[str]:
++    return sorted({m.group(1) for m in re.finditer(r"^diff --git a/(.+?) b/", diff, re.M)})
++
++
++def write_turn_snapshot(logs_dir: Path, turn: int, cumulative: str, incremental: str,
++                        *, capture_ok: bool = True, error: str | None = None) -> dict:
++    snap_dir = Path(logs_dir) / "snapshots"
++    snap_dir.mkdir(parents=True, exist_ok=True)
++    body = cumulative + "\n" if cumulative else ""
++    (snap_dir / f"turn-{turn}.patch").write_text(body)
++    meta = {
++        "schema": SNAPSHOT_SCHEMA,
++        "turn": turn,
++        "captured_at": time.time(),
++        "capture_ok": capture_ok,
++        "error": error,
++        "sandbox_ref": f"harbor-turn-{turn}",
++        "cumulative_sha256": hashlib.sha256(body.encode()).hexdigest(),
++        "cumulative_bytes": len(body),
++        "cumulative_files": _files(cumulative),
++        "incremental_sha256": hashlib.sha256(incremental.encode()).hexdigest(),
++        "incremental_bytes": len(incremental),
++        "incremental_files": _files(incremental),
++        "empty": not cumulative.strip(),
++    }
++    (snap_dir / f"turn-{turn}.json").write_text(json.dumps(meta, indent=2))
++    return meta
++
++
++def record_turn(logs_dir: Path, record: dict) -> None:
++    """Append one agent-turn record to ``<logs_dir>/turns.jsonl``."""
++    rec = {"ts": time.time(), **record}
++    with open(Path(logs_dir) / "turns.jsonl", "a") as f:
++        f.write(json.dumps(rec, ensure_ascii=False) + "\n")

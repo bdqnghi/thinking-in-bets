@@ -1,0 +1,1272 @@
+{
+ "seed": 20260928,
+ "rule": "distinct (task, patch) groups; calibration (reference/base) groups -> heldout; other groups shuffled with the seed, first half -> dev",
+ "groups": [
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "141e5a0e1d1ac0c4b4566257b35392f007dc3213a615ccec0988a5313b87efba",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/revB/W/stock/overlay_r1/trials/cli-task-2026-0__BsVfH2E"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "2f533574fcf000c9d654651cd17e90695b3123889a77d982dc3d79d198451e52",
+   "split": "heldout",
+   "sources": [
+    "stage0/W_bringup/trials/cli-task-2026-0__iUfYU7E"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "3bfb6cc58b66bb1425e52344fb08af0e4c86266cc00e471a08c7567b0ab61db9",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/revB/W/claims_after/natural_r1/trials/cli-task-2026-0__BAJjWKn",
+    "stage1_smoke/revB/W/commit_before/overlay_r2/trials/cli-task-2026-0__NvP6ig2"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true
+    },
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "49ea03198926d98bddb0e1f11abcd3b931a3bdacbefbad264298be1e76f02e4a",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-2026-0/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "6f7c32360521bbf9806e833c6ca828c6ff836f895802ac7c7a58f8a798a4474d",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/parity/e2b/W/stock/natural_r1/trials/cli-task-2026-0__apjGYmT"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "9f7383cebbd1c0dbedfa37d67d5cf706e9b3cbb22b3512462542aea096977304",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/W/commit_before/overlay_r1/trials/cli-task-2026-0__uD7LC2b",
+    "stage1_smoke/parity/docker/W/stock/natural_r2/trials/cli-task-2026-0__LLix5Bw"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true
+    },
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "a0234f05c5fc2f73d6675a9b09df9f8a7888363c13f3a5767baaa3b489329a81",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/W/commit_before/natural_r1/trials/cli-task-2026-0__XRnvghZ"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "b2e7ad91520526e4108be22cece85d75a883146ac56c02186e89dbb207cdb8be",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/W/claims_after/natural_r1/trials/cli-task-2026-0__kawWJi2"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "b3f1f09e813aeb1c7a243cc69d0a15af57aef6a3f22d0c31bfc86afab1c28046",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/parity/e2b/W/stock/natural_r2/trials/cli-task-2026-0__AFVptzz"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "c19754f76e757d9601475ea9a605eb3219412755848c0a991c31b5669f515151",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/revB/W/commit_before/natural_r1/trials/cli-task-2026-0__D8J3P33"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-2026-0/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": false,
+    "goal_1": false,
+    "goal_2": false,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": false,
+     "goal_1": false,
+     "goal_2": false,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "e461b64346a8acc0c9ade3fc013afa1d3585e4edf69ac5a25594fa2bee361ab3",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/parity/docker/W/stock/natural_r1/trials/cli-task-2026-0__BRyiANj"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-2026-0",
+   "patch_sha256": "f383bbada4a7274a65c1816465361f2caa9dcbdecb21067f0609bc790fa231a7",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/revB/W/commit_before/overlay_r1/trials/cli-task-2026-0__TrdSjtG"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-33e050",
+   "patch_sha256": "8c2c9aaf874e51d481aea61389406c7ae2409f3d4841e81467844aa6258b573c",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-33e050/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true,
+    "goal_4": true,
+    "goal_5": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true,
+     "goal_4": true,
+     "goal_5": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-33e050",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-33e050/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": false,
+    "goal_1": false,
+    "goal_2": true,
+    "goal_3": true,
+    "goal_4": true,
+    "goal_5": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": false,
+     "goal_1": false,
+     "goal_2": true,
+     "goal_3": true,
+     "goal_4": true,
+     "goal_5": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-408b8c",
+   "patch_sha256": "4335f91086562508dd4400eee82d75941f51c033521c8d1552dc1f809a4f7090",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-408b8c/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_cached_avoids_repeated_git": true,
+    "goal_reuse_existing_root_cache": true,
+    "goal_worktree_root_resolution": true,
+    "goal_cache_invalidation_and_uncacheable_failure": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_cached_avoids_repeated_git": true,
+     "goal_reuse_existing_root_cache": true,
+     "goal_worktree_root_resolution": true,
+     "goal_cache_invalidation_and_uncacheable_failure": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-408b8c",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-408b8c/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": false,
+    "goal_cached_avoids_repeated_git": false,
+    "goal_reuse_existing_root_cache": false,
+    "goal_worktree_root_resolution": true,
+    "goal_cache_invalidation_and_uncacheable_failure": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": false,
+     "goal_cached_avoids_repeated_git": false,
+     "goal_reuse_existing_root_cache": false,
+     "goal_worktree_root_resolution": true,
+     "goal_cache_invalidation_and_uncacheable_failure": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-4a9dde",
+   "patch_sha256": "c3f17c89ff397af1fa0b8d6b28418f7fa04f527b8c1ed8cb00b19cd02a75310a",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-4a9dde/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true,
+    "goal_4": true,
+    "goal_5": true,
+    "goal_6": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true,
+     "goal_4": true,
+     "goal_5": true,
+     "goal_6": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-4a9dde",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-4a9dde/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": false,
+    "goal_2": false,
+    "goal_3": false,
+    "goal_4": false,
+    "goal_5": false,
+    "goal_6": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": false,
+     "goal_2": false,
+     "goal_3": false,
+     "goal_4": false,
+     "goal_5": false,
+     "goal_6": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-5a69ca",
+   "patch_sha256": "25e4a0dcdd95e03d9b393ff000ef1c8b5c915f069aacefde64cc32f44c39920e",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-5a69ca/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_detect_empty_repo": true,
+    "goal_unit_tests": true,
+    "goal_clear_user_message": true,
+    "goal_distinct_error_value": true,
+    "goal_gemini_handler_consistency": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_detect_empty_repo": true,
+     "goal_unit_tests": true,
+     "goal_clear_user_message": true,
+     "goal_distinct_error_value": true,
+     "goal_gemini_handler_consistency": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-5a69ca",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-5a69ca/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": false,
+    "goal_detect_empty_repo": false,
+    "goal_unit_tests": false,
+    "goal_clear_user_message": false,
+    "goal_distinct_error_value": false,
+    "goal_gemini_handler_consistency": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": false,
+     "goal_detect_empty_repo": false,
+     "goal_unit_tests": false,
+     "goal_clear_user_message": false,
+     "goal_distinct_error_value": false,
+     "goal_gemini_handler_consistency": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-c425e4",
+   "patch_sha256": "7298d078bd0c4be374a79e664348edc706321b76e14b4a3b475f545a741e9a05",
+   "split": "heldout",
+   "sources": [
+    "stage0/M_plumbing/trials/cli-task-c425e4__fGfcXhP"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true,
+    "goal_4": true,
+    "goal_5": true,
+    "goal_6": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true,
+     "goal_4": true,
+     "goal_5": true,
+     "goal_6": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-c425e4",
+   "patch_sha256": "94ccf539063230bb7b0438c5619edc47db9b1854b205e0e60bb7bab22419d317",
+   "split": "dev",
+   "sources": [
+    "stage0/M_plumbing_r2/trials/cli-task-c425e4__kcHqvyK"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true,
+    "goal_4": false,
+    "goal_5": true,
+    "goal_6": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true,
+     "goal_4": false,
+     "goal_5": true,
+     "goal_6": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-c425e4",
+   "patch_sha256": "c0f15faa91c89647c51bcee63a1149b59e712465a9a23b8c5acca76af39ce4e5",
+   "split": "dev",
+   "sources": [
+    "stage0/S_plumbing_r2/trials/cli-task-c425e4__r9sKuun"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true,
+    "goal_4": false,
+    "goal_5": true,
+    "goal_6": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true,
+     "goal_4": false,
+     "goal_5": true,
+     "goal_6": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-c425e4",
+   "patch_sha256": "c92e151da8a4aec4b315e629cabfef7f832bde898d4d7a73dbe8b500759c0db0",
+   "split": "heldout",
+   "sources": [
+    "stage0/S_plumbing/trials/cli-task-c425e4__Eg9pccc"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true,
+    "goal_4": false,
+    "goal_5": true,
+    "goal_6": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true,
+     "goal_4": false,
+     "goal_5": true,
+     "goal_6": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-cd4662",
+   "patch_sha256": "20916e786b40abc49ecb60c3e5fda0794b4c8e3b21d683e193d9e1bb0996be34",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/parity/e2b/W/stock/natural_r1/trials/cli-task-cd4662__RvkqUd3"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_consecutive_unique_ids": false,
+    "goal_no_stale_id_reuse": false,
+    "goal_preserve_hook_rerun_idempotency": true,
+    "goal_regression_test_added": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_consecutive_unique_ids": false,
+     "goal_no_stale_id_reuse": false,
+     "goal_preserve_hook_rerun_idempotency": true,
+     "goal_regression_test_added": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-cd4662",
+   "patch_sha256": "423dfce7ec4f4c125afaf141b6d96783dd7a7199c504868b08240224f021c263",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-cd4662/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_consecutive_unique_ids": true,
+    "goal_no_stale_id_reuse": true,
+    "goal_preserve_hook_rerun_idempotency": true,
+    "goal_regression_test_added": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_consecutive_unique_ids": true,
+     "goal_no_stale_id_reuse": true,
+     "goal_preserve_hook_rerun_idempotency": true,
+     "goal_regression_test_added": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-cd4662",
+   "patch_sha256": "429865216494ba61c8ab1d0fde2dd3c61dc8c4393921fa0f913bcdfec4583039",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/parity/e2b/W/stock/natural_r2/trials/cli-task-cd4662__uZryA2L"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_consecutive_unique_ids": false,
+    "goal_no_stale_id_reuse": false,
+    "goal_preserve_hook_rerun_idempotency": true,
+    "goal_regression_test_added": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_consecutive_unique_ids": false,
+     "goal_no_stale_id_reuse": false,
+     "goal_preserve_hook_rerun_idempotency": true,
+     "goal_regression_test_added": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-cd4662",
+   "patch_sha256": "6c6f8e3e835e97720ae1b94b85b02b8a7f6d1d9d046c4f3a4ba81b9b5c20ca2b",
+   "split": "heldout",
+   "sources": [
+    "stage0/W_bringup/trials/cli-task-cd4662__Wouktmw"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_consecutive_unique_ids": true,
+    "goal_no_stale_id_reuse": true,
+    "goal_preserve_hook_rerun_idempotency": true,
+    "goal_regression_test_added": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_consecutive_unique_ids": true,
+     "goal_no_stale_id_reuse": true,
+     "goal_preserve_hook_rerun_idempotency": true,
+     "goal_regression_test_added": true
+    }
+   ]
+  },
+  {
+   "task": "cli-task-cd4662",
+   "patch_sha256": "89ccb566b057fb1cc252709047fe00b8c9b5ca7cba86f756bd0fc7341f41f3d2",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/parity/docker/W/stock/natural_r1/trials/cli-task-cd4662__uLzbD22"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_consecutive_unique_ids": false,
+    "goal_no_stale_id_reuse": false,
+    "goal_preserve_hook_rerun_idempotency": true,
+    "goal_regression_test_added": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_consecutive_unique_ids": false,
+     "goal_no_stale_id_reuse": false,
+     "goal_preserve_hook_rerun_idempotency": true,
+     "goal_regression_test_added": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-cd4662",
+   "patch_sha256": "ad65ff443ad343d5539ad85dd32e894ffa86eac2f7a2bc1c7718d8ca37e0d80e",
+   "split": "dev",
+   "sources": [
+    "stage0/W_docker_arm64/trials/cli-task-cd4662__Nw5eQY6"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_consecutive_unique_ids": false,
+    "goal_no_stale_id_reuse": false,
+    "goal_preserve_hook_rerun_idempotency": true,
+    "goal_regression_test_added": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_consecutive_unique_ids": false,
+     "goal_no_stale_id_reuse": false,
+     "goal_preserve_hook_rerun_idempotency": true,
+     "goal_regression_test_added": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-cd4662",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/cli-task-cd4662/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": false,
+    "goal_consecutive_unique_ids": false,
+    "goal_no_stale_id_reuse": false,
+    "goal_preserve_hook_rerun_idempotency": true,
+    "goal_regression_test_added": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": false,
+     "goal_consecutive_unique_ids": false,
+     "goal_no_stale_id_reuse": false,
+     "goal_preserve_hook_rerun_idempotency": true,
+     "goal_regression_test_added": false
+    }
+   ]
+  },
+  {
+   "task": "cli-task-cd4662",
+   "patch_sha256": "fe647b0537cb111b4e76e52ed912b19ab71d441b129e0604895cdf3b60bb199c",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/parity/docker/W/stock/natural_r2/trials/cli-task-cd4662__upHZ3bD"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_consecutive_unique_ids": false,
+    "goal_no_stale_id_reuse": false,
+    "goal_preserve_hook_rerun_idempotency": true,
+    "goal_regression_test_added": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_consecutive_unique_ids": false,
+     "goal_no_stale_id_reuse": false,
+     "goal_preserve_hook_rerun_idempotency": true,
+     "goal_regression_test_added": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "0e4d584098295a1dbe4688d4334a4990641f6602bc340a8d34beb18227bd6ffc",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/parity/e2b/W/stock/natural_r1/trials/dataclaw-windows-path-fix__jsXpDBF"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": false,
+    "goal_4": false,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": false,
+     "goal_4": false,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "1bbd9389920ebfde840c74888630c48df42b979840faeddd7576c2a18ba781de",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/revB/W/claims_after/natural_r1/trials/dataclaw-windows-path-fix__UjTWbuY"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": false,
+    "goal_2": true,
+    "goal_4": false,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": false,
+     "goal_2": true,
+     "goal_4": false,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "265afbf959d90c150fedb9892067022d51cf9de990b6f4b8a4a909aa2153d9ab",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/parity/docker/W/stock/natural_r1/trials/dataclaw-windows-path-fix__y4jjfve"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": false,
+    "goal_4": false,
+    "goal_3": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": false,
+     "goal_4": false,
+     "goal_3": true
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "2906715156bac8e5a038c2472d6746546073f12a8fba9434bca9fa65e1640d81",
+   "split": "heldout",
+   "sources": [
+    "stage0/W_bringup/trials/dataclaw-windows-path-fix__5RAz7r7"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_4": true,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_4": true,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "6a0f3804f364aa5c426a4c1f3395054475748dc8e9a2df73747e4a04a40c08f4",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/parity/docker/W/stock/natural_r2/trials/dataclaw-windows-path-fix__jUUWiWq"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_4": false,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_4": false,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "8ab986b18a003a18bd50142e78e4d9cf4b458a7995a71cbdeff079c48311ba51",
+   "split": "heldout",
+   "sources": [
+    "stage1_smoke/parity/e2b/W/stock/natural_r2/trials/dataclaw-windows-path-fix__SzWGjR7"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": false,
+    "goal_4": false,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": false,
+     "goal_4": false,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "994a7f2e01de91289eb5486a43723ae41ce9b66fd1ce98f1bcc0cb8909864336",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/W/claims_after/natural_r1/trials/dataclaw-windows-path-fix__QVHygGh"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_4": true,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_4": true,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "a4a5bd4afbcda0330ddee369b45678dcf6f331a1e44130fd0f0c6c1eb13d14a7",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/revB/W/commit_before/natural_r1/trials/dataclaw-windows-path-fix__v3xCXhz"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_4": false,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_4": false,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "abd9b42992c6a08568df06a35636b2bdbc635e8f8f0a25ed067884618261ddda",
+   "split": "dev",
+   "sources": [
+    "stage1_smoke/W/commit_before/natural_r1/trials/dataclaw-windows-path-fix__WbadiH6"
+   ],
+   "calibration": false,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_4": false,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_4": false,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/dataclaw-windows-path-fix/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": false,
+    "goal_1": false,
+    "goal_2": false,
+    "goal_4": false,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": false,
+     "goal_1": false,
+     "goal_2": false,
+     "goal_4": false,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "patch_sha256": "ec6eb387acc945bfcb30ebb68fb28a65b959bf8ccf93fcf10b2d1a51ca246456",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/dataclaw-windows-path-fix/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_4": false,
+    "goal_3": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_4": false,
+     "goal_3": true
+    }
+   ]
+  },
+  {
+   "task": "gemini-voyager-task-aa88f5",
+   "patch_sha256": "726177d01a816bd9938473deb209ba27548ecd439e8788de56c725cb8d6551e2",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/gemini-voyager-task-aa88f5/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true,
+    "goal_4": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true,
+     "goal_4": true
+    }
+   ]
+  },
+  {
+   "task": "gemini-voyager-task-aa88f5",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/gemini-voyager-task-aa88f5/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": false,
+    "goal_1": false,
+    "goal_2": false,
+    "goal_3": false,
+    "goal_4": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": false,
+     "goal_1": false,
+     "goal_2": false,
+     "goal_3": false,
+     "goal_4": false
+    }
+   ]
+  },
+  {
+   "task": "gemini-voyager-task-f519c2",
+   "patch_sha256": "dcd81dab3ce530b92618a187ead3a6208d3343269459a419f03445b9892522ab",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/gemini-voyager-task-f519c2/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_1": true,
+    "goal_2": true,
+    "goal_3": true
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_1": true,
+     "goal_2": true,
+     "goal_3": true
+    }
+   ]
+  },
+  {
+   "task": "gemini-voyager-task-f519c2",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/gemini-voyager-task-f519c2/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": false,
+    "goal_1": false,
+    "goal_2": false,
+    "goal_3": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": false,
+     "goal_1": false,
+     "goal_2": false,
+     "goal_3": false
+    }
+   ]
+  },
+  {
+   "task": "hyperswitch-8389",
+   "patch_sha256": "0f25005b7c23ca1f38dddda8590f3ea50d3756021ad182317e6d37aa22dc62f7",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/hyperswitch-8389/reference"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": true,
+    "goal_pi_kv_storage": true,
+    "goal_pa_kv_storage": true,
+    "goal_v2_kv_route": true,
+    "goal_v2_apply_changeset": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": true,
+     "goal_pi_kv_storage": true,
+     "goal_pa_kv_storage": true,
+     "goal_v2_kv_route": true,
+     "goal_v2_apply_changeset": false
+    }
+   ]
+  },
+  {
+   "task": "hyperswitch-8389",
+   "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "split": "heldout",
+   "sources": [
+    "stage0/judge_calibration/hyperswitch-8389/base"
+   ],
+   "calibration": true,
+   "goal_met": {
+    "goal_0": false,
+    "goal_pi_kv_storage": false,
+    "goal_pa_kv_storage": false,
+    "goal_v2_kv_route": false,
+    "goal_v2_apply_changeset": false
+   },
+   "goal_met_all": [
+    {
+     "goal_0": false,
+     "goal_pi_kv_storage": false,
+     "goal_pa_kv_storage": false,
+     "goal_v2_kv_route": false,
+     "goal_v2_apply_changeset": false
+    }
+   ]
+  }
+ ]
+}

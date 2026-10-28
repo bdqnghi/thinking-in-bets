@@ -1,0 +1,110 @@
+{
+ "labeller": "G2b",
+ "labels": {
+  "pi-mono-extensions-event-refactor/goal_1": {
+   "label": "satisfied",
+   "evidence": "runner.ts new emitToolResult(): copies event into currentEvent, iterates this.extensions in order, passes the same mutated currentEvent to each handler, merges only defined content/details/isError, returns undefined when nothing modified; wrapper.ts both tool_result call-sites now call runner.emitToolResult. Probe vitest (exts a.ts,b.ts): result content base,A,B; handler b saw 'base,A'; no-op handlers -> undefined. extensions-runner.test.ts 18/18 pass. Caveat: runner.ts as a whole fails tsgo typecheck (4 errors from duplicated RunnerEmitEvent alias and a stray 'as RunnerEmitResult<TEvent>' in getRegisteredCommandsWithPaths; base HEAD typechecks clean, exit 0), but the goal_1 code itself is type-clean and runs.",
+   "confidence": 0.7
+  },
+  "pi-mono-extensions-event-refactor/goal_2": {
+   "label": "not_satisfied",
+   "evidence": "Patch adds RunnerEmitEvent = Exclude<ExtensionEvent, ToolCall|ToolResult|UserBash|Context|BeforeAgentStart|ResourcesDiscover|Input> at runner.ts:102 but the old alias remains at runner.ts:138 -> 'error TS2300: Duplicate identifier RunnerEmitEvent' (both lines); plus runner.ts:458 TS2552 'Cannot find name TEvent'. `npx tsgo -p tsconfig.build.json --noEmit`: patched exit 2 (4 errors, all runner.ts), base exit 0. A probe calling emit({type:'tool_result'}) / emit({type:'tool_call'}) / input was rejected by tsgo, so the intended restriction is visible, but the restricting type itself is a compile error and the package no longer builds.",
+   "confidence": 0.6
+  },
+  "pi-mono-extensions-event-refactor/goal_3": {
+   "label": "not_satisfied",
+   "evidence": "runner.ts:536-540 still does `result = handlerResult as SessionBeforeEventResult` (unchecked cast) and `return result as RunnerEmitResult<TEvent>`; guard now takes the event and result union covers switch/fork/compact/tree, but the unchecked cast remains required. Also the misplaced `return result as RunnerEmitResult<TEvent>` at runner.ts:458 (getRegisteredCommandsWithPaths) is a TS2322/TS2552 compile error.",
+   "confidence": 0.8
+  },
+  "pi-mono-extensions-event-refactor/goal_4": {
+   "label": "satisfied",
+   "evidence": "docs/extensions.md tool_result section (~line 527) adds: handlers run in extension load order; each sees latest result after previous changes; partial patches (content/details/isError) with omitted fields keeping current values.",
+   "confidence": 0.95
+  },
+  "pi-mono-extensions-event-refactor/goal_5": {
+   "label": "satisfied",
+   "evidence": "test.sh:38-39 adds `unset KIMI_API_KEY` and `unset HF_TOKEN`; packages/ai/src/env-api-keys.ts:110 maps 'kimi-coding' -> KIMI_API_KEY, so the Kimi coding key is unset.",
+   "confidence": 0.9
+  },
+  "pi-mono-extensions-event-refactor/goal_6": {
+   "label": "satisfied",
+   "evidence": "git status: only CHANGELOG.md, docs/extensions.md, runner.ts, wrapper.ts, test/extensions-runner.test.ts (coding-agent) and test.sh modified; no manifests, lockfiles or unrelated sources.",
+   "confidence": 0.9
+  },
+  "sd-scripts-fp8-lumina/goal_1": {
+   "label": "not_satisfied",
+   "evidence": "library/lumina_util.py:25-26 declares FP8_OPTIMIZATION_TARGET_KEYS=['layers','context_refiner','noise_refiner'] and load_lumina_model gains fp8_scaled, calling load_safetensors_with_lora_and_fp8(fp8_optimization=fp8_scaled, target_keys/exclude_keys) and apply_fp8_monkey_patch. BUT the patch adds the parameter annotation `Optional[Dict[str, torch.Tensor]]` (lumina_util.py:37) while the module imports only `List, Optional, Tuple, Union` from typing: `python -c 'import library.lumina_util'` -> NameError: name 'Dict' is not defined (base HEAD imports fine). The Lumina loader cannot be imported, so the fp8 path never runs. With a probe-only builtins.Dict workaround, the tiny-NextDiT load quantized 30 Linear layers (layers.*, *_refiner.*) to float8_e4m3fn and called apply_fp8_monkey_patch, i.e. logic would be right if importable.",
+   "confidence": 0.85
+  },
+  "sd-scripts-fp8-lumina/goal_2": {
+   "label": "satisfied",
+   "evidence": "library/fp8_optimization_utils.py fp8_linear_forward_patch: original_dtype = x.dtype; scale = self.scale_weight.to(original_dtype); weight.to(original_dtype) * scale (both per-channel and block branches). Probe: nn.Linear with fp8 weight and fp8-typed scale_weight, bf16 input -> fp8_linear_forward_patch returns bfloat16 without error; max abs err vs fp32 reference 0.0034. Module imports fine (does not depend on lumina_util).",
+   "confidence": 0.9
+  },
+  "sd-scripts-fp8-lumina/goal_3": {
+   "label": "not_satisfied",
+   "evidence": "library/lumina_train_util.py add_lumina_train_arguments adds --fp8_scaled (store_true); parsing ['--fp8_scaled'] via that function gives fp8_scaled=True. However the training entrypoint itself cannot be invoked: `python lumina_train_network.py --help` -> NameError: name 'Dict' is not defined (from library/lumina_util.py:37 added by the patch). The goal requires the existing training script to be invocable with the new mode.",
+   "confidence": 0.7
+  },
+  "sd-scripts-fp8-lumina/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "lumina_train_network.py load_target_model: loading_dtype = None if args.fp8_scaled else weight_dtype; passes fp8_scaled=args.fp8_scaled to lumina_util.load_lumina_model (textually correct). But lumina_train_network.py fails at import (NameError 'Dict' in library/lumina_util.py:37), so the wiring cannot run.",
+   "confidence": 0.8
+  },
+  "sd-scripts-fp8-lumina/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "library/lumina_util.py:26 FP8_OPTIMIZATION_EXCLUDE_KEYS=['norm','_emb','modulation']; with probe-only Dict workaround no *norm* tensor received scale_weight while attention/ffn Linear did. But the module defining the constant fails to import on the patched tree (NameError: name 'Dict' is not defined, lumina_util.py:37), so the behavioral test cannot obtain the constant.",
+   "confidence": 0.8
+  },
+  "sd-scripts-fp8-lumina/goal_6": {
+   "label": "not_satisfied",
+   "evidence": "'modulation' is in FP8_OPTIMIZATION_EXCLUDE_KEYS (lumina_util.py:26); with probe-only Dict workaround adaLN_modulation.1.weight stayed float32 without scale_weight while attention.qkv was fp8. But library/lumina_util.py does not import on the patched tree (NameError 'Dict', line 37), so neither the constant nor the loader is usable.",
+   "confidence": 0.8
+  },
+  "pi-mono-auto-d3b2130d/goal_1": {
+   "label": "satisfied",
+   "evidence": "packages/coding-agent/README.md ~L1013: 'Discoverability: Published pi packages should include the pi-package keyword in their package.json for npm search' + curl registry.npmjs.org/-/v1/search?text=keywords:pi-package; docs/extensions.md ~L245: 'Add the pi-package keyword ... so users can find your package on npm' + same search command.",
+   "confidence": 0.95
+  },
+  "pi-mono-auto-d3b2130d/goal_2": {
+   "label": "satisfied",
+   "evidence": "Both docs name `pi-package` as the keyword packages should include in package.json (extensions.md shows \"keywords\": [\"pi-package\", ...]).",
+   "confidence": 0.95
+  },
+  "pi-mono-auto-d3b2130d/goal_3": {
+   "label": "satisfied",
+   "evidence": "git status: packages/coding-agent/README.md and packages/coding-agent/docs/extensions.md both modified with new pi-package discoverability prose.",
+   "confidence": 0.95
+  },
+  "pi-mono-auto-d3b2130d/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "Only the two markdown files changed; no package.json anywhere contains 'pi-package' (grep -rn pi-package --include=package.json, excluding node_modules: no hits); sibling dirs ../pi-doom etc. absent (ls .. -> pi-mono only).",
+   "confidence": 0.95
+  },
+  "gemini-voyager-task-4bddaf/goal_1": {
+   "label": "satisfied",
+   "evidence": "src/pages/popup/Popup.tsx: SectionReorderControls (L335-400) renders up/down buttons with onClick -> moveSectionInOrder(id,'up'|'down') (L1194-1212); wrapSection (L1214) wraps all 17 sections with style={{order: sectionOrder.indexOf(id)}} inside the 'flex flex-col gap-4 p-5' container. jsdom render probe (mocked i18n/polyfill): clicking move-down on the first section swapped CSS order (timeline 0->1, contextSync 1->0); first section's up button disabled, down enabled. `bun x tsc --noEmit` exit 0.",
+   "confidence": 0.9
+  },
+  "gemini-voyager-task-4bddaf/goal_2": {
+   "label": "satisfied",
+   "evidence": "Popup.tsx: POPUP_SECTION_IDS/DEFAULT_SECTION_ORDER (L50-73) and useState sectionOrder (L448); moveSectionInOrder swaps entries in a copy and setSectionOrder(next); render uses sectionOrder.indexOf(id) as flex order. Probe confirmed rendered order changes after click.",
+   "confidence": 0.9
+  },
+  "gemini-voyager-task-4bddaf/goal_3": {
+   "label": "satisfied",
+   "evidence": "StorageKeys.GV_POPUP_SECTION_ORDER='gvPopupSectionOrder' (src/core/types/common.ts); moveSectionInOrder calls setSyncStorage({gvPopupSectionOrder: next}); load path (Popup.tsx L930-940) reads stored array, filters to valid ids, appends missing ids, default when null. Probe: stored ['timeline','contextSync'] rendered those first then defaults; after move, storage held ['contextSync','timeline','cloudSync',...].",
+   "confidence": 0.9
+  },
+  "gemini-voyager-task-4bddaf/goal_4": {
+   "label": "satisfied",
+   "evidence": "docs/*/guide/settings.md (10 locales incl. docs/en/guide/settings.md, docs/guide/settings.md) add a 'Custom Order' section: hover a card, click the up/down arrows to move it, layout saved automatically and persists across sessions.",
+   "confidence": 0.95
+  },
+  "gemini-voyager-task-4bddaf/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "No changes to package.json or docs/.vitepress/config.mts (git status lists only docs md, locales, common.ts, Popup.tsx); grep for changelog/git-log/search plugin in package.json and config.mts finds nothing.",
+   "confidence": 0.95
+  }
+ }
+}

@@ -1,0 +1,357 @@
+{
+ "note": "goals of the 8 tasks without a recorded benchmark verdict for the reference patch (revised check (a)); no verdicts",
+ "tasks": {
+  "cli-task-c425e4": [
+   {
+    "goal_id": "goal_1",
+    "tier": "core",
+    "weight": 0.45,
+    "goal": "After the agent's changes, the linter (the executable invoked by the existing mise lint pipeline) reports an error when run against a mise.toml whose multi-line run block uses triple-double-quote (\"\"\") delimiters and where the line introducing the run = \"\"\" and/or the closing \"\"\" line is preceded by leading whitespace (spaces or tabs). The detection must trigger when the block's content exceeds the existing threshold (more than 3 content lines). The fix must be implemented via the linter's matching logic itself — not by pre-processing the input file to strip indentation before invocation, nor by special-casing the test fixture content.",
+    "rationale": "Headline user ask B.1+B.2. The user explicitly diagnoses the column-1 anchoring as the bug. Goal text describes observable behaviour ('reports an error when ... leading whitespace') and forbids the two obvious gaming routes (input pre-processing, content-string special-casing) without naming any specific regex implementation."
+   },
+   {
+    "goal_id": "goal_2",
+    "tier": "secondary",
+    "weight": 0.15,
+    "goal": "The same indentation-tolerance applies symmetrically when the multi-line run block uses triple-single-quote (''') delimiters. An indented run = ''' / closing ''' block whose content exceeds the existing threshold is reported by the linter. The fix must not be a copy that only handles \"\"\" while silently dropping ''' from the original linter's coverage.",
+    "rationale": "User says 'The awk patterns' (plural) and 'allowing leading whitespace for both the start (run =) and closing delimiter matches'. The existing linter handles both quote styles, so the indentation tolerance applies symmetrically. Goal text rules out the gaming route of fixing one quote style while regressing the other."
+   },
+   {
+    "goal_id": "goal_3",
+    "tier": "secondary",
+    "weight": 0.1,
+    "goal": "After the agent's changes, the linter still reports an error for a non-indented multi-line run block (run = \"\"\" or run = ''' starting at column 1) whose content exceeds the existing threshold. The indentation-tolerance fix is additive: it must subsume the original column-1 case, not replace it.",
+    "rationale": "User ask B.3 is an implicit invariant — the user wanted to broaden detection, not narrow it. Catches the gaming route of writing a matcher that requires at least one whitespace character (which would silently regress the original behaviour)."
+   },
+   {
+    "goal_id": "goal_4",
+    "tier": "secondary",
+    "weight": 0.1,
+    "goal": "After the agent's changes, the linter does NOT flag a short multi-line run block (3 or fewer content lines, indented or not, using either delimiter style). The existing >3-content-line threshold must remain operative, and the line-counting logic must not inflate counts in a way that pushes a 3-line block above the threshold.",
+    "rationale": "User ask B.4 is an implicit invariant: 'don't introduce false positives'. Catches the gaming route of dropping or weakening the threshold check (which would let an agent pass detection tests by flagging everything)."
+   },
+   {
+    "goal_id": "goal_5",
+    "tier": "secondary",
+    "weight": 0.1,
+    "goal": "When the linter reports an error for an N-content-line block (with N > 3), the reported line count equals N — that is, the closing-delimiter line is not included in the count. The reported count must not be N+1. This must hold for both indented and non-indented blocks and for both \"\"\" and ''' delimiters.",
+    "rationale": "User ask B.5, marked '(optionally)' in the user's message. Kept as a scored secondary because the user did state it; weight kept below the regression goals. Goal text avoids prescribing the implementation (increment placement, branch structure, etc.)."
+   },
+   {
+    "goal_id": "goal_6",
+    "tier": "secondary",
+    "weight": 0.1,
+    "goal": "Inline multi-line shell scripts originally embedded in mise.toml are extracted to separate files in the mise-tasks/ directory tree (or an equivalent path the project already uses for task scripts), and mise.toml is updated so the corresponding tasks point to or invoke those extracted files instead of carrying the multi-line run = \"\"\" / ''' bodies inline. Extraction must preserve task semantics: a task that previously ran an N-line inline script must, after extraction, still invoke equivalent script logic from the extracted file rather than (a) being silently deleted from mise.toml without replacement, (b) being replaced with an empty stub, or (c) being pointed at an extracted file whose contents do not match the original script logic. Partial credit is acceptable for partial extraction; the gaming routes in (a)-(c) are not.",
+    "rationale": "User ask A.2 from instruction.md: 'I'd like to extract them out'. Was missing from v2. Included because the bar is 'every goal traces to USER ask' (not 'every goal traces to oracle patch'). The reference patch in this task's harbor checkout only contains the linter fix because that was the second-turn correction the canonical session ended on, but the original instruction explicitly asked for extraction. Goal text bakes in the three obvious gaming routes (delete-without-replacement, empty stub, mismatched extraction) and allows partial credit so the judge can give credit proportional to how much of mise.toml's inline-script burden was actually moved out."
+   }
+  ],
+  "lock-code-manager-fix-7c955a": [
+   {
+    "goal_id": "goal_1",
+    "tier": "core",
+    "weight": 0.17,
+    "goal": "Add a setup-completion signaling primitive on the lock base class so that code which races with first-time setup can block until that setup has finished. The user explicitly named `asyncio.Event` as their proposed mechanism in the Turn 0 plan ('Add an asyncio.Event field to BaseLock that signals when async_setup completes'); an `asyncio.Event` satisfies this goal directly. Any other awaitable completion primitive (asyncio.Future, Condition variable, etc.) is also acceptable PROVIDED it preserves the same observable semantics: callers awaiting the primitive block until setup is signaled, and the primitive can be set multiple times without raising. The primitive must release waiters on every exit path from the first-time-setup routine: normal completion, the early-return path taken when the coordinator already exists, AND the exception/failure path (e.g., via try/finally or equivalent control flow). A stub that creates the primitive but never signals it, or only signals on the happy path, does not satisfy this goal.",
+    "rationale": "Headline ask from the initial plan (Turn 0): 'Add an asyncio.Event field to BaseLock that signals when async_setup completes, so concurrent callers can wait' and 'Also set it in the early-return path... so re-setup calls don't block.' Per Gemini-v2 audit, the user explicitly named `asyncio.Event` and that specific identifier is now treated as the canonical mechanism (with semantically-equivalent alternatives still accepted). The goal remains primarily behavioral (signal-on-all-paths), but the user's named mechanism is no longer downgraded to a parenthetical example."
+   },
+   {
+    "goal_id": "goal_2",
+    "tier": "core",
+    "weight": 0.17,
+    "goal": "When a second config entry reuses a lock instance that already exists in the shared lock registry, the code path that creates entities for that second entry must first await the setup-completion primitive from goal_1 before touching the coordinator or registering entities. The await must go through a public/encapsulated method on the lock class (e.g., something like `await lock.async_wait_for_setup()` — any sensible public method name is acceptable). Reaching into a private attribute (e.g., `await lock._setup_complete.wait()`) from outside the lock module does NOT satisfy this goal, because the user explicitly objected to that style.",
+    "rationale": "Turn 0 plan: 'Wait for setup on lock reuse... await lock._setup_complete.wait()'. Turn 196 escalates: 'we should make setup_complete public or wrap it somehow in the class so we aren't calling it privately from outside the module.' The behavioral requirement is that the reuse path blocks until setup completes; the architectural requirement is that the await goes through a public surface on the lock class."
+   },
+   {
+    "goal_id": "goal_3",
+    "tier": "core",
+    "weight": 0.15,
+    "goal": "Fix the 'Unable to remove unknown job listener' error on reload/unload by changing the unsubscribe logic so it never tries to remove a one-time HOMEASSISTANT_STARTED listener that has already fired (and therefore already removed itself). The user proposed the canonical mechanism in the Turn 0 plan: a captured `started` boolean flag, set by the `_on_started` callback itself via the Python `nonlocal` keyword, then checked by `_safe_unsub` (`if not started: unsub()`). Implementations that use this exact pattern (a captured-flag closure with `nonlocal`) satisfy this goal. Alternative state-based avoidance patterns are also acceptable PROVIDED they preserve the same observable property: `_safe_unsub` short-circuits when the listener has already auto-removed itself, so HA core's `_async_remove_listener` is never called for the missing entry — acceptable alternatives include checking a Home Assistant core-state predicate that proves the started event has already passed (e.g., `hass.state != CoreState.starting`, with attention to the `CoreState.stopping` / pre-`CoreState.running` edge cases the user raised in Turns 85 and 88). Using try/except ValueError to swallow the error after-the-fact does NOT satisfy this goal, because HA core still logs the error before the exception is caught.",
+    "rationale": "Turn 0 plan: 'Fix listener unsubscribe error' and the diagnosis notes that '_safe_unsub() calls unsub()... HA core logs an ERROR before raising ValueError. The _safe_unsub catches the ValueError, but the error log has already been emitted.' Turns 78-91 walk through the flag/nonlocal mechanism, with the user's own Turn-0 code snippet specifying `nonlocal started`; per Gemini-v2 audit, that user-named mechanism is now pinned as the canonical satisfaction path (with semantically equivalent state-based patterns still accepted, since Turn 82 'is there another pattern we can use here that's easier to read?' and Turn 85/88 about shutdown/pre-running invite alternatives)."
+   },
+   {
+    "goal_id": "goal_4",
+    "tier": "secondary",
+    "weight": 0.1,
+    "goal": "Encapsulate the first-time setup body so the base lock class exposes a single public setup entry point that always signals the completion primitive (per goal_1) and delegates the actual work to a protected/overridable hook that subclass providers extend. After this refactor, subclass providers (the existing providers, plus any future ones) must be able to add provider-specific setup logic by overriding the protected hook — not by overriding the public entry point and re-implementing the completion signaling themselves.",
+    "rationale": "Turn 250 ('move everything from the giant try block into another method. Maybe _async_setup since this is the actual setup?') asks for the refactor explicitly. Turn 422 generalizes it: 'We want the base provider to have a protected setup and allow providers to setup with their own custom logic immediately after. Review my changes with that outcome in mind.' This is a distinct architectural ask, separate from goal_1's behavioral signal-on-all-paths requirement, and it is what makes goal_1's invariant safe to maintain as new providers are added."
+   },
+   {
+    "goal_id": "goal_5",
+    "tier": "secondary",
+    "weight": 0.09,
+    "goal": "Add at least one test that demonstrates the overlapping-lock race is fixed. The user explicitly named the test `test_overlapping_locks_both_entries_get_entities` in the Turn 0 plan; that name is preferred but not required, as long as the test does what that name describes: set up two config entries that share the same underlying lock, then assert (a) no 'Coordinator missing' (or equivalent) warning is logged for the second entry, AND (b) the second entry's entities are actually created / its coordinator is populated. Assertions must be on observable behavior (entities exist, coordinator is not None, log text), not on the private completion primitive itself.",
+    "rationale": "Turn 0 plan calls for `test_overlapping_locks_both_entries_get_entities` as the first new test. Per Gemini-v2 audit, the user-named test name is now mentioned as the preferred (non-required) name. Turn 217 sharpens the requirement: 'These tests assert directly on lock._setup_complete, which is a private implementation detail. If the intent is to validate the public behavior...it would be less brittle to assert via a public helper on BaseLock...' — so the test must validate behavior, not implementation."
+   },
+   {
+    "goal_id": "goal_6",
+    "tier": "secondary",
+    "weight": 0.07,
+    "goal": "Add a regression test that genuinely exercises the listener-unsubscribe code path from goal_3. The user named `test_overlapping_locks_reload_no_listener_error` as the second new test in the Turn 0 plan; that name is preferred but not required, as long as the test: drives the code path where the one-time HOMEASSISTANT_STARTED listener is actually registered (i.e., set up while HA core is still starting, not already running), lets the started event fire so the listener auto-removes itself, then triggers unload/reload, and finally asserts that no 'Unable to remove unknown job' error string is present in the captured log output. A test that runs entirely while HA core is already in the running state — and therefore never registers the one-time listener — does NOT satisfy this goal because it is a no-op assertion that would pass even with the bug present.",
+    "rationale": "Turn 0 plan calls for a regression test for the listener-unsubscribe fix, named `test_overlapping_locks_reload_no_listener_error` (preferred name now pinned per Gemini-v2 audit). The behavioral requirement is non-trivial because the listener is only registered on the not-yet-running branch: a test that runs while HA is already running silently bypasses the code being tested and is worthless as a regression guard. The anti-gaming clause is the load-bearing part of this goal."
+   },
+   {
+    "goal_id": "goal_7",
+    "tier": "secondary",
+    "weight": 0.07,
+    "goal": "Add tests covering the early-return branches of the duplicate-code handler — at minimum, the cases (a) the slot identifier is cleared/None before the deferred task runs, (b) no config entry manages the slot identifier in question, and (c) the lookup for the enabled-toggle entity returns nothing. Each branch must be exercised by a distinct test (or distinct parametrize case) that observably shows the handler returned early without producing a side effect that the non-early-return path would produce.",
+    "rationale": "Turn 347: 'we need to test early returns in handle duplicate code.' The user identifies a coverage gap; the goal is one test per behaviorally distinct early-return branch. Specific function names are not load-bearing."
+   },
+   {
+    "goal_id": "goal_8",
+    "tier": "secondary",
+    "weight": 0.05,
+    "goal": "Fix the PR #899 in-progress-slot clearing race so that the in-progress tracking field (e.g. `_set_in_progress_code_slot`) is only cleared on Z-Wave JS Value Updates that actually carry a new user-code payload (the `LOCK_USERCODE_PROPERTY` value, or the equivalent property name in the codebase). Updates carrying only user-id-status information (`userIdStatus`, or the equivalent) must NOT clear the in-progress slot, because Copilot review comment #4 (acknowledged by the user in Turn 20) demonstrated that the `userIdStatus` Value Update can arrive before the duplicate-code notification handler runs, racing the clear against the duplicate detection. The behavioral requirement is: a value update whose property indicates a status-only change must leave the in-progress slot intact; a value update whose property indicates an actual user-code change MAY clear it.",
+    "rationale": "Turn 18 ('switch to 899') + Turn 19 ('see copilot review comments') + Turn 20 ('address all unless you disagree with any of them') anchor this goal. The agent's Turn-20 response explicitly categorized Copilot comment #4 ('Clear in-progress code slot too eagerly — cleared on any User Code CC update including userIdStatus, not just userCode updates') as a comment they should ADDRESS (vs. SKIP for the three hallucinated ones). The oracle session's grading_patch is `_fidelity: directional` and the replay dropped the zwave_js.py edits for this fix (4 `replay_warnings: edit: old text not found`), so the absence of this change in the oracle grading_patch is a replay artifact — not evidence that the user did not ask for it. The user verbatim said 'address all unless you disagree' and the agent agreed comment #4 was valid."
+   },
+   {
+    "goal_id": "goal_9",
+    "tier": "secondary",
+    "weight": 0.05,
+    "goal": "Include the affected LCM config entry's title in the user-visible duplicate-code notification / error message produced when a slot's code is rejected as a duplicate (Copilot review comment #5 on PR #899, acknowledged by user in Turn 20). The current message shows only the lock entity_id and the slot number; the fix must add identifying information for the LCM config entry that owns the slot (typically the entry's `title`) so users with multiple LCM entries can identify which entry to fix. The format is not pinned — any phrasing that makes the entry identifiable to the user (e.g. parenthetical `(config entry <title>)`, prefix, suffix) satisfies the goal. NOT satisfied by: adding the entry title only to a code comment, a docstring, or a `logger.info` / `logger.debug` line without changing the user-facing notification body text. NOT satisfied by: changing only the test fixture's expected message string without altering the production code that produces the notification. NOT satisfied by: appending the config entry's id (a UUID-like opaque slug) instead of the human-readable title — the user-facing surface needs an identifier a human can map to a UI entry, not an internal id.",
+    "rationale": "Turn 20 ('address all unless you disagree with any of them') applied to Copilot review comment #5 ('Notification message missing entry titles — The error/notification only shows lock entity_id and slot number, not which LCM config entry is affected'), which the agent categorized as 'Address — Valid. Helps users find the right config entry.' Same provenance and same replay-artifact caveat as goal_8."
+   },
+   {
+    "goal_id": "goal_10",
+    "tier": "secondary",
+    "weight": 0.04,
+    "goal": "Fix the task / log / metric name slot when the duplicate-code-handler falls back to using the previously-tracked in-progress slot (`_set_in_progress_code_slot`) because the incoming `code_slot` is 0 / sentinel (Copilot review comment #6 on PR #899, acknowledged by user in Turn 20). The current code uses the incoming slot value (0) when naming the deferred task / log / notification id; the fix must substitute the tracked in-progress slot value in those name strings when the incoming value is 0, so observers see a meaningful slot number rather than the placeholder. NOT satisfied by: changing the name string template (or the surrounding scaffolding) but still interpolating the incoming `code_slot` value, so observers still see `0` at runtime. NOT satisfied by: adding the substitution only inside a debug-only branch, a conditional that never executes on the duplicate-code fallback path, or a comment describing what the value should be. NOT satisfied by: renaming the variable to a more descriptive name without actually swapping the substituted value when code_slot == 0.",
+    "rationale": "Turn 20 ('address all unless you disagree with any of them') applied to Copilot review comment #6 ('Task name uses wrong slot — When code_slot == 0 and we fall back to _set_in_progress_code_slot, the task name still shows 0'), which the agent categorized as 'Address — Valid, minor improvement.' Smaller weight than goals 8/9 because the surface (task/log name) is less user-visible than the notification body."
+   },
+   {
+    "goal_id": "goal_11",
+    "tier": "secondary",
+    "weight": 0.04,
+    "goal": "Review the repository's TODO.md and remove or revise entries that are no longer needed or relevant — explicitly: items that have already been completed by the work delivered in this session (PR #900 race fix + PR #899 duplicate-notification fixes) or items whose factual content is stale (e.g., year/version references that have aged out, sub-bullets describing work that has since landed). The output must be a non-trivial edit to TODO.md (at least one obsolete line removed or visibly revised, not a whitespace/typo-only diff). NOT satisfied by: leaving TODO.md untouched, deleting the entire file, or making a no-op formatting-only change that does not actually drop or revise any stale entry.",
+    "rationale": "Turn 31 (msg_range [574, 622]): user verbatim 'merged, ff main and delete branch. Then review TODO.md and remove anything that is no longer needd or relevant. Create a new branch and PR for this update, use the PR template'. The oracle session's _grading_patch is in fact a TODO.md diff (the canonical extraction landed on this final ask), so this is unambiguously a real user-substantive ask the v3-pre-fix rubric silently dropped per Gemini-v2 audit coverage_completeness FAIL. Kept at a small weight (0.04) because the task is housekeeping that piggybacks on the substantive PR work scored by goals 1-10; an agent that nails 1-10 but skips this ask should still score in the high-0.90s, while one that nails 1-10 AND closes the housekeeping loop earns the last few points."
+   }
+  ],
+  "sd-scripts-reg-image-dedup": [
+   {
+    "goal_id": "goal_2",
+    "tier": "core",
+    "weight": 0.25,
+    "goal": "Address the two-call-site / duplicated-balancing concern surfaced by simulator T2 ('Why do we need to call register_balanced_regularization_images at two places, then call rebalance_regularization_images? Can't we always register reg images after filtering?'). Acceptable responses are either (a) providing a substantive explanation of why the two-phase pattern is necessary (e.g., reg images aren't in image_data yet at __init__ time, so they can't be 'rebalanced' from there without a separate registration step) and leaving the structure intact, OR (b) restructuring so that the duplicated balancing logic is no longer duplicated — i.e., the inline balancing loop / `first_loop = True` / `while n < num_train_images` pattern no longer appears in two places. The mechanism is open (shared helper, single deferred-registration path, or any equivalent unification). If the T2 redirect fires (agent under-delivered the refactor), the user has explicitly asked for a helper; the restructuring option (b) becomes a hard expectation. NOT satisfied by stubs — a helper that pass-through delegates without actually consolidating the duplicated loop body does not count, and a one-line comment 'TODO: dedup later' does not count. The restructured code must compile and preserve the balancing semantics.",
+    "rationale": "Traces to simulator T2 verbatim and to the conditional T2 redirect. The 'OR' branching reflects the actual user turn shape: the user opened with a design question (which an explanation legitimately answers), and only forces dedup if the agent visibly under-delivered. Implementation-agnostic on the dedup mechanism (no oracle-specific helper names like `register_balanced_regularization_images` or `_balance_reg_images` are required)."
+   },
+   {
+    "goal_id": "goal_4",
+    "tier": "core",
+    "weight": 0.25,
+    "goal": "After simulator T5 ('Can we avoid calling self.update_dataset_image_counts() two times when reg image count needs updating?') and T6 ('Do it'), the DreamBooth filter override path must call update_dataset_image_counts exactly once per filter invocation that actually changes counts, instead of the prior twice. The end-to-end behavioral outcome is the only requirement: a single filter-override call results in at most one update of num_train_images / num_reg_images. Mechanism is open — a suppression parameter on the base method, restructuring so only one site triggers the update, deferring the update, or any equivalent — as long as the double-call is eliminated and the once-call still fires when counts are actually dirty. NOT satisfied by stubs, NOT satisfied by simply commenting out one of the two calls without preserving the update-when-dirty invariant, NOT satisfied by chat-only proposals that never land in the source file.",
+    "rationale": "Traces to simulator T5 verbatim and T6 'Do it'. The conditional T6 redirect names a specific mechanism (`update_counts: bool = True` parameter), but the rubric does not require it — the redirect only fires if the agent has already proposed something different and the simulator wants to redirect to the canonical approach. Goal is phrased as the behavioral outcome (exactly-one count update per filter call when counts are dirty), not as the mechanism."
+   },
+   {
+    "goal_id": "goal_5",
+    "tier": "secondary",
+    "weight": 0.1,
+    "goal": "When simulator T6 ('Do it') fires, the agent must actually implement the proposed fix in the source file — i.e., the change appears in the code, not only in chat / proposal text. After T6, the file's filter-override code path reflects the agreed-upon fix (a structural change that aligns with whatever fix was proposed in response to T5). NOT satisfied by stubs, NOT satisfied by chat-only 'here is what I would change' descriptions, NOT satisfied by a TODO comment standing in for the actual edit; the on-disk file content must reflect the proposed change.",
+    "rationale": "Traces to simulator T6 verbatim ('Do it'). Distinct from goal_4 in that goal_4 measures the *outcome* (one call) while goal_5 measures the *execution discipline* (the agent actually edited the file in response to the approval), which is the simulator's specific request. Secondary tier because in most successful runs goal_4 implies goal_5; this goal exists to catch agents that propose-but-don't-implement."
+   },
+   {
+    "goal_id": "goal_6",
+    "tier": "secondary",
+    "weight": 0.05,
+    "goal": "Respect the simulator T3-pre-redirect constraint when it fires: the existing `rebalance_regularization_images` method must not be removed from the code (the redirect explicitly says 'Don't remove rebalance_regularization_images -- it's needed when external code calls filter on an already-initialized dataset'). If the T3-pre redirect did not fire (agent's refactor already aligned, or `rebalance_regularization_images` was preserved), this goal is satisfied automatically. NOT satisfied by stubs — re-adding a stub method body of `pass` or `raise NotImplementedError` does not count; the method must remain functional (delegating to a helper or preserving its original behavior).",
+    "rationale": "Traces to simulator's T3-pre-redirect: 'If rebalance_regularization_images was removed by the agent (completely gone from the code), say: Don't remove rebalance_regularization_images...'. This is an explicit, narrowly-scoped user constraint that exists in the simulator and is preservation-style (not deletion-style), so it isn't covered by goal_0's anti-gaming floor. Low weight because conditional."
+   }
+  ],
+  "cli-task-b12319": [
+   {
+    "goal_id": "goal_1",
+    "tier": "core",
+    "weight": 0.27,
+    "goal": "An adapter exists that lets the CLI treat an external standalone binary as a fully-functional agent: it implements the complete agent interface by invoking the binary as a subprocess (one subcommand per agent operation), passing input over stdin / arguments and parsing the binary's stdout response, including handling the documented per-operation I/O shapes (JSON responses, raw transcript bytes, base64 chunk lists). It must propagate the required execution context to the binary (repo-root working directory and the protocol/environment variables the spec mandates) and surface a non-zero exit from the binary as an error. Not satisfied by a stub that returns canned values without ever executing the binary, or by an adapter wired to only one or two operations while leaving the rest unimplemented.",
+    "rationale": "Turn 0 Step 2: 'Create ExternalAgent Adapter ... Implements agent.Agent (all 14 methods) by shelling out to the binary ... Each method: build args → exec binary → parse JSON response'. Behavioral core of the plugin system."
+   },
+   {
+    "goal_id": "goal_2",
+    "tier": "core",
+    "weight": 0.18,
+    "goal": "The adapter exposes exactly the optional agent capabilities (hooks, transcript analysis, etc.) that the external binary declares in its `info` capability flags — and no others. Because the host language checks optional interfaces structurally, a binary that declares only some capabilities must be wrapped so the CLI sees only those interfaces satisfied; a capability the binary did NOT declare must NOT appear satisfied. Not satisfied by always exposing every interface regardless of declared capabilities, nor by a hardcoded capability set that ignores the binary's `info` response.",
+    "rationale": "Turn 0 Step 2 capabilities.go: 'wrapper types for each optional interface ... NewExternalAgent calls info, caches the response, and returns the appropriate wrapper combining all declared capabilities.' The session's hardest bug (Go embedding exposed ALL interfaces) confirms selective exposure is the substantive ask."
+   },
+   {
+    "goal_id": "goal_3",
+    "tier": "core",
+    "weight": 0.22,
+    "goal": "The CLI discovers external agents at runtime by scanning the executable search PATH for binaries whose name marks them as external agents (the `entire-agent-<name>` convention), querying each via its `info` subcommand, and registering the resulting adapter into the agent registry so the agent becomes usable by the normal agent machinery. Discovery must skip any external binary whose name collides with an already-registered built-in agent, and this discovery must be invoked on the live CLI startup/hooks path (not merely defined but never called). Not satisfied by a hardcoded agent list, by discovery that never registers, or by code that is defined but never wired into the command path.",
+    "rationale": "Turn 0 Step 3: 'Add DiscoverExternal() that scans $PATH for entire-agent-* ... calls info ... Registers via Register ... Skip binaries whose name conflicts with built-in agents' AND 'hooks_cmd.go: Call DiscoverExternal() before building the hooks command tree'. F2P gate f2p-hooks-discovery confirms the wiring requirement."
+   },
+   {
+    "goal_id": "goal_4",
+    "tier": "important",
+    "weight": 0.15,
+    "goal": "The built-in Cursor agent implementation is removed from the CLI so that Cursor is no longer a compiled-in agent, while everything that depended on Cursor still builds and behaves: the shared cursor name/type identifiers used by other command logic remain, the build stays green, and references to the removed package (blank imports, tests that exercised the built-in cursor) are updated so nothing imports the deleted code. Not satisfied by leaving the built-in cursor package in place, by deleting it but leaving dangling imports/references that break the build, or by deleting the shared constants that unrelated commands still rely on.",
+    "rationale": "Turn 0 Step 4: 'Delete cmd/entire/cli/agent/cursor/ entirely' + 'Keep AgentNameCursor/AgentTypeCursor constants ... Update references: hooks_cmd.go remove cursor blank import; condensation test remove cursor import; architecture_test.go.' P2P p2p-cursor-removed + F2P f2p-condensation-no-cursor / f2p-arch-test-skip confirm."
+   },
+   {
+    "goal_id": "goal_5",
+    "tier": "important",
+    "weight": 0.15,
+    "goal": "A standalone Cursor agent binary lives IN THIS repository (rather than being deferred to a separate repository) and implements the external-agent protocol, so the now-external Cursor agent is discoverable and usable through the new plugin path. The binary must be a real, buildable standalone program that responds to the protocol subcommands using genuine Cursor logic, reproducing the Cursor behavior that was removed from the built-in package (its identity/presence reporting plus the hook-parsing and transcript-analysis behavior the removed package provided). Not satisfied by leaving Cursor out of the repo, by a binary that only prints a placeholder for `info` while the substantive subcommands are unimplemented or stubbed with hardcoded responses (e.g. always returning empty results) instead of porting the actual Cursor hook-parsing and transcript-analysis logic, or by a non-buildable shell.",
+    "rationale": "Turn 1 verbatim correction: 'Can you implement the cursor agent using the new external type? Keep it in this repo for now.' This reverses the plan's out-of-scope/separate-repo decision. F2P gates f2p-cursor-binary + f2p-cursor-build confirm a buildable in-repo standalone binary is required."
+   },
+   {
+    "goal_id": "goal_6",
+    "tier": "secondary",
+    "weight": 0.03,
+    "goal": "A protocol specification document is created that describes the external-agent contract so a third party could implement a conforming binary: it must document the discovery convention (PATH-scanned `entire-agent-<name>` binaries), the communication model (per-operation subcommands exchanging data over stdin/stdout/arguments), the capability-declaration mechanism, and the success/error signaling convention. Not satisfied by an empty or placeholder file, by a stub heading with no substantive protocol content, or by merely mentioning the protocol in passing inside an unrelated file.",
+    "rationale": "Turn 0 Step 1 (verbatim): 'Create docs/architecture/external-agent-protocol.md documenting the full protocol.' Low weight: a documentation artifact, far less user-critical than the working plugin behavior, but explicitly named as Step 1 so it is covered. F2P gate f2p-protocol-doc confirms the deliverable."
+   }
+  ],
+  "gemini-voyager-task-4bddaf": [
+   {
+    "goal_id": "goal_1",
+    "tier": "core",
+    "weight": 0.4,
+    "goal": "Each functional section block shown in the extension popup must gain a way for the user to move that block up or down relative to the other blocks — for example per-section up and down controls (arrow buttons, text affordances, or equivalent) that, when activated, swap the section with its neighbor in the displayed order. Activating these controls must actually change the rendered order of the sections (not be decorative). Any visible, functional control conveying move-up / move-down is acceptable; the exact styling, iconography, or labeling is the agent's choice. This must be real interactive wiring — not satisfied by adding buttons with no handler, by controls that are permanently disabled, by a hardcoded layout that never changes, or by commented-out / dead UI.",
+    "rationale": "Turn 1 (initial request) verbatim: 'popup里每一个功能区域块都有一个上调、下调按钮 ... 这样用户可以自己决定popup里的功能顺序' ('every functional section block in the popup has an up / down button ... so the user can decide the popup section order themselves'). The per-section move controls that actually re-order the rendered blocks are the central, highest-importance deliverable. Behavioral phrasing (controls exist, are labeled, and changing them changes the rendered order) avoids naming specific components/handlers while capturing intent."
+   },
+   {
+    "goal_id": "goal_2",
+    "tier": "core",
+    "weight": 0.25,
+    "goal": "The popup's section ordering must be driven by an explicit, mutable ordering data structure (a list/array of section identifiers, or behaviorally equivalent state) that determines the display order of the blocks, rather than the order being fixed by static markup. The user's move-up/move-down actions must update this ordering structure, and the rendered popup must reflect the current ordering. This is not satisfied by a constant that is read but never mutated, by ordering logic that is parsed but ignored, or by leaving the original static layout untouched while only appearing to track order.",
+    "rationale": "Turn 1 (initial request) verbatim: '有一个维护这个顺序的数组（类似的东西我随便说的）' ('there's an array — or something like it — that maintains this order'). The user explicitly described an order-maintaining structure but flagged it as loose ('我随便说的' = 'just making it up'), so the goal is phrased as any equivalent mutable ordering state that the move actions update and the render consumes — not a literally-named array."
+   },
+   {
+    "goal_id": "goal_3",
+    "tier": "important",
+    "weight": 0.2,
+    "goal": "The user-chosen section order must be persisted so it survives reopening the popup / restarting the session, rather than resetting to the default on every open. After a reorder, the new order must be written to the extension's durable storage, and on popup load the stored order must be read back and applied (falling back to a sensible default order when nothing is stored). This is not satisfied by in-memory-only state that is lost on close, by a write that is never read back, or by a read path that ignores the stored value.",
+    "rationale": "Turn 1 (initial request): '用户可以自己决定popup里的功能顺序（越常用的越靠上）' ('the user can decide the popup section order, most-used at the top') implies the choice must stick to be meaningful, and the golden implementation saves the order to durable storage and rehydrates it on load. Persistence is a distinct, observable behavior separate from the in-session reorder, so it carries its own weight. Phrased to accept basic save/load without mandating any specific data-validation hardening."
+   },
+   {
+    "goal_id": "goal_4",
+    "tier": "important",
+    "weight": 0.05,
+    "goal": "The new reorder feature must be communicated to end users through the project's documentation site: the user-facing docs gain content that explains that popup sections can be reordered and how (e.g. describing the per-section move controls and that the chosen order is remembered). The documentation must actually describe this specific feature in human-readable prose in the docs source — not satisfied by an empty stub heading, by a placeholder, by code comments only, or by leaving the docs unchanged.",
+    "rationale": "Turn 4 (documentation question) verbatim: 'vitepress 文档里如何告知呢？' ('how to inform users in the vitepress docs?'). This is a distinct multi-turn follow-up about the docs site (a separate concern from the popup code), which the golden patch satisfies by adding a 'Custom Order' section to the guide/settings docs. Weighted lower than the core feature because it is supplementary communication, not the feature itself."
+   },
+   {
+    "goal_id": "goal_5",
+    "tier": "important",
+    "weight": 0.1,
+    "goal": "The Turn-5 docs-infrastructure instruction must be honored: the user approved adopting a changelog/git-history documentation plugin for the docs site, so the docs setup must actually wire up a changelog/history plugin — i.e. the plugin is added as a project dependency and registered/configured in the docs build configuration so the docs site would surface a changelog/history. This must be a genuine integration, not satisfied by only mentioning the plugin in prose, by adding it to a dependency manifest without registering it in the docs config, or by leaving the docs build untouched. (Acting on the follow-up question about a global-search plugin — adopting or evaluating a search plugin — is a positive but optional extra and not required for credit.)",
+    "rationale": "Turn 5 (plugin approval) verbatim: '就用这个插件吧，还有全局search是不是也有插件' ('let's use this plugin then, and is there a plugin for global search too?'). This is a direct user command to adopt the changelog plugin the agent had proposed, plus an open follow-up about a search plugin. The instruction must be evaluated against the agent regardless of whether the golden patch (a message-replay snapshot) captured it. Phrased behaviorally — any changelog/history plugin genuinely registered in the docs build counts — because the user did not bind the implementation to a specific package in their own words, and the search-plugin part is left optional since it was posed as a question, not a committed task."
+   }
+  ],
+  "pi-mono-auto-d3b2130d": [
+   {
+    "goal_id": "goal_1",
+    "tier": "core",
+    "weight": 0.4,
+    "goal": "The project documentation explains that the unique keyword exists so pi packages can be discovered/searched for on the npm registry — i.e. it documents the keyword's discoverability PURPOSE the user asked to understand. The load-bearing requirement is that the added prose makes clear the shared keyword is the handle by which a reader finds pi packages on npm. Showing a concrete runnable search example (for instance a `curl` against the npm registry search endpoint `.../-/v1/search?text=keywords:<keyword>`, or an equivalent `npm search keywords:<keyword>` invocation) is the form the golden uses and fully satisfies this, but it is OPTIONAL: a clear prose explanation that the keyword is there so users can search/discover the packages on npm — even without a verbatim CLI command or exact search-mechanic syntax — equally satisfies the goal. It must be real documentation prose newly inserted into tracked markdown, not a placeholder, a commented-out block, a string in test code, or a duplicate of unrelated existing text.",
+    "rationale": "Turn 5 verbatim: 'we should document this keyword in @packages/coding-agent/docs/extensions.md @packages/coding-agent/README.md ...' is the explicit documentation request; Turns 0/1 ('tell me how that works and what packages come up', 'so we can't search just by keywords?') supply the context for WHAT must be documented — the keyword-based npm discovery mechanic. The golden patch answers exactly this by documenting the registry search (curl '.../v1/search?text=keywords:pi-package') in the coding-agent docs. This discoverability purpose is co-central to the documentation deliverable. The keyword token itself is scored separately in goal_2; this goal scores that the keyword's discovery/search purpose is documented, accepting either a runnable search command (the golden's form) or equivalent prose so it does not over-pin the golden's exact syntax or require the search mechanic verbatim."
+   },
+   {
+    "goal_id": "goal_2",
+    "tier": "core",
+    "weight": 0.25,
+    "goal": "The documentation establishes a single, unique discovery keyword convention — the specific token the user proposed, 'pi-package' — as the shared handle that pi packages should carry so they can be found by the npm keyword search. The doc must (a) name 'pi-package' as the convention's keyword and (b) describe it as a keyword that published pi packages should include in their `package.json` (e.g., in the `keywords` array) for discoverability. It is the user-agreed unique token, not a different ad-hoc/generic token and not merely the pre-existing generic 'pi' keyword. The convention text must be genuine documentation prose, not a stub, a comment, or a literal in test code.",
+    "rationale": "Turn 2 verbatim: 'we should ensure that we have a unique keyword we can search for, how about pi-package?' — the user named the exact keyword. The golden documents exactly this: 'Published pi packages should include the `pi-package` keyword in their `package.json`'. 'pi-package' is named verbatim by the user, so naming it here is permitted. Establishing the keyword convention in the docs is co-central with the search mechanic (goal_1); together they are the documentation deliverable the golden delivers."
+   },
+   {
+    "goal_id": "goal_3",
+    "tier": "core",
+    "weight": 0.15,
+    "goal": "The keyword-discovery guidance is recorded in BOTH coding-agent documentation files the user named: `packages/coding-agent/docs/extensions.md` AND `packages/coding-agent/README.md`. Each named file gains new prose covering the keyword convention and/or the search mechanic. The load-bearing requirement is that both explicitly named files are updated with real, newly inserted documentation about the 'pi-package' discovery convention — not a placeholder, a commented-out block, or a duplicate of unrelated existing text. The user's open-ended 'and any other .md file that talks about pi packages' clause is optional credit-worthy elaboration, not a hard requirement, since only these two files were named explicitly.",
+    "rationale": "Turn 5 verbatim: 'we should document this keyword in @packages/coding-agent/docs/extensions.md @packages/coding-agent/README.md and any other .md file that talks about pi packages.' The user named both files verbatim and the golden patch edits exactly these two (README.md and docs/extensions.md). Files named verbatim, so allowed. This goal scores the breadth/placement requirement (both named files), distinct from goal_1 (the search mechanic) and goal_2 (the keyword token) which score WHAT is documented; this scores WHERE."
+   },
+   {
+    "goal_id": "goal_4",
+    "tier": "important",
+    "weight": 0.2,
+    "goal": "The shared 'pi-package' keyword is applied to one or more real, tracked package.json `keywords` arrays — such as the user-named sibling packages (pi-doom, pi-package-test, pi-gitlab-duo) when they are present in the capture, or the available in-tree pi-mono packages when the named siblings are absent (editing both is also acceptable) — preserving any pre-existing keywords if present (i.e., adding the new keyword without deleting existing entries). This makes the documented convention concrete by putting the keyword on actual manifests so the keyword search can find them. As the durable artifact of the user's follow-up 'publish new versions of these' (Turn 4), additionally bumping the `version` field in the same edited manifests to a higher value is an optional but credit-worthy elaboration; the keyword addition alone is sufficient for full credit on this goal. Every path fully satisfies the goal: there is no penalty for following the named siblings, no penalty for the graceful in-tree substitution when the externals are absent, and no penalty for editing both. The keyword must be a genuine array entry in a real manifest, not a hardcoded value in test code, a commented-out line, a throwaway scratch file, or an entry added only to a private package.",
+    "rationale": "Turn 3 verbatim: 'no, add it to ../pi-doom/ ../pi-package-test/ and ../pi-gitlab-duo/' and Turn 4 'then publish new versions of these'. This is a direct, substantive later-turn user command and must be scored (criterion D / full multi-turn coverage). It is weighted as a real secondary (0.20), below the documentation core, because the user's headline ask was exploratory/documentation and the golden/reference solution delivers the convention via docs rather than manifest edits (the user-sim trigger table flags the named sibling dirs may be absent in the container and require graceful handling). It is deliberately NOT a high-weight core — the prior rubric's defect was weighting manifest edits 0.50 + a version bump, which scored the documentation-only golden just 0.25. At 0.20 the documentation-only golden still scores 0.80 (>=0.7) while the genuine Turn-3 ask is meaningfully rewarded. The publish step (Turn 4, 'then publish new versions of these') is subsumed here: the npm-publish network action cannot complete in-sandbox, but its durable, verifiable workspace artifact is a bumped `version` field in the same edited manifests, which this goal rewards alongside the keyword add. Either target path (named siblings or in-tree substitution) earns full credit."
+   }
+  ],
+  "sd-scripts-fp8-lumina": [
+   {
+    "goal_id": "goal_1",
+    "tier": "core",
+    "weight": 0.3,
+    "goal": "Integrate the in-repo fp8_scaled quantization pipeline into the Lumina model-loading path. Concretely: (a) declare a module-level constant named exactly `FP8_OPTIMIZATION_TARGET_KEYS` (USER-NAMED IN T2 — the rubric MUST require this exact identifier, not a synonym) whose entries are submodule prefix strings that actually exist in the Lumina model's state-dict (the configuration is a no-op if it lists prefixes that match no real submodules); (b) thread an `fp8_scaled` boolean through the Lumina model-loading function's parameter list; and (c) when the flag is true, route weight loading through the repository's existing fp8 optimization helpers (a 'load-with-fp8' or equivalent state-dict optimizer plus an fp8 monkey-patch application step) so the constructed model ends up with fp8 quantized weights at load time rather than fp16/bf16 weights. ANTI-GAMING: merely importing the fp8 helpers or referencing them in a comment does not satisfy this — they must be *called* on the Lumina path, and the `FP8_OPTIMIZATION_TARGET_KEYS` list must contain at least one prefix that hits real Lumina state-dict keys. A synonym variable name (`TARGET_KEYS`, `FP8_TARGET_KEYS`, `LUMINA_FP8_TARGETS`, etc.) does NOT satisfy this goal — the user explicitly cited the exact identifier `FP8_OPTIMIZATION_TARGET_KEYS` in T2 to verify its existence, so the contract is that this exact name appears in the code. Behavioral test: with fp8_scaled=True, the optimize-state-dict and apply-monkey-patch helpers are invoked, and the value bound to `FP8_OPTIMIZATION_TARGET_KEYS` matches at least one real Lumina state-dict prefix.",
+    "rationale": "Primary user ask from T1 (verbatim above). Variable-name pin added per Gemini v2 audit (structured_output_pinned_when_user_did FAIL): user named `FP8_OPTIMIZATION_TARGET_KEYS` in T2, so it is a structured-output specification, not an oracle leak. Without target keys hitting real submodule names, the quantization is a behavioral no-op (T2 explicitly cross-checks this); without threading the flag through loading, CLI/argument-parser changes have no effect. This is the single largest 'is the feature even there' goal and traces directly to T1+T2."
+   },
+   {
+    "goal_id": "goal_2",
+    "tier": "core",
+    "weight": 0.3,
+    "goal": "Eliminate the runtime crash on the fp8 dequantization multiply. The pre-fix code multiplied a tensor in fp8 dtype against another fp8-dtype operand at the line `dequantized_weight = dequantized_weight * self.scale_weight` inside fp8_linear_forward_patch (user-cited verbatim in T4 traceback), raising 'mul_cuda not implemented for Float8_e4m3fn'. The fix must change the dtype source of the multiply so that both operands are in a kernel-supported floating-point dtype (typically the input tensor's compute dtype, e.g. bf16/fp16), by casting the `self.scale_weight` operand into that compute dtype before the multiply. ANTI-GAMING: wrapping the original line in a try/except, silently returning x unchanged, or hardcoding a single dtype (e.g. always fp32 regardless of input) does NOT satisfy this — the dequantization must still produce a numerically correct dequantized weight in a dtype matching the input. Behavioral test: invoking fp8_linear_forward_patch with an fp8-typed `self.scale_weight` and a bf16 (or fp16) input must complete without raising and must return a tensor in the input's dtype.",
+    "rationale": "Explicit T4 bug report — traceback handed to the agent verbatim. This is the single largest behavioral correctness item: fp8_scaled is unusable on this model without it. The `self.scale_weight` identifier and `fp8_linear_forward_patch` function name appear in the user's verbatim T4 traceback — they are USER-PROVIDED context (the traceback line is the user's symptom report), not oracle leakage, so pinning them is appropriate."
+   },
+   {
+    "goal_id": "goal_3",
+    "tier": "secondary",
+    "weight": 0.06,
+    "goal": "Expose the fp8_scaled mode as a parseable command-line argument on the Lumina training entrypoint, so that the existing training script can be invoked with the new mode without the user having to edit Python code. Implementation: a boolean store_true-style argparse flag named for the fp8_scaled feature (the conventional name `--fp8_scaled`). ANTI-GAMING: adding the flag but never reading it off the parsed-args namespace anywhere in the loader chain does not count for this goal alone — it can satisfy this surface-level CLI goal but it leaves goal_4 (end-to-end wiring) unsatisfied. Behavioral test: parsing a known argv that includes the `--fp8_scaled` flag yields a namespace where the corresponding attribute is True.",
+    "rationale": "User-facing surface for the feature. Cleanly separated from goal_4 so a partial solution (CLI flag added, but flag not forwarded) can earn credit for the surface but not for the wiring."
+   },
+   {
+    "goal_id": "goal_4",
+    "tier": "secondary",
+    "weight": 0.1,
+    "goal": "Wire the fp8_scaled flag end-to-end through the Lumina training-network model-loading helper so that (a) the parsed flag is forwarded from the args namespace down into the Lumina model-loading function call, AND (b) the loading-dtype handling is adjusted appropriately on the fp8 path (suppressing the eager pre-cast to weight_dtype when fp8_scaled is on, so that the fp8 optimization pipeline can perform the quantization itself rather than being given already-cast weights). ANTI-GAMING: forwarding the flag but leaving the loading dtype as weight_dtype defeats the purpose (the fp8 pipeline then receives bf16/fp16 weights pre-cast and cannot quantize correctly) — both sub-conditions must hold to be considered fully wired. Behavioral test: reading the training-network's load-target-model function source (AST or text), both the fp8 flag name AND the Lumina model-loader function name must appear in the same function body.",
+    "rationale": "End-to-end integration glue: the CLI flag (goal_3) and the loader changes (goal_1) only have an effect if the training network actually forwards the flag and adjusts the loading dtype."
+   },
+   {
+    "goal_id": "goal_5",
+    "tier": "secondary",
+    "weight": 0.06,
+    "goal": "Define a module-level constant named exactly `FP8_OPTIMIZATION_EXCLUDE_KEYS` (USER-NAMED IN T2 — the rubric MUST require this exact identifier, not a synonym) that prevents normalization-style layers (any layer whose state-dict key contains a 'norm' substring, e.g. attention norms and final norms) from being quantized to fp8. This mirrors the standard convention used by the reference fp8_scaled integration in this same repository: norms must stay in higher precision to avoid numerical instability. ANTI-GAMING: declaring `FP8_OPTIMIZATION_EXCLUDE_KEYS` with entries that do not match any real Lumina normalization-layer key string is a no-op and does not satisfy this goal — entries must be substring patterns that actually catch real norm layers in the Lumina state dict. A synonym variable name (`EXCLUDE_KEYS`, `FP8_EXCLUDE`, etc.) does NOT satisfy this goal — the user explicitly cited the exact identifier `FP8_OPTIMIZATION_EXCLUDE_KEYS` in T2. Behavioral test: running the in-repo fp8 state-dict optimizer with the value bound to `FP8_OPTIMIZATION_EXCLUDE_KEYS` on a tiny synthetic Lumina-shaped state dict must NOT introduce a scale_weight for any norm-named tensor, while still introducing one for non-excluded layers.",
+    "rationale": "Standard fp8 hygiene + explicit T2 verification ask. Variable-name pin added per Gemini v2 audit: user named `FP8_OPTIMIZATION_EXCLUDE_KEYS` in T2."
+   },
+   {
+    "goal_id": "goal_6",
+    "tier": "secondary",
+    "weight": 0.12,
+    "goal": "Diagnose and fix the order-of-magnitude training-loss regression that arises after fp8_scaled is enabled (T6: loss ~5.0 vs ~0.5 baseline, even though weights load with 'all keys matched'). Root cause: certain adaptive-layer-norm-style modulation projections inside the Lumina transformer blocks are highly dtype-sensitive and must NOT be quantized to fp8 — the symptom is a clean weight-load but catastrophic numerical degradation downstream. Fix: extend `FP8_OPTIMIZATION_EXCLUDE_KEYS` (the same module-level constant from goal_5) with a substring pattern that catches these modulation layers (a substring such as 'modulation' that matches the modulation-projection submodule names in the Lumina state dict). ANTI-GAMING: a comment that *describes* this cause without actually adding the exclusion pattern does not satisfy the goal — `FP8_OPTIMIZATION_EXCLUDE_KEYS` must be modified such that running the in-repo fp8 state-dict optimizer on a tiny Lumina-shaped state dict containing a modulation-named tensor does NOT introduce a scale_weight for that tensor. Behavioral test: with the agent's `FP8_OPTIMIZATION_EXCLUDE_KEYS` configuration, an adaLN-modulation-named tensor in a synthetic state dict is preserved unquantized while a sibling attention-projection tensor IS quantized.",
+    "rationale": "The single highest-signal correctness item from the multi-turn loop (T6+T7). Loss regresses an order of magnitude when modulation layers are fp8-quantized even though weight loading reports clean success — this is the bug the user actively debugs in-session across two turns."
+   }
+  ],
+  "pi-mono-extensions-event-refactor": [
+   {
+    "goal_id": "goal_1",
+    "tier": "core",
+    "weight": 0.34,
+    "goal": "Route tool_result events through a dedicated chained-emission path instead of the generic emit() method. The dedicated path must run handlers in extension load order, expose each handler to the latest event state produced by prior handlers (pass-by-reference / in-place mutation rather than an accumulator that collects values across handlers), allow handlers to return partial patches whose omitted fields preserve the current value, and signal 'no handler modified anything' distinctly from a normal modified result. The call-site that previously emitted tool_result events must use this new path.",
+    "rationale": "Direct trace to user T2 (accumulator → pass-by-reference), T7 (propose chaining design), T8 (implement as proposed). The pass-by-reference / not-accumulator phrasing is the user's literal framing in T2 and must appear in the goal because the user explicitly steered away from accumulators. Exact method name, file location, and merge implementation shape are unconstrained — the goal judges chained semantics with field-level merge, not symbol identity."
+   },
+   {
+    "goal_id": "goal_2",
+    "tier": "core",
+    "weight": 0.34,
+    "goal": "Restrict the generic emit() method so it cannot be called with event types that already have a dedicated emission method (e.g., tool_call, tool_result, user_bash, context, before_agent_start, resources_discover, input). The restriction must be enforced at compile time by the event parameter's type, not merely by runtime checks or convention.",
+    "rationale": "Direct trace to T3 ('shouldn't the event type exclude the types for which we have special emitXXX methods?') and T4 (user insisted this be done before tool_result chaining). The exact type idiom — Exclude<>, a hand-written union, branded types, conditional types, etc. — is unconstrained; the judge checks whether a TypeScript caller would be rejected at compile time when passing one of the dedicated event types to emit()."
+   },
+   {
+    "goal_id": "goal_3",
+    "tier": "secondary",
+    "weight": 0.1,
+    "goal": "Tighten the session_before special-case block inside emit() so the cast (e.g., 'handlerResult as SessionBeforeCompactResult | SessionBeforeTreeResult') and the early-return-on-cancel logic are made type-safe, with a result-type surface that covers every session_before variant the codebase already declares (not just compact/tree). The refactor shape — whether via a discriminated-union helper, a conditional return type, a renamed guard, an extracted method, or another mechanism — is unconstrained; what must hold is that an unchecked cast is no longer needed to keep the cancel-short-circuit type-safe across the full session_before family.",
+    "rationale": "Direct trace to T10 (which quotes the 'if (this.isSessionBeforeEvent(event.type) && handlerResult)' block verbatim and asks 'should we possibly clean this up as well?') and T13 (user repeats the same quoted block when the first attempt missed it, signaling importance). The goal text avoids prescribing the specific cleanup shape (e.g., does NOT require the guard to take an event object instead of a string, does NOT require conditional return types) because the user's ask was about the cast and cancel ergonomics, not a particular type-system idiom."
+   },
+   {
+    "goal_id": "goal_4",
+    "tier": "secondary",
+    "weight": 0.08,
+    "goal": "Update the extensions documentation to describe the new tool_result chaining behavior: handlers run in extension load order, each handler observes the result after prior handlers have applied their changes, and handlers may return partial patches whose omitted fields keep their current value.",
+    "rationale": "Direct trace to T9 ('should we update @packages/coding-agent/docs/extensions.md as well?'). The docs must reflect the chaining semantics introduced by goal_1; exact wording, anchor location, and whether the addition is a fenced block or prose are unconstrained — the judge checks whether the load-order + partial-patch semantics are explained where a reader looking up the tool_result event would find them."
+   },
+   {
+    "goal_id": "goal_5",
+    "tier": "secondary",
+    "weight": 0.08,
+    "goal": "Adjust test.sh so Kimi-related coding API keys are unset before tests run, alongside any other coding-API keys the agent surfaces by inspecting the environment (the user explicitly defers the exact key name to env inspection). Goal is satisfied when running test.sh in an environment that exports a Kimi coding-API key no longer leaks that key into the test run.",
+    "rationale": "Direct trace to T16 ('need to adjust test.sh to also exclude kimi for coding api keys. not sure what the key name is. do env and see') and T17 (user follow-up checking test outcome). The goal names 'Kimi' because the user named it; it deliberately does NOT name any other specific key (e.g., HF_TOKEN) because the user did not name one — the user said 'do env and see', so the judge accepts whatever coding-API key set the agent identifies in good faith, as long as Kimi is covered."
+   },
+   {
+    "goal_id": "goal_6",
+    "tier": "secondary",
+    "weight": 0.06,
+    "goal": "Keep edits scoped to the files the user is actually asking about (the runner / wrapper modules and their immediate companions like docs and the test script); do not stage or commit changes to unrelated files (e.g., package manifests, lockfiles, source files outside the extensions area being refactored). If the agent has touched out-of-scope files, the final commit must not include them.",
+    "rationale": "Direct trace to T6 verbatim: 'i mean the changes you made, don't touch the other files, another agent is doing shit'. This is a correction the user issues mid-session because the agent's commit picked up files outside the refactor scope; honoring it is part of the work, not a free pass. Behavioral: the judge inspects what landed in the final tree, not which intermediate edits the agent attempted."
+   }
+  ]
+ }
+}

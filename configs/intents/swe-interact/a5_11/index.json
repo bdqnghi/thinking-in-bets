@@ -1,0 +1,496 @@
+{
+ "excluded": {
+  "swebenchpro_instance_ansible__ansible-c616e54a6e23fa5616a1d56d243f69576164ef9b-v1055803c3a812189a1133297f7f5468579283f86": {
+   "digest": "bf791751e82073069c50da2ea8acc64fdcb05cbcab579c3d1081960563b42f94",
+   "gold_pass": true,
+   "n_exec": 3,
+   "n_intents": 15,
+   "reasons": [
+    "intent_validation_failed"
+   ],
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 15,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 15,
+     "rate": 0.7333,
+     "satisfied": 11
+    }
+   },
+   "validation_pass": false,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_ansible__ansible-e40889e7112ae00a21a2c74312b330e67a766cc0-v1055803c3a812189a1133297f7f5468579283f86": {
+   "digest": "b9ab1c238d2edf92d45874cf1b9f5ad520a60e080155258ad21a3f23a9a1d87b",
+   "gold_pass": true,
+   "n_exec": 3,
+   "n_intents": 15,
+   "reasons": [
+    "intent_validation_failed"
+   ],
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 15,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 15,
+     "rate": 0.7333,
+     "satisfied": 11
+    }
+   },
+   "validation_pass": false,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan": {
+   "digest": "e96dfd5243346f5b7cc3daa6336379bc31cbf0d887a163ab5c72ea7135b4bdc7",
+   "gold_pass": true,
+   "n_exec": 6,
+   "n_intents": 9,
+   "reasons": [
+    "intent_validation_failed"
+   ],
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 9,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 9,
+     "rate": 0.7778,
+     "satisfied": 7
+    }
+   },
+   "validation_pass": false,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_flipt-io__flipt-c1728053367c753688f114ec26e703c8fdeda125": {
+   "digest": "93d1bf69e95281238b596c85bece698773e368ca431f9f6134cc7cffae886c9d",
+   "gold_pass": true,
+   "n_exec": 1,
+   "n_intents": 9,
+   "reasons": [
+    "intent_validation_failed"
+   ],
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 9,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 9,
+     "rate": 0.7778,
+     "satisfied": 7
+    }
+   },
+   "validation_pass": false,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e": {
+   "digest": "b541386b3677c92d44e9c24f28912d845706a445b063542cf1f98d9d6f026d1e",
+   "gold_pass": true,
+   "n_exec": 4,
+   "n_intents": 15,
+   "reasons": [
+    "intent_validation_failed"
+   ],
+   "validation": null,
+   "validation_pass": false,
+   "validation_source": "stage1_index"
+  },
+  "swebenchpro_instance_internetarchive__openlibrary-4b7ea2977be2747496ba792a678940baa985f7ea-v0f5aece3601a5b4419f7ccec1dbda2071be28ee4": {
+   "digest": "6d81ba05e8b348a8bbc142840993202e5bf6371d387400d3de2cde2fcbd7071b",
+   "gold_pass": true,
+   "n_exec": 6,
+   "n_intents": 8,
+   "reasons": [
+    "intent_validation_failed"
+   ],
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 8,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 8,
+     "rate": 0.875,
+     "satisfied": 7
+    }
+   },
+   "validation_pass": false,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26": {
+   "digest": "9a69425eeb5b3f86824e1680cb579f1756abe7151ee5beb85c7302074d2bbe6f",
+   "gold_pass": true,
+   "n_exec": 10,
+   "n_intents": 18,
+   "reasons": [
+    "intent_validation_failed"
+   ],
+   "validation": null,
+   "validation_pass": false,
+   "validation_source": "stage1_index"
+  },
+  "swebenchpro_instance_qutebrowser__qutebrowser-deeb15d6f009b3ca0c3bd503a7cef07462bd16b4-v363c8a7e5ccdf6968fc7ab84a2053ac78036691d": {
+   "digest": "f8045760866c52d4f44122320726c61242e45d3905bf69196fe52089fee975c7",
+   "gold_pass": true,
+   "n_exec": 7,
+   "n_intents": 9,
+   "reasons": [
+    "intent_validation_failed"
+   ],
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 9,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 9,
+     "rate": 0.7778,
+     "satisfied": 7
+    }
+   },
+   "validation_pass": false,
+   "validation_source": "a5_13_validation"
+  }
+ },
+ "frozen_at": "2026-10-17T01:03:40.149303+00:00",
+ "gold_sha256": "a30362a5fc8586004f0bb8a5df1d0c31ef1f55d44cd88433154d1d00bcfdc98f",
+ "index_digest": "c9a62575fc61728bb5b223294611730385d849e4c8414235bcf04af34e7b6144",
+ "note": "A5.11 task list = included; the Stage-1 index.json is not rewritten",
+ "rule": "A5.13 (4)",
+ "schema": "a5_11/swi-intents-index/1",
+ "stage1_index_sha256": "ef705c02fb320cbde690e03f2628e471ba6f666798cc5373705fc2c327dd8f32",
+ "tasks": {
+  "swebenchpro_instance_ansible__ansible-4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6-v1055803c3a812189a1133297f7f5468579283f86": {
+   "digest": "9bc21a9ba9cb454b95e2ebcda937bdf91bdbac7417017fdb3490238d846f010a",
+   "gold_pass": true,
+   "n_exec": 3,
+   "n_intents": 17,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 17,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 17,
+     "rate": 0.9412,
+     "satisfied": 16
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_element-hq__element-web-d06cf09bf0b3d4a0fbe6bd32e4115caea2083168-vnan": {
+   "digest": "38e83c7bea5248626dfb1eee4d578c819028d702ed784820a71fb5c0fd5a20eb",
+   "gold_pass": true,
+   "n_exec": 2,
+   "n_intents": 8,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 8,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 8,
+     "rate": 1.0,
+     "satisfied": 8
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_flipt-io__flipt-96820c3ad10b0b2305e8877b6b303f7fafdf815f": {
+   "digest": "9a97ed7996f34ef49fea39820a9aadf04ec3d8aaddc9e1beffc1c8a6c96772a6",
+   "gold_pass": true,
+   "n_exec": 12,
+   "n_intents": 14,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 14,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 14,
+     "rate": 1.0,
+     "satisfied": 14
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_flipt-io__flipt-e5fe37c379e1eec2dd3492c5737c0be761050b26": {
+   "digest": "028a0156ee1437ca6fc2fa280f8e6623f8452b9b1a32857d978d5c057c8f5334",
+   "gold_pass": true,
+   "n_exec": 14,
+   "n_intents": 15,
+   "validation": null,
+   "validation_pass": true,
+   "validation_source": "stage1_index"
+  },
+  "swebenchpro_instance_gravitational__teleport-d6ffe82aaf2af1057b69c61bf9df777f5ab5635a-vee9b09fb20c43af7e520f57e9239bbcf46b7113d": {
+   "digest": "4c4a0dd2ceb1fa49dd0eef060dac03768c8c7668c0a08314bb9187a757ea623a",
+   "gold_pass": true,
+   "n_exec": 27,
+   "n_intents": 30,
+   "validation": null,
+   "validation_pass": true,
+   "validation_source": "stage1_index"
+  },
+  "swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12": {
+   "digest": "c6d81a3b280e21492ddd3db6c1468baf2d2420e4ede5e80c0361bbec635d1aef",
+   "gold_pass": true,
+   "n_exec": 11,
+   "n_intents": 12,
+   "validation": null,
+   "validation_pass": true,
+   "validation_source": "stage1_index"
+  },
+  "swebenchpro_instance_internetarchive__openlibrary-0a90f9f0256e4f933523e9842799e39f95ae29ce-v76304ecdb3a5954fcf13feb710e8c40fcf24b73c": {
+   "digest": "dcbd2bf4a51a5337b5776d358c3317cbed82bee21ceab0aa4d27e565ac839179",
+   "gold_pass": true,
+   "n_exec": 7,
+   "n_intents": 11,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 11,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 11,
+     "rate": 0.9091,
+     "satisfied": 10
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_internetarchive__openlibrary-5de7de19211e71b29b2f2ba3b1dff2fe065d660f-v08d8e8889ec945ab821fb156c04c7d2e2810debb": {
+   "digest": "6398a7202b4d1aa98c6ded234ec2d188df6f93ff1e0e47be8d981d0d7458401c",
+   "gold_pass": true,
+   "n_exec": 4,
+   "n_intents": 4,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 4,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 4,
+     "rate": 1.0,
+     "satisfied": 4
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_internetarchive__openlibrary-b67138b316b1e9c11df8a4a8391fe5cc8e75ff9f-ve8c8d62a2b60610a3c4631f5f23ed866bada9818": {
+   "digest": "9e01ab3c641f66ee9ad33216d4516567a06f14b620a63905323f78272f916172",
+   "gold_pass": true,
+   "n_exec": 8,
+   "n_intents": 9,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 9,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 9,
+     "rate": 1.0,
+     "satisfied": 9
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_navidrome__navidrome-3972616585e82305eaf26aa25697b3f5f3082288": {
+   "digest": "0eeaae2a17e92728b60dc0e54faec9ab189c7727078a14948b7790302569c04c",
+   "gold_pass": true,
+   "n_exec": 8,
+   "n_intents": 8,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 8,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 8,
+     "rate": 1.0,
+     "satisfied": 8
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_nodebb__nodebb-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e": {
+   "digest": "8da87c4078409cf0f7622628d248237b9a303adc4e8ecc88c53677957a64c272",
+   "gold_pass": true,
+   "n_exec": 7,
+   "n_intents": 10,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 10,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 10,
+     "rate": 0.9,
+     "satisfied": 9
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_nodebb__nodebb-f083cd559d69c16481376868c8da65172729c0ca-vnan": {
+   "digest": "c1c512b26bc962d566949cd9f9d2d46bb127854d4aabcc3ac6590d79206a563a",
+   "gold_pass": true,
+   "n_exec": 6,
+   "n_intents": 9,
+   "validation": null,
+   "validation_pass": true,
+   "validation_source": "stage1_index"
+  },
+  "swebenchpro_instance_protonmail__webclients-e65cc5f33719e02e1c378146fb981d27bc24bdf4": {
+   "digest": "09591b53e109a2453dda1068c6af8c68b494bc3114847aae8be6d52252d21627",
+   "gold_pass": true,
+   "n_exec": 9,
+   "n_intents": 10,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 10,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 10,
+     "rate": 1.0,
+     "satisfied": 10
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_qutebrowser__qutebrowser-70248f256f93ed9b1984494d0a1a919ddd774892-v2ef375ac784985212b1805e1d0431dc8f1b3c171": {
+   "digest": "b80dcf090f2111ef92b1bdfaa8255e8fe9743ae6c32a0df771e9cd6f62d49061",
+   "gold_pass": true,
+   "n_exec": 4,
+   "n_intents": 5,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 5,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 5,
+     "rate": 1.0,
+     "satisfied": 5
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367": {
+   "digest": "7d54790111ca6105c2d006c154705689a8b77eff8fc816679ed531f450477626",
+   "gold_pass": true,
+   "n_exec": 11,
+   "n_intents": 11,
+   "validation": null,
+   "validation_pass": true,
+   "validation_source": "stage1_index"
+  },
+  "swebenchpro_instance_qutebrowser__qutebrowser-bedc9f7fadf93f83d8dee95feeecb9922b6f063f-v2ef375ac784985212b1805e1d0431dc8f1b3c171": {
+   "digest": "19f60f5a049c14df32773e5da81c17ad133358f9feb10586689e7fd8519f7eff",
+   "gold_pass": true,
+   "n_exec": 3,
+   "n_intents": 7,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 7,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 7,
+     "rate": 1.0,
+     "satisfied": 7
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  },
+  "swebenchpro_instance_qutebrowser__qutebrowser-fea33d607fde83cf505b228238cf365936437a63-v9f8e9d96c85c85a605e382f1510bd08563afc566": {
+   "digest": "7118b89046b711ba3ffe4f704f1fc9450832d0192d989116043a1d7219284d10",
+   "gold_pass": true,
+   "n_exec": 2,
+   "n_intents": 5,
+   "validation": {
+    "base": {
+     "errors": 0,
+     "n": 5,
+     "rate": 0.0,
+     "satisfied": 0
+    },
+    "reference": {
+     "errors": 0,
+     "n": 5,
+     "rate": 1.0,
+     "satisfied": 5
+    }
+   },
+   "validation_pass": true,
+   "validation_source": "a5_13_validation"
+  }
+ }
+}

@@ -1,0 +1,107 @@
+{
+ "schema": "redo_v1/swi-judge-freeze/1",
+ "frozen_at": "2026-09-27T18:26:31-0700",
+ "version": "swi-judge-gemini-1",
+ "seat": {
+  "model": "gemini-3.5-flash",
+  "reasoning_effort": "high",
+  "provider_record": {
+   "name": "models/gemini-3.5-flash",
+   "version": "3.5-flash-05-2026",
+   "displayName": "Gemini 3.5 Flash",
+   "inputTokenLimit": 1048576,
+   "outputTokenLimit": 65536,
+   "thinking": true
+  },
+  "seats_file": "configs/seats/redo_v1_seats.json",
+  "seats_file_sha256": "fe889e4998e063bd9a8467e6149f47d9a4084c960b5b933a70a31bc13d828b9e"
+ },
+ "intents_index_digest": {
+  "frozen": true,
+  "path": "configs/intents/swe-interact/index.json",
+  "sha256": "ef705c02fb320cbde690e03f2628e471ba6f666798cc5373705fc2c327dd8f32",
+  "index_digest": "94f4cc5bbb5579c888c78c8c32a984c9699e105fc78969b3b79394e8d0abb28e",
+  "frozen_at": "2026-09-26T15:14:02-0700"
+ },
+ "llm_judge": {
+  "model": "gemini-3.5-flash",
+  "reasoning_effort": "high",
+  "backend": "gemini",
+  "seat_source": "configs/seats/redo_v1_seats.json",
+  "prompt_file": "fsa/redo/prompts/intent_judge_system.md",
+  "prompt_sha256": "a85cab2a6eeac9055676b95a2a321e5d06a0d2359a61ebb79be90ed1efd79573",
+  "applicability_prompt_file": "fsa/redo/prompts/intent_applicability_system.md",
+  "applicability_prompt_sha256": "02483e3c657810940b7c28aa5f84d839a0e2821df38cbb7b9239f64822593ed2",
+  "open_intent": "always applicable",
+  "batch": 12,
+  "max_patch_chars": 150000,
+  "retry": "llm_seats.json_call (patient)"
+ },
+ "rubric_judge": {
+  "model": "gemini-3.5-flash",
+  "max_completion_tokens": 16384,
+  "reasoning_effort": "high",
+  "module_sha256": "0b3685e9267f3658243294a00981adf8a12a79f491f6b63f77a15b0d15d2d220",
+  "prompts": "the task's own rubrics_system_prompt.txt / rubrics_user_prompt_template.txt"
+ },
+ "tagger": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_file": "fsa/redo/swe_interact/prompts/revelation_tagger_system.md",
+  "prompt_sha256": "ff03d0ee6e6ba1e403f7c42e12e0da0441b6eafc9e0a7f7bc2213e310f22b1c3",
+  "levels": [
+   "explicit",
+   "implied",
+   "no"
+  ],
+  "acts": [
+   "revision_request",
+   "approval",
+   "answer",
+   "other"
+  ]
+ },
+ "exec": {
+  "recipe_version": "swi-exec/1"
+ },
+ "final_verifier_rubric_grader": {
+  "EVAL_MODEL": "gemini-3.5-flash",
+  "reasoning_effort": "high",
+  "max_completion_tokens": 16384,
+  "note": "rf_* final step, inside the task container (fsa/redo/swe_interact/rungs.json)"
+ },
+ "module_sha256": {
+  "judge.py": "df0e4dec8efff75e31c5a5c857a3653c5feba09caf3a07feacb9b27a08a94438",
+  "exec_judge.py": "7d6c225ec7a1c12a5ac29031ba3b8ddf0c6763f96e0dc06dd13598191cf8602f",
+  "rubric_judge.py": "0b3685e9267f3658243294a00981adf8a12a79f491f6b63f77a15b0d15d2d220",
+  "tagger.py": "6100ef3db3f53653a983f5415d4f08a2ddbee82218cc4fef212f8e82816d21da",
+  "metrics.py": "0451a654830d294f649c46438f8a5f619581d874f78795f7604fd5740ba92f78"
+ },
+ "revalidation": {
+  "file": "configs/intents/swe-interact/JUDGE_REVALIDATION_GEMINI.json",
+  "sha256": "f87a457bdb7a0a09d21e3cf75b64f8ee67f7fd9e820d770ba80ee362aa6851c6",
+  "summary": {
+   "reference": "305/307",
+   "base_positive": "0/284",
+   "tasks_pass": 20,
+   "tasks_pass_gpt55": 18,
+   "stats_llm": {
+    "cache_hits": 0,
+    "judged": 56,
+    "calls": 22,
+    "failed_calls": 0,
+    "input_tokens": 57574,
+    "output_tokens": 3318,
+    "reasoning_tokens": 26767
+   },
+   "stats_rubric": {
+    "cache_hits": 0,
+    "calls": 202,
+    "failed_calls": 2,
+    "input_tokens": 911984,
+    "output_tokens": 16768,
+    "reasoning_tokens": 122627
+   }
+  }
+ }
+}

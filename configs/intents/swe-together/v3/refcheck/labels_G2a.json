@@ -1,0 +1,110 @@
+{
+ "labeller": "G2a",
+ "labels": {
+  "gemini-voyager-task-4bddaf/goal_1": {
+   "label": "satisfied",
+   "evidence": "src/pages/popup/Popup.tsx:335-380 SectionReorderControls up/down buttons with onClick -> moveSectionInOrder (1194-1211) swapping ids in sectionOrder; wrapSection (1214) applies style order=sectionOrder.indexOf(id) inside flex-col container, all 17 sections wrapped; disabled only at first/last visible. bun run typecheck passes.",
+   "confidence": 0.9
+  },
+  "gemini-voyager-task-4bddaf/goal_2": {
+   "label": "satisfied",
+   "evidence": "Popup.tsx:448 useState<PopupSectionId[]> sectionOrder (default POPUP_SECTION_IDS at 50-73); moveSectionInOrder calls setSectionOrder with swapped copy; rendering uses CSS order from sectionOrder.indexOf(id) (1215).",
+   "confidence": 0.9
+  },
+  "gemini-voyager-task-4bddaf/goal_3": {
+   "label": "satisfied",
+   "evidence": "StorageKeys.GV_POPUP_SECTION_ORDER added (src/core/types/common.ts:110); moveSectionInOrder writes via setSyncStorage -> browser.storage.sync.set (1209); load reads key with default null (856) and applies filtered+missing order (930-940), default order otherwise.",
+   "confidence": 0.9
+  },
+  "gemini-voyager-task-4bddaf/goal_4": {
+   "label": "satisfied",
+   "evidence": "docs/en/guide/settings.md (+ 9 other locales) new '## Custom Order' section: hover card, ▲/▼ arrows move card up/down, layout saved automatically and persists.",
+   "confidence": 0.95
+  },
+  "gemini-voyager-task-4bddaf/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "git status shows no change to package.json or docs/.vitepress/config.mts; grep -i 'changelog|git-log|nolebase|vitepress-plugin' over docs/.vitepress and package.json finds nothing. No changelog/history plugin wired.",
+   "confidence": 0.95
+  },
+  "pi-mono-auto-d3b2130d/goal_1": {
+   "label": "satisfied",
+   "evidence": "README.md:1013 'Published pi packages should include the pi-package keyword ... for npm search' + curl registry search keywords:pi-package; docs/extensions.md:245 'so users can find your package on npm' + search curl.",
+   "confidence": 0.95
+  },
+  "pi-mono-auto-d3b2130d/goal_2": {
+   "label": "satisfied",
+   "evidence": "Both files name `pi-package` and say it belongs in package.json keywords (extensions.md shows keywords array example).",
+   "confidence": 0.95
+  },
+  "pi-mono-auto-d3b2130d/goal_3": {
+   "label": "satisfied",
+   "evidence": "git status: both packages/coding-agent/README.md and packages/coding-agent/docs/extensions.md modified with new Discoverability prose.",
+   "confidence": 0.95
+  },
+  "pi-mono-auto-d3b2130d/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "Only the two .md files changed; `git ls-files '*package.json' | xargs grep -l pi-package` returns nothing; sibling dirs (pi-doom etc.) absent in /workspace. No manifest carries the keyword.",
+   "confidence": 0.95
+  },
+  "sd-scripts-fp8-lumina/goal_1": {
+   "label": "not_satisfied",
+   "evidence": "library/lumina_util.py adds FP8_OPTIMIZATION_TARGET_KEYS=['layers','context_refiner','noise_refiner'] (hits 358 real NextDiT weight keys), fp8_scaled param, calls load_safetensors_with_lora_and_fp8(fp8_optimization=...) and apply_fp8_monkey_patch. BUT the new signature uses Optional[Dict[...]] while typing import is only List/Optional/Tuple/Union: `python -c 'import library.lumina_util'` -> NameError: name 'Dict' is not defined (py3.12). The Lumina loading module does not import, so the path cannot run. (With Dict injected into builtins the logic works.) Hidden verifier still gives 1.0 (static gates).",
+   "confidence": 0.8
+  },
+  "sd-scripts-fp8-lumina/goal_2": {
+   "label": "satisfied",
+   "evidence": "library/fp8_optimization_utils.py:395 original_dtype = x.dtype; scale = self.scale_weight.to(original_dtype) used in both branches. Probe: fp8_linear_forward_patch with float8_e4m3fn weight, fp8 scale_weight and bf16 input returns bf16 [2,32] without error. fp8_optimization_utils imports independently of lumina_util.",
+   "confidence": 0.9
+  },
+  "sd-scripts-fp8-lumina/goal_3": {
+   "label": "not_satisfied",
+   "evidence": "--fp8_scaled store_true added in library/lumina_train_util.add_lumina_train_arguments (parser probe -> True), but the Lumina training entrypoint cannot be invoked: `python lumina_train_network.py --help` -> NameError: name 'Dict' is not defined (import of library/lumina_util.py). Flag surface exists only at parser-function level.",
+   "confidence": 0.7
+  },
+  "sd-scripts-fp8-lumina/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "lumina_train_network.py:63-72 sets loading_dtype = None if args.fp8_scaled and forwards fp8_scaled=args.fp8_scaled to load_lumina_model (text-level wiring correct), but lumina_train_network.py fails at import (NameError Dict in library/lumina_util.py:37), so the wiring cannot run.",
+   "confidence": 0.75
+  },
+  "sd-scripts-fp8-lumina/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "FP8_OPTIMIZATION_EXCLUDE_KEYS=['norm','_emb','modulation'] in library/lumina_util.py:26; pattern matches all norm keys (attention_norm1/2, ffn_norm1/2, q_norm,k_norm,norm_final) and synthetic optimizer probe leaves attention_norm1 unscaled. However the module defining it raises NameError on import, so the constant cannot be bound/used by any code path.",
+   "confidence": 0.7
+  },
+  "sd-scripts-fp8-lumina/goal_6": {
+   "label": "not_satisfied",
+   "evidence": "'modulation' is in FP8_OPTIMIZATION_EXCLUDE_KEYS; synthetic probe: layers.0.adaLN_modulation.1.weight not scaled while layers.0.attention.qkv gets scale_weight. But library/lumina_util.py fails to import (NameError Dict), so the fix is not effective in the running code.",
+   "confidence": 0.7
+  },
+  "pi-mono-extensions-event-refactor/goal_1": {
+   "label": "not_satisfied",
+   "evidence": "Behaviour is present: runner.ts emitToolResult iterates extensions in load order, mutates a single currentEvent in place, merges content/details/isError field-wise, returns undefined when nothing modified; wrapper.ts:75,97 call runner.emitToolResult; new vitest chaining tests pass (verifier P2P vitest extensions-runner PASS). BUT the patched runner.ts does not type-check/build: `npx tsgo --noEmit` -> TS2300 Duplicate identifier 'RunnerEmitEvent' (runner.ts:102 and :138), TS2322 + TS2552 'Cannot find name TEvent' at runner.ts:458 (stray `return result as RunnerEmitResult<TEvent>` in getRegisteredCommandsWithPaths); `npm run build` in packages/coding-agent fails. Base tree type-checks cleanly (rc 0). Labelled per rubric 'relevant code does not build'; runtime semantics alone would be satisfied.",
+   "confidence": 0.6
+  },
+  "pi-mono-extensions-event-refactor/goal_2": {
+   "label": "not_satisfied",
+   "evidence": "New RunnerEmitEvent = Exclude<ExtensionEvent, ToolCall|ToolResult|UserBash|Context|BeforeAgentStart|ResourcesDiscover|Input> and emit<TEvent extends RunnerEmitEvent>; probe file calling emit({type:'tool_result'}) and emit(input event) is rejected by tsgo. However the type alias is declared twice (runner.ts:102 and the pre-existing one at :138) -> TS2300 Duplicate identifier, plus TS2552/TS2322 at :458; the compile-time mechanism lives in a file that fails type-checking/build (base passes).",
+   "confidence": 0.65
+  },
+  "pi-mono-extensions-event-refactor/goal_3": {
+   "label": "not_satisfied",
+   "evidence": "runner.ts:536-540 still does `result = handlerResult as SessionBeforeEventResult;` (unchecked cast remains) and `return result as RunnerEmitResult<TEvent>`; the guard now takes the event and the result union covers switch/fork/compact/tree, but the goal requires the unchecked cast to no longer be needed. Also file fails tsgo (duplicate identifier, TEvent error at :458).",
+   "confidence": 0.8
+  },
+  "pi-mono-extensions-event-refactor/goal_4": {
+   "label": "satisfied",
+   "evidence": "packages/coding-agent/docs/extensions.md:527-530 under tool_result: handlers run in extension load order; each sees latest result after previous changes; partial patches (content/details/isError), omitted fields keep current values.",
+   "confidence": 0.95
+  },
+  "pi-mono-extensions-event-refactor/goal_5": {
+   "label": "satisfied",
+   "evidence": "test.sh adds `unset KIMI_API_KEY` (and HF_TOKEN); packages/ai/src/env-api-keys.ts:110 maps 'kimi-coding' -> KIMI_API_KEY, so the Kimi coding key is covered.",
+   "confidence": 0.9
+  },
+  "pi-mono-extensions-event-refactor/goal_6": {
+   "label": "satisfied",
+   "evidence": "git status: only CHANGELOG.md, docs/extensions.md, src/core/extensions/runner.ts, wrapper.ts, test/extensions-runner.test.ts, test.sh modified; no manifests/lockfiles/unrelated sources. CHANGELOG entry is a companion doc of the same package.",
+   "confidence": 0.8
+  }
+ }
+}

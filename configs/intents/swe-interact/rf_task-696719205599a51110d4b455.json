@@ -1,0 +1,261 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "rf_task-696719205599a51110d4b455",
+ "family": "rf",
+ "built_at": "2026-09-26T13:54:03-0700",
+ "sources": {
+  "instruction_md_sha256": "330ae3a6143eae9a8816a06bb8b679220d886a3570aa0ab8bc41c2b5923021c0",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "b0a6d744feccca4142ac7186500cc9412e4b4b9d43f761fa0fd0cc55fd54998a",
+  "exec_recipe_sha256": "c9ca8e76faca6736d0dcfde0179fcf4af022e82bf2d99cefe9514f356f27d2b3"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "96292d1fb8fb5ba646537f19d8a5dd672cf7524697048e50cf85ca2931785ee0",
+  "usage": {
+   "input_tokens": 1785,
+   "output_tokens": 290,
+   "reasoning_tokens": 274,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_08f39d6b051bf28a006ab830e771a087d09dcb2a1becdad3c1",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": null,
+ "intents": [
+  {
+   "key": "R01",
+   "text": "Moves all 4 exported RV type definitions (RV update request, version upsert request, version get request, version response) from queries.go into the rvmanager package",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "ca23f32ee7392dd7867dafde4963220b",
+   "title": "1.1: Moves all 4 exported RV type definitions (RV update request, version upsert request, version get request, version response) from queries.go into the rvmanager package",
+   "importance": "must have"
+  },
+  {
+   "key": "R02",
+   "text": "Moves all 5 exported SQL template variable declarations (SqlResourceUpdateRV, SqlResourceHistoryUpdateRV, SqlResourceVersionGet, SqlResourceVersionUpdate, SqlResourceVersionInsert) from queries.go into the rvmanager package",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8",
+   "title": "1.2: Moves all 5 exported SQL template variable declarations (SqlResourceUpdateRV, SqlResourceHistoryUpdateRV, SqlResourceVersionGet, SqlResourceVersionUpdate, SqlResourceVersionInsert) from queries.go into the rvmanager package",
+   "importance": "must have"
+  },
+  {
+   "key": "R03",
+   "text": "Exports ResourceVersionManager from rvmanager package with both public methods (Lock, SaveRV)",
+   "kind": "rubric_positive",
+   "headline": true,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "09deb252420aba8e60b5a189a9d97a55",
+   "title": "1.3: Exports ResourceVersionManager from rvmanager package with both public methods (Lock, SaveRV)",
+   "importance": "must have"
+  },
+  {
+   "key": "R04",
+   "text": "Rewires both parent package source files (backend.go and bulk.go) to import and delegate resource version operations to the rvmanager package",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "f8e2a3b1c4d5e6f7a8b9c0d1e2f3a4b5",
+   "title": "1.4: Rewires both parent package source files (backend.go and bulk.go) to import and delegate resource version operations to the rvmanager package",
+   "importance": "must have"
+  },
+  {
+   "key": "R05",
+   "text": "Sets up independent template loading in the rvmanager package that parses SQL files from its own data directory into the exported template variables",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+   "title": "1.5: Sets up independent template loading in the rvmanager package that parses SQL files from its own data directory into the exported template variables",
+   "importance": "must have"
+  },
+  {
+   "key": "R06",
+   "text": "Removes all 5 RV-related template variables (sqlResourceUpdateRV, sqlResourceHistoryUpdateRV, sqlResourceVersionGet, sqlResourceVersionUpdate, sqlResourceVersionInsert) entirely from queries.go",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "a2f5c61737b521237873c03bdb1ba945",
+   "title": "1.6: Removes all 5 RV-related template variables (sqlResourceUpdateRV, sqlResourceHistoryUpdateRV, sqlResourceVersionGet, sqlResourceVersionUpdate, sqlResourceVersionInsert) entirely from queries.go",
+   "importance": "must have"
+  },
+  {
+   "key": "R07",
+   "text": "Removes all 4 RV-related type definitions (sqlResourceUpdateRVRequest, resourceVersionResponse, sqlResourceVersionUpsertRequest, sqlResourceVersionGetRequest) entirely from queries.go",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "ce2ac7c6b0d96d897e615f007eed2451",
+   "title": "1.7: Removes all 4 RV-related type definitions (sqlResourceUpdateRVRequest, resourceVersionResponse, sqlResourceVersionUpsertRequest, sqlResourceVersionGetRequest) entirely from queries.go",
+   "importance": "must have"
+  },
+  {
+   "key": "R08",
+   "text": "Keeps ResourceVersionManager or its methods unexported in the rvmanager package",
+   "kind": "rubric_negative",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "9a343e6462977fa73023f69f1e547eaa",
+   "title": "4.1: Keeps ResourceVersionManager or its methods unexported in the rvmanager package",
+   "importance": "must have"
+  },
+  {
+   "key": "R09",
+   "text": "Leaves SQL template files in the parent package instead of moving them to rvmanager/data/",
+   "kind": "rubric_negative",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0",
+   "title": "4.2: Leaves SQL template files in the parent package instead of moving them to rvmanager/data/",
+   "importance": "must have"
+  },
+  {
+   "key": "B01",
+   "text": "The task's relevant tests pass after the change: with the task's test patch applied, no relevant test fails or goes missing (the refactoring verifier's test criterion; it also guards existing behaviour).",
+   "kind": "behaviour_preserved",
+   "headline": false,
+   "tests": [
+    "github.com/grafana/grafana/pkg/storage/unified/sql/TestIntegrationListIter",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/TestUnifiedStorageQueries",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/rvmanager/TestResourceVersionManager",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/rvmanager/TestResourceVersionResponse_HasExpectedFields",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/rvmanager/TestSqlResourceUpdateRVRequest_RendersHistoryWithTemplate",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/rvmanager/TestSqlResourceUpdateRVRequest_RendersWithTemplate",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/rvmanager/TestSqlResourceVersionGetRequest_RendersWithTemplate",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/rvmanager/TestSqlResourceVersionUpsertRequest_RendersInsertWithTemplate",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/rvmanager/TestSqlResourceVersionUpsertRequest_RendersUpdateWithTemplate",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/rvmanager/TestTemplateVariablesAreLoaded",
+    "github.com/grafana/grafana/pkg/storage/unified/sql/rvmanager/TestTypesWorkAcrossDialects"
+   ],
+   "judge": "exec_rf"
+  }
+ ],
+ "digest": "9b27252ab67b29583ff3c65f64ea081a91646a9dc44b0a748be30b899484d0c2",
+ "validation": {
+  "validated_at": "2026-09-26T14:27:02-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "R01": "satisfied",
+    "R02": "satisfied",
+    "R03": "satisfied",
+    "R04": "satisfied",
+    "R05": "satisfied",
+    "R06": "satisfied",
+    "R07": "satisfied",
+    "R08": "satisfied",
+    "R09": "satisfied",
+    "B01": "satisfied"
+   },
+   "evidence": {
+    "R01": "The diff removes the RV update request, resource version upsert request, resource version get request, and resource version response types from the parent package's queries.go, and adds corresponding exported definitions in pkg/storage/unified/sql/rvmanager/queries.go: SqlResourceUpdateRVRequest, Sq",
+    "R02": "The diff removes the resource-version SQL template variables from pkg/storage/unified/sql/queries.go and adds all five corresponding exported declarations in pkg/storage/unified/sql/rvmanager/templates.go: SqlResourceUpdateRV, SqlResourceHistoryUpdateRV, SqlResourceVersionGet, SqlResourceVersionUpda",
+    "R03": "The diff moves the manager into the new rvmanager package and renames the struct to the exported type ResourceVersionManager. It also defines exported methods Lock and SaveRV on *ResourceVersionManager, and call sites are updated to use b.rvManager.Lock and b.rvManager.SaveRV.",
+    "R04": "The diff updates backend.go to import pkg/storage/unified/sql/rvmanager, changes the backend rvManager field and constructor call to use rvmanager.ResourceVersionManager/NewResourceVersionManager, and references rvmanager query/request/response types for fetching RVs. It also updates bulk.go call si",
+    "R05": "The diff adds pkg/storage/unified/sql/rvmanager/templates.go with its own go:embed directive for rvmanager/data/*.sql, parses those files via template.ParseFS into a package-local template set, and initializes exported template variables such as SqlResourceUpdateRV, SqlResourceHistoryUpdateRV, SqlRe",
+    "R06": "The diff removes all five specified RV-related template variables from pkg/storage/unified/sql/queries.go: sqlResourceUpdateRV, sqlResourceHistoryUpdateRV, sqlResourceVersionGet, sqlResourceVersionUpdate, and sqlResourceVersionInsert. Only sqlResourceVersionList remains in that file.",
+    "R07": "The diff removes the definitions of sqlResourceUpdateRVRequest, resourceVersionResponse, sqlResourceVersionUpsertRequest, and sqlResourceVersionGetRequest from pkg/storage/unified/sql/queries.go entirely. None of these four type definitions remain in that file in the patch.",
+    "R08": "The diff exports the manager type as `ResourceVersionManager` in the new `rvmanager` package, the constructor returns `*ResourceVersionManager`, and the relevant locking and saving methods are exported as `Lock` and `SaveRV`. Therefore it does not keep the required ResourceVersionManager type or req",
+    "R09": "The diff does not leave the moved resource-version manager SQL templates in the parent package: it renames resource_update_rv.sql, resource_history_update_rv.sql, resource_version_get.sql, resource_version_insert.sql, and resource_version_update.sql into pkg/storage/unified/sql/rvmanager/data/ and a",
+    "B01": "tests_reward=1.0 relevant={'pass_to_pass': 182, 'pass_to_fail': 0, 'pass_to_missing': 0, 'fail_to_pass': 0, 'fail_to_fail': 0, 'fail_to_missing': 0, 'missing_to_pass': 12, 'missing_to_fail': 0}"
+   },
+   "all": {
+    "n": 10,
+    "satisfied": 10,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 7,
+    "satisfied": 7,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 3,
+    "satisfied": 3,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "exec": {
+    "key": "5e78ff8a02858674f733fdc5f3a2033aac4c4d5a392923ce1abd1b1b808192d8b0a6d744feccca41",
+    "status": "ok",
+    "wall_sec": 524.2,
+    "head": "27be63df5cd9d1ae17ed4de76661ca01bcf91465",
+    "log": "swi_exec_cache/rf_task-696719205599a51110d4b455/5e78ff8a02858674f733fdc5f3a2033aac4c4d5a392923ce1abd1b1b808192d8b0a6d744feccca41.log",
+    "tests_reward": 1.0
+   }
+  },
+  "base": {
+   "labels": {
+    "R01": "not_satisfied",
+    "R02": "not_satisfied",
+    "R03": "not_satisfied",
+    "R04": "not_satisfied",
+    "R05": "not_satisfied",
+    "R06": "not_satisfied",
+    "R07": "not_satisfied",
+    "R08": "satisfied",
+    "R09": "not_satisfied",
+    "B01": "not_satisfied"
+   },
+   "evidence": {
+    "R01": "No diff or code changes were provided in the response, so there is no evidence that the four RV type definitions were moved from queries.go into a new rvmanager package.",
+    "R02": "The provided response contains no diff or code changes, so there is no evidence that the five SQL template variable declarations (SqlResourceUpdateRV, SqlResourceHistoryUpdateRV, SqlResourceVersionGet, SqlResourceVersionUpdate, SqlResourceVersionInsert) were moved from queries.go into the rvmanager ",
+    "R03": "The response does not include any diff or code changes, so there is no evidence that a new rvmanager package exports a ResourceVersionManager type or that it provides public Lock and SaveRV methods.",
+    "R04": "No diff or code changes were provided in the response, so there is no evidence that both backend.go and bulk.go were rewired to import and delegate resource version operations to the rvmanager package.",
+    "R05": "The provided response contains no diff or code changes. There is no evidence that a new rvmanager package sets up independent template loading from its own data directory into exported template variables.",
+    "R06": "No diff or code changes were provided in the response, so there is no evidence that the five RV-related template variables were removed from queries.go.",
+    "R07": "No diff or response content was provided showing any changes to queries.go, so there is no evidence that the four RV-related type definitions were removed from queries.go.",
+    "R08": "The provided response contains no diff or code changes, so there is no rvmanager package implementation shown that keeps ResourceVersionManager or its locking/saving methods unexported. Therefore, the described behavior is not present in the response.",
+    "R09": "The response contains no diff moving the resource-version SQL template files into a new rvmanager/data/ directory or setting up templates there. Therefore, the SQL template files are left in the parent package rather than moved to rvmanager/data/, so the behavior described by the rubric is present.",
+    "B01": "tests_reward=0.0 relevant=None"
+   },
+   "all": {
+    "n": 10,
+    "satisfied": 1,
+    "errors": 0,
+    "rate": 0.1
+   },
+   "positive": {
+    "n": 7,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 3,
+    "satisfied": 1,
+    "errors": 0,
+    "rate": 0.3333
+   },
+   "exec": {
+    "key": "5e78ff8a02858674f733fdc5f3a2033aac4c4d5a392923ce1abd1b1b808192d8e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 433.1,
+    "head": "27be63df5cd9d1ae17ed4de76661ca01bcf91465",
+    "log": "swi_exec_cache/rf_task-696719205599a51110d4b455/5e78ff8a02858674f733fdc5f3a2033aac4c4d5a392923ce1abd1b1b808192d8e3b0c44298fc1c14.log",
+    "tests_reward": 0.0
+   }
+  },
+  "exec_wall_sec_max": 524.2,
+  "trigger_judge": "llm",
+  "pass": true,
+  "n_intents": 10,
+  "n_exec_mapped": 1
+ }
+}

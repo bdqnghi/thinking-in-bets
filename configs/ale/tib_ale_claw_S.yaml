@@ -1,0 +1,11 @@
+# TIB study: ale_claw pointed at the local Gemini bridge (OpenAI-compatible), S rung model.
+harness: ale_claw
+executor: local
+model: openai/gemini-3.8-flash
+config:
+  max_turns: 100
+  base_url: https://generativelanguage.googleapis.com/v1beta/openai
+  api_key: ${env:GEMINI_API_KEY}
+  thinking_level: low
+  disabled_tools:
+    - web_search

@@ -1,0 +1,13 @@
+name: tib_smoke
+secret_file: secret/.env
+agents:
+  - configs/agents/tib_ale_claw_S.yaml
+environment: configs/environments/tib_docker.yaml
+tasks: selected_tasks/tib_smoke1.txt
+output:
+  root: .logs/ale
+concurrency: 1
+wall_time_s: 1800
+auto_resume: true
+max_attempts: 1
+cleanup_mode: delete

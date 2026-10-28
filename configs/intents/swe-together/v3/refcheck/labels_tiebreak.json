@@ -1,0 +1,15 @@
+{
+ "labeller": "tiebreak",
+ "labels": {
+  "lock-code-manager-fix-7c955a/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "providers/_base.py:298-305: base now has public async_setup (try/finally sets _setup_complete) delegating to protected _async_setup. But the existing providers were not migrated: providers/virtual.py:42 and providers/zwave_js.py:455 still override the PUBLIC async_setup and call super().async_setup (grep shows no subclass overrides _async_setup). Consequences: virtual.py runs Store creation + async_hard_refresh_codes BEFORE super(), so an exception there never signals the event; zwave_js registers its notification listener AFTER super() has already released waiters. Goal text requires providers to extend the protected hook, not override the public entry point; only the base half of the refactor is present.",
+   "confidence": 0.75
+  },
+  "pi-mono-extensions-event-refactor/goal_1": {
+   "label": "satisfied",
+   "evidence": "runner.ts: new emitToolResult(event) iterates this.extensions in load order, passes a single mutable currentEvent (copy of the input) to every handler and writes each handler's returned content/details/isError onto it only when !== undefined (partial patch, omitted fields keep current value), tracks `modified` and returns undefined when no handler changed anything, else {content,details,isError}. wrapper.ts:75 and :97 now call runner.emitToolResult (both success and error paths) instead of emit. Runtime verified: after building tui/ai/agent deps, `npx vitest --run test/extensions-runner.test.ts` -> 18/18 pass, including new 'chains content modifications across handlers' (ext2 sees ext1's appended content) and 'preserves previous modifications when later handlers return partial patches'. CAVEAT: `tsgo --noEmit -p tsconfig.build.json` in packages/coding-agent gives 4 errors, all introduced by the patch in runner.ts (base tree: 0 errors): TS2300 duplicate 'RunnerEmitEvent' at lines 102 and 138, and at line 458 a stray `return result as RunnerEmitResult<TEvent>` in getRegisteredCommandsWithPaths (TS2552 TEvent undefined, TS2322). So `npm run build` of the package exits non-zero (JS is still emitted and runs). None of the errors is in the tool_result chaining path or its call-site (they belong to the emit() typing / a mis-applied line), so I label the goal_1 behaviour satisfied; a strict reading of 'the relevant code does not build' (whole runner.ts module) would flip this to not_satisfied.",
+   "confidence": 0.7
+  }
+ }
+}

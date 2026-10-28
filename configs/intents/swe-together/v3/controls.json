@@ -1,0 +1,406 @@
+{
+ "rule": "For each subset task, the first other subset task (in subset order, starting after it) whose\n    reference patch applies in this task's image. Apply checks only; no model.",
+ "controls": {
+  "cli-task-2026-0": {
+   "control_task": "cli-task-408b8c",
+   "tried": [
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c"
+   ]
+  },
+  "cli-task-cd4662": {
+   "control_task": "cli-task-408b8c",
+   "tried": [
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c"
+   ]
+  },
+  "gemini-voyager-task-f519c2": {
+   "control_task": null,
+   "tried": [
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662"
+   ]
+  },
+  "hyperswitch-8389": {
+   "control_task": null,
+   "tried": [
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2"
+   ]
+  },
+  "dataclaw-windows-path-fix": {
+   "control_task": null,
+   "tried": [
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389"
+   ]
+  },
+  "gemini-voyager-task-aa88f5": {
+   "control_task": null,
+   "tried": [
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix"
+   ]
+  },
+  "cli-task-33e050": {
+   "control_task": null,
+   "tried": [
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5"
+   ]
+  },
+  "cli-task-408b8c": {
+   "control_task": null,
+   "tried": [
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050"
+   ]
+  },
+  "cli-task-4a9dde": {
+   "control_task": "cli-task-408b8c",
+   "tried": [
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c"
+   ]
+  },
+  "cli-task-5a69ca": {
+   "control_task": "cli-task-cd4662",
+   "tried": [
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662"
+   ]
+  },
+  "cli-task-c425e4": {
+   "control_task": null,
+   "tried": [
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca"
+   ]
+  },
+  "lock-code-manager-fix-7c955a": {
+   "control_task": null,
+   "tried": [
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4"
+   ]
+  },
+  "sd-scripts-reg-image-dedup": {
+   "control_task": "sd-scripts-fp8-lumina",
+   "tried": [
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina"
+   ]
+  },
+  "cli-task-b12319": {
+   "control_task": null,
+   "tried": [
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup"
+   ]
+  },
+  "gemini-voyager-task-4bddaf": {
+   "control_task": null,
+   "tried": [
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319"
+   ]
+  },
+  "desloppify-zone-classification": {
+   "control_task": null,
+   "tried": [
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf"
+   ]
+  },
+  "pi-mono-auto-d3b2130d": {
+   "control_task": null,
+   "tried": [
+    "sd-scripts-fp8-lumina",
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf"
+   ]
+  },
+  "sd-scripts-fp8-lumina": {
+   "control_task": null,
+   "tried": [
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d"
+   ]
+  },
+  "vibecomfy-mcp-pr-integration": {
+   "control_task": null,
+   "tried": [
+    "pi-mono-extensions-event-refactor",
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina"
+   ]
+  },
+  "pi-mono-extensions-event-refactor": {
+   "control_task": null,
+   "tried": [
+    "cli-task-2026-0",
+    "cli-task-cd4662",
+    "gemini-voyager-task-f519c2",
+    "hyperswitch-8389",
+    "dataclaw-windows-path-fix",
+    "gemini-voyager-task-aa88f5",
+    "cli-task-33e050",
+    "cli-task-408b8c",
+    "cli-task-4a9dde",
+    "cli-task-5a69ca",
+    "cli-task-c425e4",
+    "lock-code-manager-fix-7c955a",
+    "sd-scripts-reg-image-dedup",
+    "cli-task-b12319",
+    "gemini-voyager-task-4bddaf",
+    "pi-mono-auto-d3b2130d",
+    "sd-scripts-fp8-lumina"
+   ]
+  }
+ }
+}

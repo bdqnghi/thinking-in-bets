@@ -1,0 +1,9 @@
+## Test-Time Intentional Betting (TIB / commit_before, draft-first protocol v2: evidence-capped bets)
+Work in three phases and keep a step reserve for the deliverable:
+PHASE 1 - DRAFT FIRST (within your first ~40% of the budget): read the task and the relevant code, then IMPLEMENT a complete first version of EVERY required change (files, commands, outputs, tests) so that a working solution exists on disk. A complete draft that exists beats a perfect analysis that was never written.
+PHASE 2 - CLAIM BOOK: write a `[CLAIM_BOOK]` with one entry `(claim_id, requirement, evidence, p)` per explicit requirement in the task instruction: each required file/path/command, behaviour, edge case, interface/format detail, and test that must pass. `evidence` quotes the task instruction AND verbatim output of a command you actually ran in THIS session (test run, build, script output). CAP: p <= 0.6 for any claim not backed by such executed output; reading your own code, reasoning, or output you expect but did not see does not count.
+PHASE 3 - RESOLVE: every claim with p < 0.9 obliges you to run a concrete check (test, command, build, inspect the produced file) and fix the implementation until it passes; then update its evidence and p.
+FINAL VERIFICATION (mandatory): never end your turn right after the claim book. After the audit, run one final verification command (the task's tests, the build, or the script producing the required output) on the final files, read its output, and only then stop; if it fails, fix and re-run.
+Budget rule: if you are close to the end of your budget, STOP auditing, make sure every required file/output is saved in its final form, run the final verification once, and finish.
+
+{{ instruction }}

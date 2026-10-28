@@ -1,0 +1,81 @@
+{
+ "schema": "redo_v1/mediator-experiences/1",
+ "by_model": {
+  "gemini-3.5-flash-lite": {
+   "rules": "1. **Capture Complete Chronology**: Extract and list every distinct user query, follow-up request, command, error report, and feedback across all turns of the conversation transcript, rather than merely summarizing the final goal.\n2. **Structure with Initial Context and Numbered Follow-ups**: Begin the rewritten request with the user's initial opening prompt, task setup, or problem statement, followed by a numbered list capturing each subsequent user instruction, question, or error clarification in exact chronological order.\n3. **Preserve Exact Technical Details**: Retain all specific technical identifiers mentioned by the user (such as file names, function names, exact error messages, stack traces, URLs, and specific configuration options) without generalization.\n4. **Maintain First-Person Voice and Intent**: Frame each listed point directly from the user's perspective, preserving their original intent, feedback tone, and technical constraints.",
+   "rules_sha256": "bdc51e113bd4e52d96c56834dd30e6139dba24740c4b24283d335025a4a01e35",
+   "refiner_model": "gemini/gemini-3.5-flash-lite",
+   "reasoning_effort": "high",
+   "pairs": [
+    "banodoco-video-perf-optimize",
+    "cli-task-19def0",
+    "cli-task-30159a",
+    "hyperswitch-9063",
+    "unsloth-idefics3-finetune"
+   ],
+   "created_at": "2026-09-27T05:36:33Z",
+   "usage": {
+    "prompt_tokens": 23009,
+    "completion_tokens": 1381,
+    "reasoning_tokens": 1191,
+    "resolved_model": "gemini-3.5-flash-lite"
+   },
+   "attempts": 1
+  },
+  "gemini-3.6-flash": {
+   "rules": "1. Structure the rewritten request by preserving the user's complete initial prompt at the top, followed by the exact transition line: \"To be complete, here is everything I need from you in this session:\", followed by a numbered list.\n2. Extract every distinct user intent, question, instruction, feedback, or reported error across all subsequent user turns in strict chronological order.\n3. Rephrase informal, fragmented, or raw user inputs (such as error traces, tool output feedback, or interrupted prompts) into clear, self-contained, active instructions or direct questions.\n4. Exclude all AI assistant responses, system notifications, and tool execution outputs, retaining only the user's explicit requests and actions.",
+   "rules_sha256": "a556ca13eeab46eb0bfa7d96787e13342457d4039f20c13f169462a5cb258fc2",
+   "refiner_model": "gemini/gemini-3.6-flash",
+   "reasoning_effort": "high",
+   "pairs": [
+    "banodoco-video-perf-optimize",
+    "cli-task-19def0",
+    "cli-task-30159a",
+    "hyperswitch-9063",
+    "unsloth-idefics3-finetune"
+   ],
+   "created_at": "2026-09-27T05:37:20Z",
+   "usage": {
+    "prompt_tokens": 23009,
+    "completion_tokens": 2150,
+    "reasoning_tokens": 1997,
+    "resolved_model": "gemini-3.6-flash"
+   },
+   "attempts": 3
+  },
+  "gemini-3.8-flash": {
+   "rules": "1. **Standard Output Structure**\n   - Begin with the user's initial prompt or primary task specification at the top, stripping out wrapper tags or metadata (such as `<command-message>`, `<command-args>`, or system XML).\n   - Add the exact transition line immediately after the opening prompt:\n     `To be complete, here is everything I need from you in this session:`\n   - Follow with a chronologically ordered, numbered list (`1.`, `2.`, ...) of all subsequent user requests across the session. If the user issued no subsequent requests (e.g., only tool confirmations or tool outputs occurred), leave the section below the transition line empty.\n\n2. **Item Identification and Decomposition**\n   - Review every subsequent user turn—including requests, inquiries, feedback, reported errors, and tasks outlined in continuation/elision summaries.\n   - Deconstruct turns with multiple distinct questions or directives into separate numbered items.\n   - Exclude trivial procedural acknowledgments (e.g., simple \"yes\", \"ok\", or approvals to continue an ongoing proposal) and automated tool outputs that introduce no new user requirements.\n\n3. **Item Rephrasing and First-Person Perspective**\n   - Frame each item from the user's perspective as an actionable imperative command, a direct question, or an explicit problem report.\n   - Eliminate conversational fluff, hesitations, and informal filler (e.g., \"kinda\", \"know what I mean\", \"and yeah\") while strictly retaining exact technical details, parameters, code snippets, file paths, line numbers, and URLs.\n\n4. **Iterative Adjustments and Feedback Capture**\n   - Capture user feedback on intermediate results (e.g., speed adjustments, style preferences, animation smoothness) as concise, explicit instructions or state descriptions (e.g., \"Make the animation half the speed\", \"The animation is now too wavy\").\n   - Transcribe system notifications, task terminations, and runtime errors into clear, standalone reports or action items (e.g., \"Background Vite dev server task was killed; read the output file for results\").\n\n5. **Historical Context from Summaries and Elisions**\n   - When a transcript contains elisions or resumes from a summary of an earlier session, extract each distinct goal, technical question, setup instruction, and error referenced in that summary and integrate them into the numbered list in their proper chronological order.",
+   "rules_sha256": "3aa4e7b4814cabc34a9935fdf9f7807c0b0a1f797642312d23fe21e5c7b5bae8",
+   "refiner_model": "gemini/gemini-3.8-flash",
+   "reasoning_effort": "high",
+   "pairs": [
+    "banodoco-video-perf-optimize",
+    "cli-task-19def0",
+    "cli-task-30159a",
+    "hyperswitch-9063",
+    "unsloth-idefics3-finetune"
+   ],
+   "created_at": "2026-09-27T05:38:54Z",
+   "usage": {
+    "prompt_tokens": 23009,
+    "completion_tokens": 4080,
+    "reasoning_tokens": 3572,
+    "resolved_model": "gemini-3.8-flash"
+   },
+   "attempts": 4
+  }
+ },
+ "method": "intent mediator - controlled port of Mediator-Assistant (arXiv 2602.07338)",
+ "refiner_prompt_sha256": "43b4a9450408d2381bbd18fb325a03bb481a97fb1f51a38de2d4678aa7c25e23",
+ "pairs": [
+  "banodoco-video-perf-optimize",
+  "cli-task-19def0",
+  "cli-task-30159a",
+  "hyperswitch-9063",
+  "unsloth-idefics3-finetune"
+ ],
+ "pair_seed": 20260926,
+ "pair_budget_chars": 24000,
+ "refiner_input_sha256": "f4043b821117fe36fbffbbe991fe331e999ba3486e10d68af56ffb597377c746",
+ "pair_source": "SWE-Together tasks outside configs/subsets/swe-together.json; transcript = original_session.json (user + assistant text), ground truth = instruction.md + oracle_intents.json (deterministic template)"
+}

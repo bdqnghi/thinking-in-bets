@@ -1,0 +1,24 @@
+# tb4 (Terminal-Bench 4.0) 4.0 Pro: draft-first v2 lane (FIX 4B). 20 tasks.
+# 10 losses (stock pass, TIB v1 fail; results/analysis/log_mining.json tb4/G loss rows)
+# + 10 ties (5 both-pass, 5 both-fail; no exception/timeout in either arm), random.Random(20261015).sample
+# from results/harbor/tb4_G_{stock,tib}/per_task.json as of 2026-10-15.
+atrx-vep-crispr
+freecad-spring-clip
+heat-pump-warranty
+nextjs-performance
+vpp-loss-divergence
+biped-contact-dynamics
+live-database-cutover
+music-harmony
+distributed-dedup
+sound-change-cascade
+coq-block-bound
+layout-config-recreation2
+mp-checkpoint-consolidation
+satb-audio-transcription
+wdm-design
+batched-eval-parity
+bun-sourcemap-leak
+freecad-platform-drawing
+mvcc-lsm-compaction
+react-lead-form

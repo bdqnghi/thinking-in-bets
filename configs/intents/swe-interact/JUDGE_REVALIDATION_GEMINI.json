@@ -1,0 +1,1718 @@
+{
+ "seat": {
+  "model": "gemini-3.5-flash",
+  "reasoning_effort": "high",
+  "source": "configs/seats/redo_v1_seats.json"
+ },
+ "at": "2026-09-27T17:37:45-0700",
+ "tasks": {
+  "deepswe_fastapi-implicit-head-options": {
+   "reference": {
+    "labels": {
+     "I15": "not_applicable",
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied"
+    },
+    "all": {
+     "n": 14,
+     "satisfied": 14,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 14,
+     "satisfied": 14,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I15": "not_applicable",
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I07": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied",
+     "I13": "not_satisfied",
+     "I14": "not_satisfied"
+    },
+    "all": {
+     "n": 14,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 14,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 14,
+     "satisfied": 14,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 14,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "deepswe_helm-array-merge-strategies": {
+   "reference": {
+    "labels": {
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied",
+     "I15": "satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I07": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied",
+     "I13": "not_satisfied",
+     "I14": "not_satisfied",
+     "I15": "not_satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "deepswe_httpx-streaming-json-iteration": {
+   "reference": {
+    "labels": {
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied",
+     "I15": "satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I07": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied",
+     "I13": "not_satisfied",
+     "I14": "not_satisfied",
+     "I15": "not_satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "deepswe_returns-validated-error-accumulation": {
+   "reference": {
+    "labels": {
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied",
+     "I15": "satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I07": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied",
+     "I13": "not_satisfied",
+     "I14": "not_satisfied",
+     "I15": "not_satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "deepswe_sqlite-utils-safe-import-checkpoints": {
+   "reference": {
+    "labels": {
+     "I15": "satisfied",
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I15": "not_addressed",
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I07": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied",
+     "I13": "not_satisfied",
+     "I14": "not_satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "deepswe_testem-bail-on-test-failure": {
+   "reference": {
+    "labels": {
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied",
+     "I15": "satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I07": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied",
+     "I13": "not_satisfied",
+     "I14": "not_satisfied",
+     "I15": "not_satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "rf_task-694b4b99829f00e24fd11885": {
+   "reference": {
+    "labels": {
+     "R01": "satisfied",
+     "R02": "satisfied",
+     "R03": "satisfied",
+     "R04": "satisfied",
+     "R05": "satisfied",
+     "R06": "satisfied",
+     "R07": "satisfied",
+     "R08": "satisfied",
+     "R09": "satisfied",
+     "R10": "satisfied",
+     "R11": "satisfied",
+     "R12": "satisfied",
+     "R13": "satisfied",
+     "B01": "satisfied"
+    },
+    "all": {
+     "n": 14,
+     "satisfied": 14,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 11,
+     "satisfied": 11,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "R01": "not_satisfied",
+     "R02": "not_satisfied",
+     "R03": "not_satisfied",
+     "R04": "not_satisfied",
+     "R05": "not_satisfied",
+     "R06": "not_satisfied",
+     "R07": "not_satisfied",
+     "R08": "not_satisfied",
+     "R09": "not_satisfied",
+     "R10": "not_satisfied",
+     "R11": "not_satisfied",
+     "R12": "satisfied",
+     "R13": "satisfied",
+     "B01": "not_satisfied"
+    },
+    "all": {
+     "n": 14,
+     "satisfied": 2,
+     "errors": 0,
+     "rate": 0.1429
+    },
+    "positive": {
+     "n": 11,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 14,
+     "satisfied": 14,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 11,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "rf_task-694b4b99829f00e24fd11889": {
+   "reference": {
+    "labels": {
+     "R01": "satisfied",
+     "R02": "satisfied",
+     "R03": "satisfied",
+     "R04": "satisfied",
+     "R05": "satisfied",
+     "R06": "satisfied",
+     "R07": "satisfied",
+     "R08": "satisfied",
+     "R09": "satisfied",
+     "R10": "satisfied",
+     "R11": "satisfied",
+     "R12": "satisfied",
+     "R13": "satisfied",
+     "R14": "satisfied",
+     "B01": "satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 10,
+     "satisfied": 10,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "R01": "not_satisfied",
+     "R02": "not_satisfied",
+     "R03": "not_satisfied",
+     "R04": "not_satisfied",
+     "R05": "not_satisfied",
+     "R06": "not_satisfied",
+     "R07": "not_satisfied",
+     "R08": "not_satisfied",
+     "R09": "not_satisfied",
+     "R10": "not_satisfied",
+     "R11": "satisfied",
+     "R12": "satisfied",
+     "R13": "satisfied",
+     "R14": "satisfied",
+     "B01": "not_satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 4,
+     "errors": 0,
+     "rate": 0.2667
+    },
+    "positive": {
+     "n": 10,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 10,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "rf_task-694b4b99829f00e24fd11891": {
+   "reference": {
+    "labels": {
+     "R01": "satisfied",
+     "R02": "satisfied",
+     "R03": "satisfied",
+     "R04": "satisfied",
+     "R05": "satisfied",
+     "R06": "satisfied",
+     "R07": "satisfied",
+     "R08": "satisfied",
+     "R09": "satisfied",
+     "R10": "satisfied",
+     "R11": "satisfied",
+     "R12": "satisfied",
+     "R13": "satisfied",
+     "R14": "satisfied",
+     "R15": "satisfied",
+     "R16": "satisfied",
+     "B01": "satisfied"
+    },
+    "all": {
+     "n": 17,
+     "satisfied": 17,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "R01": "not_satisfied",
+     "R02": "not_satisfied",
+     "R03": "not_satisfied",
+     "R04": "not_satisfied",
+     "R05": "not_satisfied",
+     "R06": "not_satisfied",
+     "R07": "not_satisfied",
+     "R08": "not_satisfied",
+     "R09": "not_satisfied",
+     "R10": "not_satisfied",
+     "R11": "not_satisfied",
+     "R12": "not_satisfied",
+     "R13": "not_satisfied",
+     "R14": "not_satisfied",
+     "R15": "not_satisfied",
+     "R16": "satisfied",
+     "B01": "not_satisfied"
+    },
+    "all": {
+     "n": 17,
+     "satisfied": 1,
+     "errors": 0,
+     "rate": 0.0588
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 17,
+     "satisfied": 16,
+     "errors": 0,
+     "rate": 0.9412
+    },
+    "base": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {
+    "R10": [
+     "not_satisfied",
+     "satisfied"
+    ]
+   }
+  },
+  "rf_task-696719205599a51110d4b40c": {
+   "reference": {
+    "labels": {
+     "R01": "satisfied",
+     "R02": "satisfied",
+     "R03": "satisfied",
+     "R04": "satisfied",
+     "R05": "satisfied",
+     "R06": "satisfied",
+     "R07": "satisfied",
+     "R08": "not_satisfied",
+     "R09": "satisfied",
+     "R10": "satisfied",
+     "B01": "satisfied"
+    },
+    "all": {
+     "n": 11,
+     "satisfied": 10,
+     "errors": 0,
+     "rate": 0.9091
+    },
+    "positive": {
+     "n": 7,
+     "satisfied": 7,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "R01": "not_satisfied",
+     "R02": "not_satisfied",
+     "R03": "not_satisfied",
+     "R04": "not_satisfied",
+     "R05": "not_satisfied",
+     "R06": "not_satisfied",
+     "R07": "not_satisfied",
+     "R08": "satisfied",
+     "R09": "satisfied",
+     "R10": "satisfied",
+     "B01": "not_satisfied"
+    },
+    "all": {
+     "n": 11,
+     "satisfied": 3,
+     "errors": 0,
+     "rate": 0.2727
+    },
+    "positive": {
+     "n": 7,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 11,
+     "satisfied": 10,
+     "errors": 0,
+     "rate": 0.9091
+    },
+    "base": {
+     "n": 7,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "rf_task-696719205599a51110d4b436": {
+   "reference": {
+    "labels": {
+     "R01": "satisfied",
+     "R02": "satisfied",
+     "R03": "satisfied",
+     "R04": "satisfied",
+     "R05": "satisfied",
+     "R06": "satisfied",
+     "R07": "satisfied",
+     "R08": "satisfied",
+     "R09": "satisfied",
+     "R10": "satisfied",
+     "R11": "satisfied",
+     "R12": "satisfied",
+     "R13": "satisfied",
+     "R14": "satisfied",
+     "R15": "satisfied",
+     "R16": "satisfied",
+     "R17": "satisfied",
+     "B01": "satisfied"
+    },
+    "all": {
+     "n": 18,
+     "satisfied": 18,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "R01": "not_satisfied",
+     "R02": "not_satisfied",
+     "R03": "not_satisfied",
+     "R04": "not_satisfied",
+     "R05": "not_satisfied",
+     "R06": "not_satisfied",
+     "R07": "not_satisfied",
+     "R08": "not_satisfied",
+     "R09": "not_satisfied",
+     "R10": "not_satisfied",
+     "R11": "not_satisfied",
+     "R12": "not_satisfied",
+     "R13": "not_satisfied",
+     "R14": "not_satisfied",
+     "R15": "not_satisfied",
+     "R16": "satisfied",
+     "R17": "satisfied",
+     "B01": "not_satisfied"
+    },
+    "all": {
+     "n": 18,
+     "satisfied": 2,
+     "errors": 0,
+     "rate": 0.1111
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 18,
+     "satisfied": 18,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "rf_task-696719205599a51110d4b446": {
+   "reference": {
+    "labels": {
+     "R01": "satisfied",
+     "R02": "satisfied",
+     "R03": "satisfied",
+     "R04": "satisfied",
+     "R05": "satisfied",
+     "R06": "satisfied",
+     "R07": "satisfied",
+     "R08": "satisfied",
+     "R09": "satisfied",
+     "R10": "satisfied",
+     "R11": "satisfied",
+     "R12": "satisfied",
+     "R13": "satisfied",
+     "R14": "satisfied",
+     "R15": "satisfied",
+     "R16": "satisfied",
+     "R17": "satisfied",
+     "R18": "satisfied",
+     "R19": "satisfied",
+     "R20": "satisfied",
+     "R21": "satisfied",
+     "R22": "satisfied",
+     "B01": "satisfied"
+    },
+    "all": {
+     "n": 23,
+     "satisfied": 23,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 20,
+     "satisfied": 20,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "R01": "not_satisfied",
+     "R02": "not_satisfied",
+     "R03": "not_satisfied",
+     "R04": "not_satisfied",
+     "R05": "not_satisfied",
+     "R06": "not_satisfied",
+     "R07": "not_satisfied",
+     "R08": "not_satisfied",
+     "R09": "not_satisfied",
+     "R10": "not_satisfied",
+     "R11": "not_satisfied",
+     "R12": "not_satisfied",
+     "R13": "not_satisfied",
+     "R14": "not_satisfied",
+     "R15": "not_satisfied",
+     "R16": "not_satisfied",
+     "R17": "not_satisfied",
+     "R18": "not_satisfied",
+     "R19": "not_satisfied",
+     "R20": "not_satisfied",
+     "R21": "satisfied",
+     "R22": "not_satisfied",
+     "B01": "not_satisfied"
+    },
+    "all": {
+     "n": 23,
+     "satisfied": 1,
+     "errors": 0,
+     "rate": 0.0435
+    },
+    "positive": {
+     "n": 20,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 23,
+     "satisfied": 23,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 20,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "rf_task-696719205599a51110d4b455": {
+   "reference": {
+    "labels": {
+     "R01": "satisfied",
+     "R02": "satisfied",
+     "R03": "satisfied",
+     "R04": "satisfied",
+     "R05": "satisfied",
+     "R06": "satisfied",
+     "R07": "satisfied",
+     "R08": "satisfied",
+     "R09": "satisfied",
+     "B01": "satisfied"
+    },
+    "all": {
+     "n": 10,
+     "satisfied": 10,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 7,
+     "satisfied": 7,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "R01": "not_satisfied",
+     "R02": "not_satisfied",
+     "R03": "not_satisfied",
+     "R04": "not_satisfied",
+     "R05": "not_satisfied",
+     "R06": "not_satisfied",
+     "R07": "not_satisfied",
+     "R08": "satisfied",
+     "R09": "not_satisfied",
+     "B01": "not_satisfied"
+    },
+    "all": {
+     "n": 10,
+     "satisfied": 1,
+     "errors": 0,
+     "rate": 0.1
+    },
+    "positive": {
+     "n": 7,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 10,
+     "satisfied": 10,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 7,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "swebenchpro_instance_flipt-io__flipt-e5fe37c379e1eec2dd3492c5737c0be761050b26": {
+   "reference": {
+    "labels": {
+     "I15": "satisfied",
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 15,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I15": "not_addressed",
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I07": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied",
+     "I13": "not_satisfied",
+     "I14": "not_satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 15,
+     "satisfied": 14,
+     "errors": 0,
+     "rate": 0.9333
+    },
+    "base": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {
+    "I15": [
+     "not_satisfied",
+     "satisfied"
+    ]
+   }
+  },
+  "swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e": {
+   "reference": {
+    "labels": {
+     "I01": "satisfied",
+     "I03": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied",
+     "I15": "not_satisfied",
+     "I02": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I11": "satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 14,
+     "errors": 0,
+     "rate": 0.9333
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 14,
+     "errors": 0,
+     "rate": 0.9333
+    }
+   },
+   "base": {
+    "labels": {
+     "I01": "not_addressed",
+     "I03": "not_addressed",
+     "I06": "not_addressed",
+     "I07": "not_addressed",
+     "I08": "not_addressed",
+     "I09": "not_addressed",
+     "I10": "not_addressed",
+     "I12": "not_addressed",
+     "I13": "not_addressed",
+     "I14": "not_addressed",
+     "I15": "not_addressed",
+     "I02": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I11": "not_satisfied"
+    },
+    "all": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 15,
+     "satisfied": 11,
+     "errors": 0,
+     "rate": 0.7333
+    },
+    "base": {
+     "n": 15,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": false
+   },
+   "reference_changed_vs_gpt55": {
+    "I09": [
+     "not_satisfied",
+     "satisfied"
+    ],
+    "I10": [
+     "not_satisfied",
+     "satisfied"
+    ],
+    "I12": [
+     "not_satisfied",
+     "satisfied"
+    ]
+   }
+  },
+  "swebenchpro_instance_gravitational__teleport-d6ffe82aaf2af1057b69c61bf9df777f5ab5635a-vee9b09fb20c43af7e520f57e9239bbcf46b7113d": {
+   "reference": {
+    "labels": {
+     "I26": "satisfied",
+     "I29": "satisfied",
+     "I30": "satisfied",
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied",
+     "I15": "satisfied",
+     "I16": "satisfied",
+     "I17": "satisfied",
+     "I18": "satisfied",
+     "I19": "satisfied",
+     "I20": "satisfied",
+     "I21": "satisfied",
+     "I22": "satisfied",
+     "I23": "satisfied",
+     "I24": "satisfied",
+     "I25": "satisfied",
+     "I27": "satisfied",
+     "I28": "satisfied"
+    },
+    "all": {
+     "n": 30,
+     "satisfied": 30,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 30,
+     "satisfied": 30,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I26": "not_addressed",
+     "I29": "not_addressed",
+     "I30": "not_addressed",
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I07": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied",
+     "I13": "not_satisfied",
+     "I14": "not_satisfied",
+     "I15": "not_satisfied",
+     "I16": "not_satisfied",
+     "I17": "not_satisfied",
+     "I18": "not_satisfied",
+     "I19": "not_satisfied",
+     "I20": "not_satisfied",
+     "I21": "not_satisfied",
+     "I22": "not_satisfied",
+     "I23": "not_satisfied",
+     "I24": "not_satisfied",
+     "I25": "not_satisfied",
+     "I27": "not_satisfied",
+     "I28": "not_satisfied"
+    },
+    "all": {
+     "n": 30,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 30,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 30,
+     "satisfied": 28,
+     "errors": 0,
+     "rate": 0.9333
+    },
+    "base": {
+     "n": 30,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {
+    "I26": [
+     "not_satisfied",
+     "satisfied"
+    ],
+    "I30": [
+     "not_satisfied",
+     "satisfied"
+    ]
+   }
+  },
+  "swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12": {
+   "reference": {
+    "labels": {
+     "I07": "satisfied",
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied"
+    },
+    "all": {
+     "n": 12,
+     "satisfied": 12,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 12,
+     "satisfied": 12,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I07": "not_addressed",
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied"
+    },
+    "all": {
+     "n": 12,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 12,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 12,
+     "satisfied": 12,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 12,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26": {
+   "reference": {
+    "labels": {
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I09": "satisfied",
+     "I08": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied",
+     "I12": "satisfied",
+     "I13": "satisfied",
+     "I14": "satisfied",
+     "I15": "satisfied",
+     "I16": "satisfied",
+     "I17": "satisfied",
+     "I18": "satisfied"
+    },
+    "all": {
+     "n": 18,
+     "satisfied": 18,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 18,
+     "satisfied": 18,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I01": "not_addressed",
+     "I02": "not_addressed",
+     "I03": "not_addressed",
+     "I04": "not_addressed",
+     "I05": "not_addressed",
+     "I06": "not_addressed",
+     "I07": "not_addressed",
+     "I09": "not_addressed",
+     "I08": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied",
+     "I12": "not_satisfied",
+     "I13": "not_satisfied",
+     "I14": "not_satisfied",
+     "I15": "not_satisfied",
+     "I16": "not_satisfied",
+     "I17": "not_satisfied",
+     "I18": "not_satisfied"
+    },
+    "all": {
+     "n": 18,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 18,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 18,
+     "satisfied": 14,
+     "errors": 0,
+     "rate": 0.7778
+    },
+    "base": {
+     "n": 18,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": false
+   },
+   "reference_changed_vs_gpt55": {
+    "I01": [
+     "not_satisfied",
+     "satisfied"
+    ],
+    "I03": [
+     "not_satisfied",
+     "satisfied"
+    ],
+    "I04": [
+     "not_satisfied",
+     "satisfied"
+    ],
+    "I05": [
+     "not_satisfied",
+     "satisfied"
+    ]
+   }
+  },
+  "swebenchpro_instance_nodebb__nodebb-f083cd559d69c16481376868c8da65172729c0ca-vnan": {
+   "reference": {
+    "labels": {
+     "I06": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I07": "satisfied"
+    },
+    "all": {
+     "n": 9,
+     "satisfied": 9,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 9,
+     "satisfied": 9,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I06": "not_addressed",
+     "I08": "not_addressed",
+     "I09": "not_addressed",
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I07": "not_satisfied"
+    },
+    "all": {
+     "n": 9,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 9,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 9,
+     "satisfied": 9,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 9,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  },
+  "swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367": {
+   "reference": {
+    "labels": {
+     "I01": "satisfied",
+     "I02": "satisfied",
+     "I03": "satisfied",
+     "I04": "satisfied",
+     "I05": "satisfied",
+     "I06": "satisfied",
+     "I07": "satisfied",
+     "I08": "satisfied",
+     "I09": "satisfied",
+     "I10": "satisfied",
+     "I11": "satisfied"
+    },
+    "all": {
+     "n": 11,
+     "satisfied": 11,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "positive": {
+     "n": 11,
+     "satisfied": 11,
+     "errors": 0,
+     "rate": 1.0
+    }
+   },
+   "base": {
+    "labels": {
+     "I01": "not_satisfied",
+     "I02": "not_satisfied",
+     "I03": "not_satisfied",
+     "I04": "not_satisfied",
+     "I05": "not_satisfied",
+     "I06": "not_satisfied",
+     "I07": "not_satisfied",
+     "I08": "not_satisfied",
+     "I09": "not_satisfied",
+     "I10": "not_satisfied",
+     "I11": "not_satisfied"
+    },
+    "all": {
+     "n": 11,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "positive": {
+     "n": 11,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    }
+   },
+   "pass": true,
+   "gpt55": {
+    "reference": {
+     "n": 11,
+     "satisfied": 11,
+     "errors": 0,
+     "rate": 1.0
+    },
+    "base": {
+     "n": 11,
+     "satisfied": 0,
+     "errors": 0,
+     "rate": 0.0
+    },
+    "pass": true
+   },
+   "reference_changed_vs_gpt55": {}
+  }
+ },
+ "summary": {
+  "reference": "305/307",
+  "base_positive": "0/284",
+  "tasks_pass": 20,
+  "tasks_pass_gpt55": 18,
+  "stats_llm": {
+   "cache_hits": 0,
+   "judged": 56,
+   "calls": 22,
+   "failed_calls": 0,
+   "input_tokens": 57574,
+   "output_tokens": 3318,
+   "reasoning_tokens": 26767
+  },
+  "stats_rubric": {
+   "cache_hits": 0,
+   "calls": 202,
+   "failed_calls": 2,
+   "input_tokens": 911984,
+   "output_tokens": 16768,
+   "reasoning_tokens": 122627
+  }
+ }
+}

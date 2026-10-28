@@ -1,0 +1,105 @@
+{
+ "labeller": "partB",
+ "labels": {
+  "S07-55d66f/goal_1": {
+   "label": "satisfied",
+   "evidence": "detached_unix.go:37 cmd.Stdout = io.Discard, live assignment before cmd.Start(); package builds/vets OK; verifier F2P_STDOUT_DISCARD pass"
+  },
+  "S07-55d66f/goal_2": {
+   "label": "satisfied",
+   "evidence": "detached_unix.go:38 cmd.Stderr = io.Discard, live assignment before cmd.Start(); build OK; verifier F2P_STDERR_DISCARD pass"
+  },
+  "S07-55d66f/goal_3": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/telemetry/detached_unix.go:37-38 cmd.Stdout = io.Discard; cmd.Stderr = io.Discard (import \"io\" added); go build ./... + go vet OK in container; verifier reward 1.0 (all gates pass, tests pass)",
+   "note": "stdlib io.Discard used for both streams, import present and used; non-unix file is a no-op stub (unchanged)"
+  },
+  "S08-38798c/goal_1": {
+   "label": "satisfied",
+   "evidence": "public/contentStyle.css:4738-4748 (title), 4779-4788 (strategy label), 4893-4902 (radio option span = merge/overwrite labels): new body.light-theme/.theme-host.light-theme/html.light/[data-theme=light] rules set dark text oklch(0.14 ...), specificity (0,2,1) beats the @media(prefers-color-scheme:dark) base rule (0,1,0/0,2,0 via :.gv-folder-import-dialog .title) that caused white text; dark-theme rules kept/extended. Dialog appended to document.body (manager.ts:6439+). Verifier: all F2P structural gates PASS, P2P_DARK_THEME_INTACT PASS."
+  },
+  "S08-38798c/goal_2": {
+   "label": "satisfied",
+   "evidence": "contentStyle.css: light overrides added for dialog container (4685-4698), radio-option border/hover (~4842-4863), file-name area, file button, .gv-folder-dialog-btn-primary and -secondary (+hover) with light values, dark counterparts preserved (body.dark-theme etc.). Verifier F2P_RADIO_OPTIONS_LIGHT/DIALOG_BUTTONS_LIGHT/FILE_ELEMENTS_LIGHT PASS; P2P_NO_CSS_ERRORS PASS."
+  },
+  "S09-689119/goal_1": {
+   "label": "satisfied",
+   "evidence": "desloppify/zones.py (new) _match_pattern: dir patterns match '/'+path+'/', 'x_' basename startswith, '_x'/'.x' basename endswith, 'a.py' basename equality; classify_file uses it. In-container script: src/contests/foo.py, src/contest_results.py, src/my_test_helpers.py, src/my_config.py, src/config.python.py -> production; src/tests/test_foo.py, tests/test_foo.py -> test; config.py, a/b/c/config.py -> config"
+  },
+  "S09-689119/goal_2": {
+   "label": "satisfied",
+   "evidence": "zones.py COMMON_ZONE_RULES (vendor, generated, test, script); PY_ZONE_RULES=[test_ /_test.py/conftest.py, config, script]+COMMON, TS_ZONE_RULES=[.test./.spec./..., config, .d.ts]+COMMON (language first; classify_file first-match-wins). Wired: PythonConfig(zone_rules=PY_ZONE_RULES), TypeScriptConfig(zone_rules=TS_ZONE_RULES); verified classify of a.test.ts/__tests__ -> test"
+  },
+  "S09-689119/goal_3": {
+   "label": "not_satisfied",
+   "evidence": "zones.py adjust_potential behaves correctly (None->no-op 7, empty->0, prod-only count 2 of 3) but grep -rn 'adjust_potential|should_skip_finding|init_zone_map|zone_map' desloppify/ (excluding zones.py) -> only lang/base.py definitions of zone_rules/_zone_map/init_zone_map; no phase runner, plan.py, cli or narrative references",
+   "note": "helper defined but not applied by any Python/TS phase runner, which the goal explicitly requires"
+  },
+  "S09-689119/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "zones.py should_skip_finding + ZONE_POLICIES.skip_detectors defined, but grep -rn 'adjust_potential|should_skip_finding|init_zone_map|zone_map' desloppify/ (excluding zones.py) -> only lang/base.py definitions of zone_rules/_zone_map/init_zone_map; no phase runner, plan.py, cli or narrative references; no detector's finding emission is filtered",
+   "note": "definition-only"
+  },
+  "S09-689119/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "FileZoneMap(files, rules, overrides=...) implements (a)-(c) (verified override config.py->production, others unaffected); no persistence in state/config and no CLI zone show/set/clear subcommands exist (grep zone_overrides/zones in desloppify/ finds nothing outside zones.py/base.py)",
+   "note": "only part of multi-part goal"
+  },
+  "S09-689119/goal_6": {
+   "label": "satisfied",
+   "evidence": "lang/base.py:92-100 LangConfig.zone_rules field (default COMMON_ZONE_RULES) + init_zone_map(path, overrides) method building FileZoneMap; PythonConfig/TypeScriptConfig set language rules (python/__init__.py:221, typescript/__init__.py:442). Caller holding the lang config gets correct rules/classification without per-language conditionals",
+   "note": "not yet called by plan.py/cmd_scan, but the goal only requires the indirection to be available; confidence ~0.75"
+  },
+  "S09-689119/goal_8": {
+   "label": "not_addressed",
+   "evidence": "no changes to query.json writing, narrative.py or any output path; only FileZoneMap.distribution() exists, unused (grep -rn 'adjust_potential|should_skip_finding|init_zone_map|zone_map' desloppify/ (excluding zones.py) -> only lang/base.py definitions of zone_rules/_zone_map/init_zone_map; no phase runner, plan.py, cli or narrative references)"
+  },
+  "S10-b84018/goal_1": {
+   "label": "not_satisfied",
+   "evidence": "src/pages/content/folder/manager.ts:1161-1163 setupDropZone dragleave still unconditionally removes 'gv-folder-dragover' (unchanged); jsdom check: dragover then dragleave with relatedTarget=child -> class removed (AFTER_CHILD_LEAVE false). Only change is a global document dragend/drop clearAllDragStyles (manager.ts:355-366, 1137-1151), which clears stale highlight at drag end but provides no leave-vs-descendant discrimination; conv rows stopPropagation on dragover so folder-content highlight is not restored over rows",
+   "note": "verifier dragleave_fix gate FAIL (structural)"
+  },
+  "S10-b84018/goal_2": {
+   "label": "satisfied",
+   "evidence": "conversation row drop handler (manager.ts:2379-2421) now passes dragData to reorderOrMoveConversations, which constructs the ConversationReference from dragData when not in any folder (manager.ts:2585-2600); previously native drops on a row returned early (movingConvs empty). Snapshot test folderDragDrop.test.ts 'adds native conversation when dropped onto a conversation inside a folder' passes; vitest folder suite 45/45 pass. Drops on content area also handled by setupDropZone(content)"
+  },
+  "S10-b84018/goal_3": {
+   "label": "satisfied",
+   "evidence": "reorderOrMoveConversations builds the external conv from dragData then splices into same-starred-group siblings at insertIndex (manager.ts:2640-2660); row/gap indices now per-starred-group (manager.ts:735-741, 869-875). Ad-hoc vitest: folder [c0,c1,c2] + native n1 dropped at index 1 -> order [c0,n1,c1,c2]",
+   "note": "verifier gates FAIL because they look for a specific ensureConversationsInFolder pre-insert helper; behaviour is equivalent"
+  },
+  "S11-10dcf6/goal_consecutive_unique_ids": {
+   "label": "not_satisfied",
+   "evidence": "manual_commit_hooks.go:~312-326 PrepareCommitMsg new-content path still takes state.PendingCheckpointID (set in PostCommit ActionMigrateShadowBranch, hooks.go:631) before id.Generate(). Ad-hoc integration test (go test -tags integration, pattern of phase_transitions_test.go TestShadow_CommitBeforeStop): prompt-submit (session ACTIVE), write a.go + transcript, GitCommitWithShadowHooks -> phase active_committed, PendingCheckpointID=b53f6bbfbcf6; write b.go + transcript, commit again -> id1==id2==b53f6bbfbcf6 (DUPLICATE). Same with GitCommitWithShadowHooksAsAgent (b513b81d4f23 twice).",
+   "note": "snapshot only removed the no-new-content LastCheckpointID reuse (split-commit feature); consecutive manual commits during an active session still share an ID"
+  },
+  "S11-10dcf6/goal_no_stale_id_reuse": {
+   "label": "not_satisfied",
+   "evidence": "PendingCheckpointID still reused in PrepareCommitMsg new-content path (manual_commit_hooks.go:312-320) and in addTrailerForAgentCommit (hooks.go:987-993); not cleared after consumption (manual_commit_git.go:118 keeps it). Ad-hoc integration test (go test -tags integration, pattern of phase_transitions_test.go TestShadow_CommitBeforeStop): prompt-submit (session ACTIVE), write a.go + transcript, GitCommitWithShadowHooks -> phase active_committed, PendingCheckpointID=b53f6bbfbcf6; write b.go + transcript, commit again -> id1==id2==b53f6bbfbcf6 (DUPLICATE). Same with GitCommitWithShadowHooksAsAgent (b513b81d4f23 twice).",
+   "note": "real change made (LastCheckpointID reuse removed) but the stale pending-ID root cause remains on both paths"
+  },
+  "S11-10dcf6/goal_preserve_hook_rerun_idempotency": {
+   "label": "satisfied",
+   "evidence": "PrepareCommitMsg keeps trailers.ParseCheckpoint existing-trailer early return (manual_commit_hooks.go:~301-309); addTrailerForAgentCommit 'Don't add if trailer already exists' (hooks.go:1011-1014); amend handler unchanged. go test ./cmd/entire/cli/strategy/... ok; TestPrepareCommitMsg_AmendPreservesExistingTrailer / AmendRestoresTrailerFromPendingCheckpointID / AmendNoTrailerNoPendingID PASS"
+  },
+  "S11-10dcf6/goal_regression_test_added": {
+   "label": "not_satisfied",
+   "evidence": "integration_test/last_checkpoint_id_test.go:24 TestShadowStrategy_ConsecutiveCommitsHaveUniqueCheckpointIDs asserts id2!=id1 and id3!=id1, but it PASSES against the base manual_commit_hooks.go (restored HEAD version, go test -tags integration -run ... -> PASS), so it does not fail on the buggy behaviour; its second commit is a non-agent file that base never tagged. Repurposed unit test TestShadowStrategy_PrepareCommitMsg_NoNewContent also passes on base and only checks LastCheckpointID state (internal detail).",
+   "note": "also deleted LastCheckpointID_IgnoresOldSessions and BaseCommitUpdatedOnReuse tests"
+  },
+  "S12-02f394/goal_1": {
+   "label": "satisfied",
+   "evidence": "packages/coding-agent/src/core/extensions/runner.ts:566-611 emitToolResult: iterates extensions in load order, passes the same event object and mutates event.content/details/isError in place per field only when the handler returned that field (partial patch), returns undefined when no handler changed anything else a merged result; wrapper.ts:75 and :97 call runner.emitToolResult (no remaining emit() for tool_result; grep). New vitest tests 'chains content modifications' / 'preserves details and content changes' pass (verifier upstream vitest extensions-runner PASS after building deps)",
+   "note": "verifier F2P-2 fails only because it calls with no handlers and expects an object; the goal requires a distinct no-change signal (undefined)"
+  },
+  "S12-02f394/goal_2": {
+   "label": "satisfied",
+   "evidence": "runner.ts:100-110 RunnerEmitEvent = Exclude<ExtensionEvent, ToolCallEvent|ToolResultEvent|SessionBeforeEvent|UserBashEvent|ContextEvent|BeforeAgentStartEvent|ResourcesDiscoverEvent|InputEvent>; emit(event: RunnerEmitEvent) (runner.ts:484). tsgo --noEmit on a probe file: @ts-expect-error on emit() of tool_result/tool_call/user_bash/context/before_agent_start/resources_discover/input all consumed (no TS2578), agent_end/agent_start accepted"
+  },
+  "S12-02f394/goal_6": {
+   "label": "satisfied",
+   "evidence": "git status/diff in container: only packages/coding-agent/{CHANGELOG.md, docs/extensions.md, src/core/agent-session.ts, src/core/extensions/{index,runner,types,wrapper}.ts, test/extensions-runner.test.ts}; no package manifests, lockfiles, other packages or untracked files",
+   "note": "agent-session.ts is outside extensions/ but its edits are only the forced emit()->emitSessionBefore call-site updates of this refactor"
+  }
+ }
+}

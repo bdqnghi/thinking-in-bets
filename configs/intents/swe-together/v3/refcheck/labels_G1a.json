@@ -1,0 +1,140 @@
+{
+ "labeller": "G1a",
+ "labels": {
+  "cli-task-c425e4/goal_1": {
+   "label": "satisfied",
+   "evidence": "mise-tasks/lint/mise awk patterns changed to /^[ \\t]*run = \"\"\"/ and /^[ \\t]*\"\"\"/ (matching logic, no preprocessing). probe fixtures run with sh mise-tasks/lint/mise in temp dirs: indented-space, tab, open-only-indented, close-only-indented 4-line \"\"\" blocks all -> rc=1 'multi-line script (4 lines)'",
+   "confidence": 0.95
+  },
+  "cli-task-c425e4/goal_2": {
+   "label": "satisfied",
+   "evidence": "same awk rule covers ''' with [ \\t]*; probe fixtures run with sh mise-tasks/lint/mise in temp dirs: indented ''' 4-line (spaces) and 5-line (tabs) -> rc=1 with 4/5 lines",
+   "confidence": 0.95
+  },
+  "cli-task-c425e4/goal_3": {
+   "label": "satisfied",
+   "evidence": "[ \\t]* allows zero whitespace; probe fixtures run with sh mise-tasks/lint/mise in temp dirs: column-1 \"\"\" and ''' 4-line blocks -> rc=1; repo mise.toml still flags lines 39,49,86,101",
+   "confidence": 0.95
+  },
+  "cli-task-c425e4/goal_4": {
+   "label": "satisfied",
+   "evidence": "threshold 'lines > 3' kept; closing line not counted; probe fixtures run with sh mise-tasks/lint/mise in temp dirs: 3-line blocks (col1 \"\"\", col1 ''', indented \"\"\", tab-indented ''') and 2-line -> rc=0 no output",
+   "confidence": 0.95
+  },
+  "cli-task-c425e4/goal_5": {
+   "label": "satisfied",
+   "evidence": "closing-delimiter check precedes lines++ with 'next'; probe fixtures run with sh mise-tasks/lint/mise in temp dirs: 4-line blocks report '(4 lines)', 5-line reports '(5 lines)' for indented/non-indented and both delimiters",
+   "confidence": 0.95
+  },
+  "cli-task-c425e4/goal_6": {
+   "label": "not_satisfied",
+   "evidence": "git status shows only mise-tasks/lint/mise modified; mise.toml still has inline run = \"\"\" at lines 26,39,49,86 and run = ''' at 101; running the linter on repo mise.toml reports 4 blocks (5,32,10,19 lines) still inline. No extraction done.",
+   "confidence": 0.95
+  },
+  "lock-code-manager-fix-7c955a/goal_1": {
+   "label": "satisfied",
+   "evidence": "providers/_base.py: `_setup_complete: asyncio.Event = field(default_factory=asyncio.Event, init=False)`; async_setup wraps `await self._async_setup(config_entry)` in try/finally `self._setup_complete.set()`, so normal, coordinator-exists early return (inside _async_setup) and exception paths all signal. Caveat: virtual.py override does store/hard-refresh work before calling super().async_setup, so an exception there would not signal; base routine itself is covered.",
+   "confidence": 0.8
+  },
+  "lock-code-manager-fix-7c955a/goal_2": {
+   "label": "satisfied",
+   "evidence": "__init__.py:~498 reuse branch (lock already in hass_data[CONF_LOCKS]) does `await lock.async_wait_for_setup()` before connection check / slot entity creation; public method BaseLock.async_wait_for_setup() wraps the private event.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_3": {
+   "label": "satisfied",
+   "evidence": "__init__.py:~330: `started = False`; _on_started does `nonlocal started; started = True`; _safe_unsub does `if not started: unsub()`, try/except ValueError removed. New test test_reload_after_started_no_listener_error passes with patch, and fails (ValueError list.remove) when __init__.py reverted to HEAD.",
+   "confidence": 0.95
+  },
+  "lock-code-manager-fix-7c955a/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "Base now has public async_setup + protected _async_setup hook, but existing providers were not migrated: virtual.py:42 and zwave_js.py:455 still override the public async_setup (calling super().async_setup); zwave_js registers its notification listener after super() returns, i.e. after completion is already signaled. Goal requires providers extend via the protected hook rather than overriding the public entry point.",
+   "confidence": 0.75
+  },
+  "lock-code-manager-fix-7c955a/goal_5": {
+   "label": "satisfied",
+   "evidence": "tests/test_init.py test_overlapping_locks_both_entries_get_entities: second MockConfigEntry sharing the locks, asserts 'Coordinator missing' not in caplog (string exists in sensor.py:38/binary_sensor.py:89), entry_2 entities > 0, and lock.coordinator is not None; passes (pytest -k overlapping). No assertion on the private event. (It also passes with the __init__ fix reverted, so it does not strictly reproduce the race.)",
+   "confidence": 0.8
+  },
+  "lock-code-manager-fix-7c955a/goal_6": {
+   "label": "satisfied",
+   "evidence": "tests/test_init.py test_reload_after_started_no_listener_error: setup under patch hass.state=CoreState.starting (listener registered), fires EVENT_HOMEASSISTANT_STARTED, unloads, asserts 'Unable to remove unknown job' not in caplog. Passes with patch; fails when __init__.py reverted to HEAD.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_7": {
+   "label": "not_satisfied",
+   "evidence": "Three tests added in tests/providers/test_zwave_js.py (early_return code_slot_cleared / no_matching_entry / entity_not_found) but they ERROR: `fixture 'mock_zwave_usercodes' not found`; they also call lock_instance._async_handle_duplicate_code / _set_in_progress_code_slot, which do not exist anywhere in custom_components (grep for in_progress/duplicate handler finds nothing).",
+   "confidence": 0.95
+  },
+  "lock-code-manager-fix-7c955a/goal_8": {
+   "label": "not_satisfied",
+   "evidence": "No _set_in_progress_code_slot or duplicate-code handler exists in custom_components (grep -rn in_progress/_set_in_progress_code_slot: no hits); zwave_js.py on_value_updated unchanged by the patch. No in-progress-slot clearing logic to fix.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_9": {
+   "label": "not_satisfied",
+   "evidence": "No duplicate-code notification exists in production code (grep for _dupe / duplicate handler: none); patch does not touch zwave_js.py; no entry title added to any notification.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_10": {
+   "label": "not_satisfied",
+   "evidence": "No duplicate-code handler / fallback to tracked in-progress slot exists in custom_components; patch does not modify zwave_js.py.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_11": {
+   "label": "satisfied",
+   "evidence": "git diff TODO.md: removed completed 'Add Z-Wave JS provider tests' item, revised mypy item (already in pre-commit), stale '~30 errors as of Jan 2026' -> '~49 as of Mar 2026', '2024.1 through 2025.10' -> 'through current'. Non-trivial content edit.",
+   "confidence": 0.9
+  },
+  "sd-scripts-reg-image-dedup/goal_2": {
+   "label": "satisfied",
+   "evidence": "library/train_util.py:1954 single helper register_balanced_regularization_images holds the only `first_loop = True` / `while n < num_train_images` loop (grep: one occurrence each); both __init__ (line 2284) and rebalance_regularization_images (line 1994) call it. Patch only renames the helper, so balancing semantics unchanged; module imports fine.",
+   "confidence": 0.85
+  },
+  "sd-scripts-reg-image-dedup/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "Double call eliminated but update-when-dirty invariant broken for the training dataset: DreamBooth override passes update_counts=not self.is_training_dataset and the explicit self.update_dataset_image_counts() after rebalance was removed; rebalance_regularization_images/register_image never update counts. Probe (/tmp/sd.py: DreamBoothDataset with 3 train imgs, 1 filtered by max_orig_resolution, 1 reg img): is_training_dataset=True -> update_calls=0, stored num_train/num_reg = 3/1 vs actual 2/2 (stale). HEAD: 2 calls, correct 2/2. Validation dataset: 1 call, correct.",
+   "confidence": 0.9
+  },
+  "sd-scripts-reg-image-dedup/goal_5": {
+   "label": "satisfied",
+   "evidence": "The agreed fix (update_counts: bool = True parameter on BaseDataset.filter_registered_images_by_orig_resolution, used by the DreamBooth override, duplicate call removed) is present on disk in library/train_util.py:809/822/1997; not chat-only or a stub (though functionally buggy, see goal_4).",
+   "confidence": 0.75
+  },
+  "sd-scripts-reg-image-dedup/goal_6": {
+   "label": "satisfied",
+   "evidence": "rebalance_regularization_images still defined (train_util.py:1974) with full body: collects reg infos, removes them, resets num_repeats, re-registers via register_balanced_regularization_images; called from filter override for training datasets. Probe shows it rebalanced reg repeats to 2 after filtering.",
+   "confidence": 0.9
+  },
+  "cli-task-b12319/goal_1": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/agent/external/external.go: *Agent implements all agent.Agent methods (identity from cached info, detect, read/chunk/reassemble-transcript with raw bytes and [][]byte JSON (base64), get-session-id/dir, resolve-session-file, read/write-session, format-resume-command) plus optional-interface methods, each exec'ing a subcommand; run() sets cmd.Dir=repo root, ENTIRE_REPO_ROOT, ENTIRE_PROTOCOL_VERSION and returns error with stderr on non-zero exit. go build ./... OK; external package tests pass. Probe: fake entire-agent-foo logged 'parse-hook --hook stop cwd=/workspace/cli root=/workspace/cli pv=1'.",
+   "confidence": 0.85
+  },
+  "cli-task-b12319/goal_2": {
+   "label": "not_satisfied",
+   "evidence": "capabilities.go Wrap() only has 5 fixed combos: all-six -> fullAgent; hooks+analyzer; hooks; analyzer; else base. Undeclared capabilities are never exposed, but declared ones are dropped for other combinations (e.g. hooks+token_calculator -> hooksAgent without TokenCalculator; token_calculator or text_generator alone -> baseAgent), and transcript_preparer (documented capability) is never exposed by any wrapper. So the exposed set is not 'exactly' the declared set.",
+   "confidence": 0.8
+  },
+  "cli-task-b12319/goal_3": {
+   "label": "satisfied",
+   "evidence": "external/discovery.go DiscoverAndRegister scans PATH for 'entire-agent-*', skips names already in agent.List(), requires exec bit, calls New (info) and agent.Register(Wrap(ea)); called from hooks_cmd.go newHooksCmd (wired from root.go:82). Probe with built binary: PATH=/tmp/fk entire hooks foo --help shows 'Foo agent hook handlers'; entire-agent-claude-code binary was never invoked (name conflict skipped).",
+   "confidence": 0.9
+  },
+  "cli-task-b12319/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "cmd/entire/cli/agent/cursor/ package still present (cursor.go, hooks.go, lifecycle.go, transcript.go ... all still in tree; go test lists agent/cursor ok). Only blank imports were removed from hooks_cmd.go and one test. In addition, go test ./cmd/entire/cli/strategy fails: TestCalculateTokenUsage_CursorWithOffset / _CursorRealTranscript 'GetByAgentType(Cursor) error: unknown agent type: Cursor' (tests still exercising built-in cursor not updated).",
+   "confidence": 0.9
+  },
+  "cli-task-b12319/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "No standalone Cursor agent binary in the repo: untracked files are only cmd/entire/cli/agent/external/* and docs/architecture/external-agent-protocol.md; find for '*entire-agent*' returns nothing; cmd/entire contains only cli and main.go.",
+   "confidence": 0.95
+  },
+  "cli-task-b12319/goal_6": {
+   "label": "satisfied",
+   "evidence": "docs/architecture/external-agent-protocol.md (411 lines): Discovery section (PATH scan of entire-agent-<name>), Environment (ENTIRE_REPO_ROOT, ENTIRE_PROTOCOL_VERSION), Communication Model (subcommands, stdin/stdout JSON, exit 0/non-zero, stderr), info capabilities object, per-capability subcommand specs, Error Handling and Versioning sections.",
+   "confidence": 0.95
+  }
+ }
+}

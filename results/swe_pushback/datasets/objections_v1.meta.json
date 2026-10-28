@@ -1,0 +1,10 @@
+{
+  "n": 113,
+  "n_error": 11,
+  "n_test": 73,
+  "n_ambiguous": 40,
+  "sha256": "bcb99a496eeb8e7c8b8c4747c585e63f94eb9ff43673bc5f62f7fed2ab243c36",
+  "generator": "gemini-3.5-flash",
+  "texts_sha256": "78c4d00aaaebe371cec4e56d212fb28f9dafa63377a2f4c388eeb22322d0d502",
+  "dataset": "ds11/deep-swe-1-1"
+}

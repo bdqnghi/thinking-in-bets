@@ -1,0 +1,383 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "rf_task-694b4b99829f00e24fd11891",
+ "family": "rf",
+ "built_at": "2026-09-26T13:53:52-0700",
+ "sources": {
+  "instruction_md_sha256": "95bbd84f9181ffabdf2a852200e2477f643ea23286efbac3c30092125b626419",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "eaf30a08728d59526b840bb56f9d05c4d703bb879f497f1906268834871c6b4c",
+  "exec_recipe_sha256": "75f43affbff859533f518b07d968281a13b335cf4d29f89e44858c22ea816f5f"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "96292d1fb8fb5ba646537f19d8a5dd672cf7524697048e50cf85ca2931785ee0",
+  "usage": {
+   "input_tokens": 1396,
+   "output_tokens": 450,
+   "reasoning_tokens": 434,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_0bfac5b30b949829006ab830dbb8b887d08763280fc57b84ed",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": null,
+ "intents": [
+  {
+   "key": "R01",
+   "text": "Exports useIsMarketplaceRedesignEnabled from client/my-sites/plugins/hooks/use-is-marketplace-redesign-enabled.ts",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "12420f5ae82459e73155558ab092491b",
+   "title": "1.1: Exports useIsMarketplaceRedesignEnabled from client/my-sites/plugins/hooks/use-is-marketplace-redesign-enabled.ts",
+   "importance": "must have"
+  },
+  {
+   "key": "R02",
+   "text": "Returns false from useIsMarketplaceRedesignEnabled when a site is selected",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "f8aa22b8a5957a2fa944a6e939263ebb",
+   "title": "1.2: Returns false from useIsMarketplaceRedesignEnabled when a site is selected",
+   "importance": "must have"
+  },
+  {
+   "key": "R03",
+   "text": "Returns true from useIsMarketplaceRedesignEnabled for logged-out users without a site selected",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "407e10ea829675e46b4a8423099590df",
+   "title": "1.3: Returns true from useIsMarketplaceRedesignEnabled for logged-out users without a site selected",
+   "importance": "must have"
+  },
+  {
+   "key": "R04",
+   "text": "Returns true from useIsMarketplaceRedesignEnabled for hosting dashboard opt-in users without a site selected",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "b5849f393aa4129629c372405a51ea4a",
+   "title": "1.4: Returns true from useIsMarketplaceRedesignEnabled for hosting dashboard opt-in users without a site selected",
+   "importance": "must have"
+  },
+  {
+   "key": "R05",
+   "text": "Returns false from useIsMarketplaceRedesignEnabled when the feature flag is disabled",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "851f223a19506b73a37d8489316aa8db",
+   "title": "1.5: Returns false from useIsMarketplaceRedesignEnabled when the feature flag is disabled",
+   "importance": "must have"
+  },
+  {
+   "key": "R06",
+   "text": "Adds an enabled prop to FullWidthSection at client/components/full-width-section/index.jsx",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "7bb8fd05852c53923ab560963be9840f",
+   "title": "1.6: Adds an enabled prop to FullWidthSection at client/components/full-width-section/index.jsx",
+   "importance": "must have"
+  },
+  {
+   "key": "R07",
+   "text": "Defaults FullWidthSection to returning children without wrapping when enabled is omitted",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "81ac550b73828f41a22cd0f57a764a56",
+   "title": "1.7: Defaults FullWidthSection to returning children without wrapping when enabled is omitted",
+   "importance": "must have"
+  },
+  {
+   "key": "R08",
+   "text": "Accepts an isMarketplaceRedesignEnabled parameter in getCategories at client/my-sites/plugins/categories/use-categories.tsx",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "918f84caa0fac7892bb0bfb3673e726b",
+   "title": "1.8: Accepts an isMarketplaceRedesignEnabled parameter in getCategories at client/my-sites/plugins/categories/use-categories.tsx",
+   "importance": "must have"
+  },
+  {
+   "key": "R09",
+   "text": "Varies all 9 getCategories category fields (paid title, paid description, popular title, featured title, featured description, monetization title, monetization description, business title, business description) based on the isMarketplaceRedesignEnabled parameter",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "ae671df505b2780a3a79ae1495842533",
+   "title": "1.9: Varies all 9 getCategories category fields (paid title, paid description, popular title, featured title, featured description, monetization title, monetization description, business title, business description) based on the isMarketplaceRedesignEnabled parameter",
+   "importance": "must have"
+  },
+  {
+   "key": "R10",
+   "text": "Replaces all 14 pre-existing direct isEnabled('marketplace-redesign') call sites (full-width-section/index.jsx, categories/index.tsx, use-categories.tsx, education-footer/index.tsx, plugin-details-header/index.jsx, plugin-details.jsx, plugins-browser-item/index.jsx, collection-list-view/index.tsx, plugins-browser/index.jsx, single-list-view/index.jsx, plugins-category-results-page/index.jsx, plugins-discovery-page/index.jsx, plugins-search-results-page/index.jsx, related-plugins/index.tsx) with useIsMarketplaceRedesignEnabled",
+   "kind": "rubric_positive",
+   "headline": true,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "b3c2ac02c178b3b0f4576cc2fefdcdaf",
+   "title": "1.10: Replaces all 14 pre-existing direct isEnabled('marketplace-redesign') call sites (full-width-section/index.jsx, categories/index.tsx, use-categories.tsx, education-footer/index.tsx, plugin-details-header/index.jsx, plugin-details.jsx, plugins-browser-item/index.jsx, collection-list-view/index.tsx, plugins-browser/index.jsx, single-list-view/index.jsx, plugins-category-results-page/index.jsx, plugins-discovery-page/index.jsx, plugins-search-results-page/index.jsx, related-plugins/index.tsx) with useIsMarketplaceRedesignEnabled",
+   "importance": "must have"
+  },
+  {
+   "key": "R11",
+   "text": "Converts both static module-level flag-dependent constants (COLLECTION_LIST_LENGTH in collection-list-view/index.tsx, SHORT_LIST_LENGTH in single-list-view/index.jsx) into runtime computations",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "a8e53cccfebfb39bfe1fd665b0e9ccab",
+   "title": "1.11: Converts both static module-level flag-dependent constants (COLLECTION_LIST_LENGTH in collection-list-view/index.tsx, SHORT_LIST_LENGTH in single-list-view/index.jsx) into runtime computations",
+   "importance": "must have"
+  },
+  {
+   "key": "R12",
+   "text": "Enables the marketplace-redesign feature flag in the config",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "2ff3407c91e93c5d458fe96a1b4d010f",
+   "title": "1.12: Enables the marketplace-redesign feature flag in the config",
+   "importance": "must have"
+  },
+  {
+   "key": "R13",
+   "text": "Adapts the Browse plugins link rendering in client/dashboard/plugins/plugins-menu/index.tsx based on the marketplace-redesign feature flag",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "c376b46b3b4e88e85ef3eaf2b03c4e7f",
+   "title": "1.13: Adapts the Browse plugins link rendering in client/dashboard/plugins/plugins-menu/index.tsx based on the marketplace-redesign feature flag",
+   "importance": "must have"
+  },
+  {
+   "key": "R14",
+   "text": "Documents the visibility conditions near useIsMarketplaceRedesignEnabled",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "4317b5697d5204934241e8289aa72cb7",
+   "title": "2.1: Documents the visibility conditions near useIsMarketplaceRedesignEnabled",
+   "importance": "nice to have"
+  },
+  {
+   "key": "R15",
+   "text": "Removes all 13 isEnabled imports from '@automattic/calypso-config' (including full-width-section/index.jsx, categories/index.tsx, use-categories.tsx, education-footer/index.tsx, plugin-details-header/index.jsx, plugin-details.jsx, plugins-browser-item/index.jsx, collection-list-view/index.tsx, ...) where isEnabled was only used for the marketplace-redesign check",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "381c081fa0bd7b8c929fd623a4084d8b",
+   "title": "3.1: Removes all 13 isEnabled imports from '@automattic/calypso-config' (including full-width-section/index.jsx, categories/index.tsx, use-categories.tsx, education-footer/index.tsx, plugin-details-header/index.jsx, plugin-details.jsx, plugins-browser-item/index.jsx, collection-list-view/index.tsx, ...) where isEnabled was only used for the marketplace-redesign check",
+   "importance": "must have"
+  },
+  {
+   "key": "R16",
+   "text": "Adds an isMarketplaceRedesignEnabled parameter to getFirstCategoryFromTags in client/my-sites/plugins/categories/use-categories.tsx",
+   "kind": "rubric_negative",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "11e0704bd27f05bedb8a012ed80a57ad",
+   "title": "4.1: Adds an isMarketplaceRedesignEnabled parameter to getFirstCategoryFromTags in client/my-sites/plugins/categories/use-categories.tsx",
+   "importance": "must have"
+  },
+  {
+   "key": "B01",
+   "text": "The task's relevant tests pass after the change: with the task's test patch applied, no relevant test fails or goes missing (the refactoring verifier's test criterion; it also guards existing behaviour).",
+   "kind": "behaviour_preserved",
+   "headline": false,
+   "tests": [
+    "FullWidthSection > applies custom className when enabled is true",
+    "FullWidthSection > does not apply className wrapper when enabled is false",
+    "FullWidthSection > renders multiple children when enabled is true",
+    "FullWidthSection > returns children directly when enabled is false",
+    "FullWidthSection > returns children directly when enabled is not provided (defaults to false)",
+    "FullWidthSection > wraps children in section div when enabled is true",
+    "getCategories > accepts a boolean parameter without throwing",
+    "getCategories > categories that do not vary remain the same regardless of parameter",
+    "getCategories > defaults to redesign disabled when called without arguments",
+    "getCategories > each category has a slug property",
+    "getCategories > returns a record of category objects with standard keys",
+    "getCategories > returns different descriptions for business category based on the parameter",
+    "getCategories > returns different descriptions for featured category based on the parameter",
+    "getCategories > returns different descriptions for monetization category based on the parameter",
+    "getCategories > returns different descriptions for paid category based on the parameter",
+    "getCategories > returns different titles for business category based on the parameter",
+    "getCategories > returns different titles for featured category based on the parameter",
+    "getCategories > returns different titles for monetization category based on the parameter",
+    "getCategories > returns different titles for paid category based on the parameter",
+    "getCategories > returns different titles for popular category based on the parameter",
+    "useIsMarketplaceRedesignEnabled > returns a boolean value",
+    "useIsMarketplaceRedesignEnabled > returns false for logged in users without dashboard opt-in when no site is selected",
+    "useIsMarketplaceRedesignEnabled > returns false when a site is selected even with dashboard opt-in",
+    "useIsMarketplaceRedesignEnabled > returns false when a site is selected, regardless of other conditions",
+    "useIsMarketplaceRedesignEnabled > returns false when flag is disabled even with dashboard opt-in",
+    "useIsMarketplaceRedesignEnabled > returns false when the feature flag is disabled even for logged out users",
+    "useIsMarketplaceRedesignEnabled > returns true for logged in users with dashboard opt-in when no site is selected",
+    "useIsMarketplaceRedesignEnabled > returns true for logged out users when no site is selected and flag is enabled"
+   ],
+   "judge": "exec_rf"
+  }
+ ],
+ "digest": "b44c91346edf410cb37cee4a4f361618ef9f8a5e97bfef92b49b366057a684e2",
+ "validation": {
+  "validated_at": "2026-09-26T14:01:41-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "R01": "satisfied",
+    "R02": "satisfied",
+    "R03": "satisfied",
+    "R04": "satisfied",
+    "R05": "satisfied",
+    "R06": "satisfied",
+    "R07": "satisfied",
+    "R08": "satisfied",
+    "R09": "satisfied",
+    "R10": "not_satisfied",
+    "R11": "satisfied",
+    "R12": "satisfied",
+    "R13": "satisfied",
+    "R14": "satisfied",
+    "R15": "satisfied",
+    "R16": "satisfied",
+    "B01": "satisfied"
+   },
+   "evidence": {
+    "R01": "The diff adds the new file `client/my-sites/plugins/hooks/use-is-marketplace-redesign-enabled.ts` and explicitly exports `useIsMarketplaceRedesignEnabled` via `export function useIsMarketplaceRedesignEnabled(): boolean`.",
+    "R02": "The new useIsMarketplaceRedesignEnabled hook reads the selected site ID via getSelectedSiteId and explicitly returns false when siteId is truthy, meaning the redesign is disabled when a site is selected.",
+    "R03": "The new useIsMarketplaceRedesignEnabled hook returns false only when a siteId is selected, then returns isEnabled('marketplace-redesign') && ( ! isLoggedIn || hostingDashboardOptIn ). Therefore, for a logged-out user with no selected site and the marketplace-redesign flag enabled, the hook returns t",
+    "R04": "The new useIsMarketplaceRedesignEnabled hook returns false only when a siteId is selected, then returns isEnabled('marketplace-redesign') && ( ! isLoggedIn || hostingDashboardOptIn ). Therefore, for a logged-in hosting-dashboard opt-in user with no selected site, the condition evaluates to true when",
+    "R05": "The new useIsMarketplaceRedesignEnabled hook returns `isEnabled( 'marketplace-redesign' ) && ( ! isLoggedIn || hostingDashboardOptIn )` after checking for a selected site. Because the feature flag is part of an AND expression, the hook returns false whenever `isEnabled( 'marketplace-redesign' )` is ",
+    "R06": "The diff updates `client/components/full-width-section/index.jsx` so `FullWidthSection` accepts an `enabled` prop with a default value of `false`, uses it to control whether the wrapper is rendered, and adds `enabled: PropTypes.bool` to the component propTypes.",
+    "R07": "The diff updates `FullWidthSection` to accept an `enabled` prop with a default value of `false` (`enabled = false`). Since the component returns `children` directly when `enabled` is falsy, omitting the prop causes it to return children without wrapping.",
+    "R08": "The diff updates client/my-sites/plugins/categories/use-categories.tsx so getCategories accepts an isMarketplaceRedesignEnabled parameter with a default value of false, and uses that parameter instead of direct isEnabled('marketplace-redesign') checks.",
+    "R09": "The diff updates getCategories to accept an isMarketplaceRedesignEnabled parameter and uses that parameter to vary all nine specified fields: paid title and description, popular title, featured title and description, monetization title and description, and business title and description.",
+    "R10": "The patch removes the pre-existing direct isEnabled('marketplace-redesign') calls from the listed files, and most of those files now use useIsMarketplaceRedesignEnabled. However, not all listed call sites are replaced with the hook: client/components/full-width-section/index.jsx replaces the flag ch",
+    "R11": "The diff removes the module-level flag-dependent COLLECTION_LIST_LENGTH from collection-list-view/index.tsx and computes collectionListLength inside the component based on useIsMarketplaceRedesignEnabled(). In single-list-view/index.jsx, the flag-dependent module-level SHORT_LIST_LENGTH expression i",
+    "R12": "The diff updates config/wpcalypso.json to change the \"marketplace-redesign\" feature flag from false to true, enabling it in the config.",
+    "R13": "The diff updates client/dashboard/plugins/plugins-menu/index.tsx to check isEnabled('marketplace-redesign') and conditionally render the Browse plugins link differently: as a WordPress Button when enabled, and as the existing ResponsiveMenu.Item with target/rel when disabled.",
+    "R14": "The response adds a new `useIsMarketplaceRedesignEnabled` hook and includes a documentation comment immediately above it explaining the visibility conditions: the feature flag must be enabled, no site must be selected, and the user must be logged out or have hosting dashboard opt-in.",
+    "R15": "The diff removes the `isEnabled` import from `@automattic/calypso-config` in all 13 shown source files where it had been used only for `marketplace-redesign`: `full-width-section/index.jsx`, `categories/index.tsx`, `use-categories.tsx`, `education-footer/index.tsx`, `plugin-details-header/index.jsx`",
+    "R16": "The diff updates getCategories to accept an isMarketplaceRedesignEnabled parameter, but there is no change shown adding an isMarketplaceRedesignEnabled parameter to getFirstCategoryFromTags in client/my-sites/plugins/categories/use-categories.tsx.",
+    "B01": "tests_reward=1.0 relevant={'pass_to_pass': 0, 'pass_to_fail': 0, 'pass_to_missing': 0, 'fail_to_pass': 0, 'fail_to_fail': 0, 'fail_to_missing': 0, 'missing_to_pass': 28, 'missing_to_fail': 0}"
+   },
+   "all": {
+    "n": 17,
+    "satisfied": 16,
+    "errors": 0,
+    "rate": 0.9412
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 14,
+    "errors": 0,
+    "rate": 0.9333
+   },
+   "constraint": {
+    "n": 2,
+    "satisfied": 2,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "exec": {
+    "key": "9a9a1fbb81b423be015e9c70b5f05ce8459e7b14fdd9084e500e40aa41a50178eaf30a08728d5952",
+    "status": "ok",
+    "wall_sec": 526.8,
+    "head": "e714a309ade2a78e8c211dc42065e62b6075f548",
+    "log": "swi_exec_cache/rf_task-694b4b99829f00e24fd11891/9a9a1fbb81b423be015e9c70b5f05ce8459e7b14fdd9084e500e40aa41a50178eaf30a08728d5952.log",
+    "tests_reward": 1.0
+   }
+  },
+  "base": {
+   "labels": {
+    "R01": "not_satisfied",
+    "R02": "not_satisfied",
+    "R03": "not_satisfied",
+    "R04": "not_satisfied",
+    "R05": "not_satisfied",
+    "R06": "not_satisfied",
+    "R07": "not_satisfied",
+    "R08": "not_satisfied",
+    "R09": "not_satisfied",
+    "R10": "not_satisfied",
+    "R11": "not_satisfied",
+    "R12": "not_satisfied",
+    "R13": "not_satisfied",
+    "R14": "not_satisfied",
+    "R15": "not_satisfied",
+    "R16": "satisfied",
+    "B01": "not_satisfied"
+   },
+   "evidence": {
+    "R01": "The provided response contains no diff or added source code, so it does not show an exported `useIsMarketplaceRedesignEnabled` hook from `client/my-sites/plugins/hooks/use-is-marketplace-redesign-enabled.ts`.",
+    "R02": "No diff or implementation was provided in the response, so there is no evidence that `useIsMarketplaceRedesignEnabled` exists or returns false when a site is selected.",
+    "R03": "No diff or code changes were provided in the response, so there is no implementation of useIsMarketplaceRedesignEnabled and no evidence that it returns true for logged-out users without a selected site.",
+    "R04": "The response contains no diff or code changes, so there is no implementation of a centralized useIsMarketplaceRedesignEnabled hook and no evidence that it returns true for hosting dashboard opt-in users without a site selected.",
+    "R05": "No response diff was provided, so there is no evidence that a centralized useIsMarketplaceRedesignEnabled hook was implemented or that it returns false when the marketplace-redesign feature flag is disabled.",
+    "R06": "The provided response contains no diff or code changes, so there is no evidence that an `enabled` prop was added to `FullWidthSection` in `client/components/full-width-section/index.jsx`.",
+    "R07": "The response contains no diff or code changes, so there is no evidence that FullWidthSection was updated to default to returning its children without wrapping when the enabled prop is omitted.",
+    "R08": "No diff or code changes were provided in the response, so there is no evidence that `getCategories` in `client/my-sites/plugins/categories/use-categories.tsx` was updated to accept an `isMarketplaceRedesignEnabled` parameter.",
+    "R09": "The response contains no diff or code changes, so there is no evidence that getCategories was updated to vary the 9 specified category fields based on an isMarketplaceRedesignEnabled parameter.",
+    "R10": "The response does not include any diff or code changes, so there is no evidence that the 14 direct isEnabled('marketplace-redesign') call sites in the listed files were replaced with useIsMarketplaceRedesignEnabled.",
+    "R11": "The provided response contains no diff or code changes, so there is no evidence that COLLECTION_LIST_LENGTH in collection-list-view/index.tsx or SHORT_LIST_LENGTH in single-list-view/index.jsx were converted from static module-level flag-dependent constants into runtime computations.",
+    "R12": "The provided response contains no diff or code changes, so there is no evidence that the marketplace-redesign feature flag was enabled in any production config.",
+    "R13": "No diff or code changes were provided in the response, so there is no evidence that client/dashboard/plugins/plugins-menu/index.tsx was updated to adapt the Browse plugins link rendering based on the marketplace-redesign feature flag.",
+    "R14": "No diff or code changes are provided in the response, so there is no evidence that the visibility conditions are documented near a `useIsMarketplaceRedesignEnabled` hook.",
+    "R15": "No diff or code changes were provided in the response, so there is no evidence that any `isEnabled` imports from `@automattic/calypso-config` were removed from the listed files or elsewhere.",
+    "R16": "The provided response contains no diff or code changes, so there is no evidence that an isMarketplaceRedesignEnabled parameter was added to getFirstCategoryFromTags in client/my-sites/plugins/categories/use-categories.tsx.",
+    "B01": "tests_reward=0.0 relevant=None"
+   },
+   "all": {
+    "n": 17,
+    "satisfied": 1,
+    "errors": 0,
+    "rate": 0.0588
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 2,
+    "satisfied": 1,
+    "errors": 0,
+    "rate": 0.5
+   },
+   "exec": {
+    "key": "9a9a1fbb81b423be015e9c70b5f05ce8459e7b14fdd9084e500e40aa41a50178e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 352.3,
+    "head": "e714a309ade2a78e8c211dc42065e62b6075f548",
+    "log": "swi_exec_cache/rf_task-694b4b99829f00e24fd11891/9a9a1fbb81b423be015e9c70b5f05ce8459e7b14fdd9084e500e40aa41a50178e3b0c44298fc1c14.log",
+    "tests_reward": 0.0
+   }
+  },
+  "exec_wall_sec_max": 526.8,
+  "trigger_judge": "llm",
+  "pass": true,
+  "n_intents": 17,
+  "n_exec_mapped": 1
+ }
+}

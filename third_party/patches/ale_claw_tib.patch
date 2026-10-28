@@ -1,0 +1,37 @@
+diff --git a/ale_run/agents/ale_claw/deployer.py b/ale_run/agents/ale_claw/deployer.py
+index 831e8dd..7830c1d 100644
+--- a/ale_run/agents/ale_claw/deployer.py
++++ b/ale_run/agents/ale_claw/deployer.py
+@@ -305,6 +305,10 @@ class AleClawDeployer(BaseAgentDeployer):
+ 
+         # ---- 7. System prompt + AGENTS.md + TASK_MEMORY.md context ----
+         agents_md = _HARNESS_AGENTS_MD.read_text(encoding="utf-8")
++        extra_gen_kwargs = dict(cfg.extra_generation_kwargs or {})
++        tib_append = extra_gen_kwargs.pop("tib_agents_md_append", None) or os.environ.get("TIB_ALE_AGENTS_MD_APPEND")
++        if tib_append:
++            agents_md = agents_md.rstrip() + "\n\n" + str(tib_append).strip() + "\n"
+         context_files = [ContextFile(path="AGENTS.md", content=agents_md)]
+         bootstrap = memory_store.get_bootstrap_context()
+         if bootstrap:
+@@ -399,7 +403,7 @@ class AleClawDeployer(BaseAgentDeployer):
+                 # litellm as api_base/api_key kwargs — no os.environ mutation.
+                 async for result in agent.run(
+                     run_input, api_base=cfg.base_url, api_key=cfg.api_key,
+-                    **cfg.extra_generation_kwargs,
++                    **extra_gen_kwargs,
+                 ):
+                     sys.stdout.flush()
+                     step += 1
+diff --git a/ale_run/environments/providers/docker.py b/ale_run/environments/providers/docker.py
+index 1c55f9d..8b9ed99 100644
+--- a/ale_run/environments/providers/docker.py
++++ b/ale_run/environments/providers/docker.py
+@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
+ 
+ _CUA_INTERNAL_PORT = 8000
+ _VNC_INTERNAL_PORT = 6901
+-_CUA_READY_TIMEOUT = 120
++_CUA_READY_TIMEOUT = 300
+ _CUA_READY_POLL_INTERVAL = 3
+ _CUA_READY_STABLE_SUCCESSES = 2
+ 

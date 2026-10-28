@@ -1,0 +1,104 @@
+{
+ "schema": "redo_v1/swt-judge-freeze/3",
+ "frozen_at": "2026-09-28T03:30:56-0700",
+ "config": {
+  "version": "v3",
+  "judge": "agentic_v3",
+  "unit": "goals",
+  "model": "gemini-3.8-flash",
+  "reasoning_effort": "high",
+  "max_steps": 40,
+  "max_wall_sec": 1500,
+  "cmd_timeout_sec": 600,
+  "tool_output_chars": 12000,
+  "inline_diff_chars": 30000,
+  "show_rationale": true,
+  "refute": false,
+  "refute_steps": 16,
+  "slots": 3,
+  "output_subdir": "agentic_judge_v3",
+  "prompt_file": "fsa/redo/swe_together/prompts/agentic_judge_v3_system.md",
+  "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+  "tools_sha256": "c94983af0e1ae44ca91025987810ad61c4b1e49cbf87d210f5dabb1fdc9197f0",
+  "recipe": "swt-exec/1",
+  "schema": "redo_v1/swt-agentic-judge/1"
+ },
+ "units_digests": {
+  "cli-task-2026-0": "636c1c38cb4708a574775d90a52f03d7af77eb5d7722363595b4cb308f78f6fe",
+  "cli-task-cd4662": "c9a13f253a98ae8f7335353b0e35283a8b771c94ab43ab06bb5f0de0a1ea2ef1",
+  "gemini-voyager-task-f519c2": "d4824ee5ce4ba77c5312a33c7e792211691c9d41f2afa5774027b8db2c87a5a4",
+  "hyperswitch-8389": "b8658077b9c0ce37f11d30123cfc88a9ae70b61cbdde153899e2512400d3d3da",
+  "dataclaw-windows-path-fix": "e2cb42629057a414d44540b195ce72302b9fd228db1d1918d57251047b9d0981",
+  "gemini-voyager-task-aa88f5": "492f495c3b851d9d38d89b1e2e02b9ff595eaf033605512baaa812d68864e4cc",
+  "cli-task-33e050": "fb78a5a18d48956efd641aac35ec84c790b8613aaf457cf148e8f81b2b08d7d0",
+  "cli-task-408b8c": "75a0477bf9dd805752541d083e6f2689f9c13c869486cb5480dcd79636595086",
+  "cli-task-4a9dde": "4920403e4d6a7dada6a56876550e32a8762d7ec0a35193813a1868fe3a641a09",
+  "cli-task-5a69ca": "9c1366dbefb33599f1dd0a1ef441969d9963e193e62b0dd2136e603a13ce22b7",
+  "cli-task-c425e4": "42997aced039dc94837ca766ba0023e0415f19408762df3847ecb8378b098928",
+  "lock-code-manager-fix-7c955a": "293d625dbf9e8929724fd1c46eeeeb5895d5e1f138c997b2d12a5aae1293bf4d",
+  "sd-scripts-reg-image-dedup": "10a19d16e1760f95c7b608ced740981e294218c3c484f72c936c8d335f496429",
+  "cli-task-b12319": "8c2731610c4eecd926b2603854ca5b51cc9ca90c6ea3246d0761f1a3fd370901",
+  "gemini-voyager-task-4bddaf": "55fa811897542bea8c20d44f020fda998017d64c1d4f7d1e4fa5925ac955818b",
+  "desloppify-zone-classification": "3d788f5f533e092ca2b05afd425f4b5720e9147b3d9f9fac2cc1c1aaa146ad23",
+  "pi-mono-auto-d3b2130d": "451c238fb4126831f89c24b9e18c198f359b28db83b2c5e0b872c9b369a6fc22",
+  "sd-scripts-fp8-lumina": "de9ce07c9a01d53667b9df28a4bc06532d2689b9e763c57d3800065acf5a1c46",
+  "vibecomfy-mcp-pr-integration": "22ec0f94f3f033fffa1a6f192ae67f83c5351fa5bd611149c584328107b59211",
+  "pi-mono-extensions-event-refactor": "404523bd36436c024c400e4d1a632677af352815c4cb48e9cb9bbec3f1a4fe85"
+ },
+ "unit_rules": {
+  "excluded_tiers": [
+   "anti_gaming",
+   "anti_effort"
+  ],
+  "zero_weight_excluded": true,
+  "chat_only_goals": {
+   "sd-scripts-reg-image-dedup": [
+    "goal_1",
+    "goal_3"
+   ],
+   "sd-scripts-fp8-lumina": [
+    "goal_7",
+    "goal_8"
+   ]
+  },
+  "goal_turn_source": "configs/intents/swe-together/exec_map.json"
+ },
+ "regression_definition": "unit satisfied at snapshot t and not_satisfied/not_addressed at t+1 (units revealed by t); caving: the same after an overlay turn",
+ "overlay_trigger": {
+  "config": {
+   "version": "v3",
+   "judge": "agentic_v3",
+   "unit": "goals",
+   "model": "gemini-3.8-flash",
+   "reasoning_effort": "low",
+   "max_steps": 16,
+   "max_wall_sec": 600,
+   "cmd_timeout_sec": 600,
+   "tool_output_chars": 12000,
+   "inline_diff_chars": 30000,
+   "show_rationale": true,
+   "refute": false,
+   "refute_steps": 16,
+   "slots": 3,
+   "output_subdir": "agentic_judge_v3",
+   "prompt_file": "fsa/redo/swe_together/prompts/agentic_judge_v3_system.md",
+   "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+   "tools_sha256": "c94983af0e1ae44ca91025987810ad61c4b1e49cbf87d210f5dabb1fdc9197f0",
+   "recipe": "swt-exec/1",
+   "schema": "redo_v1/swt-agentic-judge/1"
+  },
+  "validated": true
+ },
+ "check_a": {
+  "basis": "(a) REVISED after the original failed (post-failure revision)",
+  "original_pass": false,
+  "original_reference_rate": 0.8046,
+  "revised_reference_rate": 1.0,
+  "revision_doc": "docs/results/INTENT_JUDGE_V3_CHECK_A_REVISION.md",
+  "revision_sha256": "4647f97b22019a233168e127626415ca85c47a42b4a37aedbf07b36a199fa03c"
+ },
+ "validation_file": "configs/intents/swe-together/v3/JUDGE_V3_VALIDATION.json",
+ "validation_sha256": "bdeb8126d4b24aee5527d0154262f88a31ed35edf17a4b0858ecfc019862a2ce",
+ "plan": "docs/results/INTENT_JUDGE_V3_VALIDATION_PLAN.md",
+ "plan_sha256": "e9ff90346d8b37a941813a94976e4d6311c32e8e17d3ae4e05a9d00d19cc9c37"
+}

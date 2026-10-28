@@ -1,0 +1,4678 @@
+{
+ "config": {
+  "version": "v2.0",
+  "model": "gemini-3.5-flash",
+  "reasoning_effort": "high",
+  "combine": "exec",
+  "batch": 8,
+  "max_diff_chars": 100000,
+  "max_files_chars": 80000,
+  "max_file_chars": 40000,
+  "file_window_lines": 80,
+  "output_subdir": "intent_judge_v2",
+  "use_goals": true,
+  "use_files": true,
+  "use_checks": true,
+  "prompt_file": "fsa/redo/swe_together/prompts/intent_judge_v2_system.md",
+  "prompt_sha256": "bda69f0061b558e57da0ed067ad0416394cd262e68cf5c6d45b4f0be3a25ee34",
+  "applicability_prompt_file": "fsa/redo/prompts/intent_applicability_system.md",
+  "applicability_prompt_sha256": "02483e3c657810940b7c28aa5f84d839a0e2821df38cbb7b9239f64822593ed2",
+  "exec_map_file": "configs/intents/swe-together/exec_map.json",
+  "exec_map_file_sha256": "711704dcb613b89ac71e93b3407d104ab34ce6cf2184b495e2ca96cc09c56363",
+  "exec_map_digest": "074e42c40d0020c14e81b5ab2fbfa295fe2273a6dfe18451bd3dbf1093e8e0c6",
+  "exec_recipe": "swt-exec/1",
+  "exec_map_sha256_canonical": "5e2b6b7b68b2c64ae48bc76dafe24937dcdac1aeffa8d309c56578a6a3df7c2f"
+ },
+ "plan": "docs/results/INTENT_JUDGE_VALIDATION_PLAN.md",
+ "plan_sha256": "c91b80d0e7ca39e0d0292ae962b9387225266e904301055a9c379c67a7c90f91",
+ "started_at": "2026-09-27T17:36:42-0700",
+ "c1": {
+  "primary_reference_non_superseded": {
+   "n": 52,
+   "satisfied": 39,
+   "rate": 0.75
+  },
+  "reference_all_applicable": {
+   "n": 55,
+   "satisfied": 40,
+   "rate": 0.7273
+  },
+  "reference_tasks_reward_ge_0.85": {
+   "n": 28,
+   "satisfied": 22,
+   "rate": 0.7857
+  },
+  "reference_exec_route": {
+   "n": 1,
+   "satisfied": 1,
+   "rate": 1.0
+  },
+  "reference_llm_route": {
+   "n": 54,
+   "satisfied": 39,
+   "rate": 0.7222
+  },
+  "base_all_applicable": {
+   "n": 70,
+   "satisfied": 0,
+   "rate": 0.0
+  },
+  "cross_task_all_applicable": {
+   "n": 70,
+   "satisfied": 0,
+   "rate": 0.0
+  },
+  "criteria": {
+   "reference >= 0.90 (primary)": false,
+   "base <= 0.10": true,
+   "cross_task <= 0.10": true
+  },
+  "rows": [
+   {
+    "task": "cli-task-2026-0",
+    "n_intents": 2,
+    "has_reference": true,
+    "reference_reward": 1.0,
+    "superseded": [],
+    "route": {
+     "open": "exec",
+     "0": "llm"
+    },
+    "cross_task_source": "cli-task-cd4662",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "open": "satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "open": "exec"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "open": "gate:F2P_DISCARD_CONCEPT_COVERED=pass; gate:F2P_NIL_REMOVED=pass; gate:F2P_STDERR_DISCARD=pass; gate:F2P_STDOUT_DISCARD=pass; gate:P2P_BUILD_OK=pass; gate:P2P_TESTS_PASS=pass"
+     },
+     "wall_sec": 3.2
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "open": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "open": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "open": "The diff only contains changes related to checkpoint IDs and consecutive commits in manual_commit_hooks.go, with no changes addressing telemetry subprocess output or stdout/stderr redirection."
+     },
+     "wall_sec": 6.5
+    }
+   },
+   {
+    "task": "cli-task-cd4662",
+    "n_intents": 3,
+    "has_reference": true,
+    "reference_reward": 1.0,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm"
+    },
+    "cross_task_source": "gemini-voyager-task-f519c2",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "open": "satisfied",
+      "1": "satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "open": "llm",
+      "1": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "open": "In `manual_commit_hooks.go`, the code was changed to always generate a fresh checkpoint ID instead of incorrectly reusing `PendingCheckpointID` from a previous commit, fixing the duplicate ID issue while preserving idempotency via trailer checks.",
+      "1": "Added `TestPrepareCommitMsg_ConsecutiveCommits_UniqueCheckpointIDs` in `phase_prepare_commit_msg_test.go` to verify that consecutive commits generate distinct checkpoint IDs."
+     },
+     "wall_sec": 39.5
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_addressed"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "empty"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "empty diff"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "open": "not_addressed",
+      "1": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "open": "llm",
+      "1": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "open": "The diff contains changes to src/pages/content/folder/manager.ts which are unrelated to git CLI commits or checkpoint IDs.",
+      "1": "No test files or git-related files were added or modified in the repository."
+     },
+     "wall_sec": 7.3
+    }
+   },
+   {
+    "task": "gemini-voyager-task-f519c2",
+    "n_intents": 3,
+    "has_reference": true,
+    "reference_reward": 1.0,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm"
+    },
+    "cross_task_source": "hyperswitch-8389",
+    "reference": {
+     "labels": {
+      "1": "not_applicable",
+      "open": "satisfied",
+      "0": "satisfied"
+     },
+     "sources": {
+      "1": "applicability",
+      "open": "llm",
+      "0": "llm"
+     },
+     "evidence": {
+      "1": "not a repository change (applicability)",
+      "open": "In manager.ts, dragleave checks bounding rects to prevent getting stuck, and ensureConversationsInFolder is used on dropping onto child conversation elements.",
+      "0": "In manager.ts, ensureConversationsInFolder adds external conversations to the folder's data so reorderOrMoveConversations can place them at the exact targeted insertIndex."
+     },
+     "wall_sec": 56.0
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "1": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "empty",
+      "1": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "empty diff",
+      "1": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "1": "not_applicable",
+      "open": "not_addressed",
+      "0": "not_addressed"
+     },
+     "sources": {
+      "1": "applicability",
+      "open": "llm",
+      "0": "llm"
+     },
+     "evidence": {
+      "1": "not a repository change (applicability)",
+      "open": "The cumulative diff contains only changes to backend Rust files for storage and payment processing, with no frontend or drag-and-drop elements present.",
+      "0": "The cumulative diff contains only changes to backend Rust files for storage and payment processing, with no frontend or drag-and-drop elements present."
+     },
+     "wall_sec": 9.0
+    }
+   },
+   {
+    "task": "hyperswitch-8389",
+    "n_intents": 1,
+    "has_reference": true,
+    "reference_reward": 0.64,
+    "superseded": [],
+    "route": {
+     "open": "llm"
+    },
+    "cross_task_source": "dataclaw-windows-path-fix",
+    "reference": {
+     "labels": {
+      "open": "satisfied"
+     },
+     "sources": {
+      "open": "llm"
+     },
+     "evidence": {
+      "open": "KV Redis support for v2 payment models is implemented in payment_attempt.rs and payment_intent.rs, with complete apply_changeset methods and the v2 merchant-account toggle KV route in admin.rs."
+     },
+     "wall_sec": 84.7
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed"
+     },
+     "sources": {
+      "open": "empty"
+     },
+     "evidence": {
+      "open": "empty diff"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "open": "not_addressed"
+     },
+     "sources": {
+      "open": "llm"
+     },
+     "evidence": {
+      "open": "The diff contains changes to a Python project called dataclaw and has no changes to the Hyperswitch codebase or Rust files."
+     },
+     "wall_sec": 7.0
+    }
+   },
+   {
+    "task": "dataclaw-windows-path-fix",
+    "n_intents": 4,
+    "has_reference": true,
+    "reference_reward": 0.712,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm"
+    },
+    "cross_task_source": "gemini-voyager-task-aa88f5",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "open": "satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "open": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "open": "Windows path support was successfully implemented in anonymizer.py (anonymize_path/anonymize_text) and parser.py (_extract_project_path_from_sessions and _build_project_name), with tests added in test_parser.py."
+     },
+     "wall_sec": 14.5
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "open": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "open": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "open": "The current diff only contains styling adjustments in CSS and a minor icon alignment change in `manager.ts`, with no changes regarding Windows path normalization or absolute path detection."
+     },
+     "wall_sec": 3.4
+    }
+   },
+   {
+    "task": "gemini-voyager-task-aa88f5",
+    "n_intents": 4,
+    "has_reference": true,
+    "reference_reward": 0.8,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm"
+    },
+    "cross_task_source": "cli-task-33e050",
+    "reference": {
+     "labels": {
+      "open": "satisfied",
+      "0": "satisfied",
+      "1": "satisfied",
+      "2": "satisfied"
+     },
+     "sources": {
+      "open": "llm",
+      "0": "llm",
+      "1": "llm",
+      "2": "llm"
+     },
+     "evidence": {
+      "open": "public/contentStyle.css sets dark readable colors for light-theme elements inside the gv-folder-import-dialog.",
+      "0": "public/contentStyle.css provides light-theme color definitions for the strategy labels and dialog text.",
+      "1": "public/contentStyle.css modifies .gv-folder-import-file-name to be hidden by default (display: none) and visible when not empty (display: flex).",
+      "2": "public/contentStyle.css and src/pages/content/folder/manager.ts apply flexbox centering and line-height adjustment for menu items to align icons with text."
+     },
+     "wall_sec": 45.3
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "1": "not_addressed",
+      "2": "not_addressed"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "empty",
+      "1": "empty",
+      "2": "empty"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "empty diff",
+      "1": "empty diff",
+      "2": "empty diff"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "1": "not_addressed",
+      "2": "not_addressed"
+     },
+     "sources": {
+      "open": "llm",
+      "0": "llm",
+      "1": "llm",
+      "2": "llm"
+     },
+     "evidence": {
+      "open": "The cumulative diff only touches backend Go files (lifecycle.go) and contains no UI or style changes.",
+      "0": "The cumulative diff only touches backend Go files (lifecycle.go) and contains no UI or style changes.",
+      "1": "The cumulative diff only touches backend Go files (lifecycle.go) and contains no UI or style changes.",
+      "2": "The cumulative diff only touches backend Go files (lifecycle.go) and contains no UI or style changes."
+     },
+     "wall_sec": 13.2
+    }
+   },
+   {
+    "task": "cli-task-33e050",
+    "n_intents": 9,
+    "has_reference": true,
+    "reference_reward": 1.0,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm",
+     "7": "llm"
+    },
+    "cross_task_source": "cli-task-408b8c",
+    "reference": {
+     "labels": {
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "7": "not_applicable",
+      "open": "satisfied",
+      "0": "satisfied",
+      "6": "satisfied"
+     },
+     "sources": {
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "7": "applicability",
+      "open": "llm",
+      "0": "llm",
+      "6": "llm"
+     },
+     "evidence": {
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "open": "waitForTranscriptFlush in lifecycle.go is optimized to return immediately on nonexistent and stale files, eliminating slow-down.",
+      "0": "staleThreshold in lifecycle.go is set to 2 * time.Minute (120 seconds), implementing a conservative cutoff.",
+      "6": "TestWaitForTranscriptFlush_NonexistentFile_ReturnsImmediately corrects the misleading comment and asserts immediate return (< 500ms)."
+     },
+     "wall_sec": 61.5
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_addressed",
+      "7": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "empty",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "empty",
+      "7": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "empty diff",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "empty diff",
+      "7": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "7": "not_applicable",
+      "open": "not_satisfied",
+      "0": "not_addressed",
+      "6": "not_addressed"
+     },
+     "sources": {
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "7": "applicability",
+      "open": "llm",
+      "0": "llm",
+      "6": "llm"
+     },
+     "evidence": {
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "open": "The diff only caches GetWorktreePath and does not implement any transcript-flush wait or stale-session fast-path logic.",
+      "0": "There are no changes related to timeouts, staleness thresholds, or elapsed-time checks.",
+      "6": "No changes were made to comments or tests regarding os.Stat and poll loop behavior."
+     },
+     "wall_sec": 26.1
+    }
+   },
+   {
+    "task": "cli-task-408b8c",
+    "n_intents": 9,
+    "has_reference": true,
+    "reference_reward": 1.0,
+    "superseded": [
+     "3"
+    ],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm",
+     "7": "llm"
+    },
+    "cross_task_source": "cli-task-4a9dde",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "7": "not_applicable",
+      "open": "satisfied",
+      "3": "not_addressed",
+      "4": "satisfied",
+      "5": "satisfied",
+      "6": "satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "7": "applicability",
+      "open": "llm",
+      "3": "llm",
+      "4": "llm",
+      "5": "llm",
+      "6": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "open": "GetWorktreePath in cmd/entire/cli/strategy/common.go now delegates to paths.RepoRoot(), which is cached.",
+      "3": "No changes related to os.Getwd() error handling or cache key skipping appear in the repository diff.",
+      "4": "GetWorktreePath in cmd/entire/cli/strategy/common.go was updated to delegate directly to paths.RepoRoot() to avoid duplicate caching logic.",
+      "5": "TestGetWorktreePath_Cache in cmd/entire/cli/strategy/common_test.go validates the caching and clear functionality.",
+      "6": "TestGetWorktreePath_Worktree validates that GetWorktreePath correctly resolves linked worktree roots."
+     },
+     "wall_sec": 81.6
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_addressed",
+      "4": "not_addressed",
+      "5": "not_addressed",
+      "6": "not_addressed",
+      "7": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "empty",
+      "4": "empty",
+      "5": "empty",
+      "6": "empty",
+      "7": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "empty diff",
+      "4": "empty diff",
+      "5": "empty diff",
+      "6": "empty diff",
+      "7": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "7": "not_applicable",
+      "open": "not_addressed",
+      "3": "not_addressed",
+      "4": "not_addressed",
+      "5": "not_addressed",
+      "6": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "7": "applicability",
+      "open": "llm",
+      "3": "llm",
+      "4": "llm",
+      "5": "llm",
+      "6": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "open": "No changes related to GetWorktreePath or common.go in the diff.",
+      "3": "No changes related to os.Getwd() or GetWorktreePath in the diff.",
+      "4": "No changes related to RepoRoot or GetWorktreePath in the diff.",
+      "5": "No changes related to unit tests for GetWorktreePath in the diff.",
+      "6": "No changes related to multiple worktrees or GetWorktreePath in the diff."
+     },
+     "wall_sec": 11.7
+    }
+   },
+   {
+    "task": "cli-task-4a9dde",
+    "n_intents": 24,
+    "has_reference": true,
+    "reference_reward": 0.8,
+    "superseded": [
+     "3",
+     "4"
+    ],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm",
+     "7": "llm",
+     "8": "llm",
+     "9": "llm",
+     "10": "llm",
+     "11": "llm",
+     "12": "llm",
+     "13": "llm",
+     "14": "llm",
+     "15": "llm",
+     "16": "llm",
+     "17": "llm",
+     "18": "llm",
+     "19": "llm",
+     "20": "llm",
+     "21": "llm",
+     "22": "llm"
+    },
+    "cross_task_source": "cli-task-5a69ca",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "8": "not_applicable",
+      "9": "not_applicable",
+      "10": "not_applicable",
+      "11": "not_applicable",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable",
+      "17": "not_applicable",
+      "18": "not_applicable",
+      "19": "not_applicable",
+      "20": "not_applicable",
+      "21": "not_applicable",
+      "22": "not_applicable",
+      "open": "satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "7": "applicability",
+      "8": "applicability",
+      "9": "applicability",
+      "10": "applicability",
+      "11": "applicability",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability",
+      "17": "applicability",
+      "18": "applicability",
+      "19": "applicability",
+      "20": "applicability",
+      "21": "applicability",
+      "22": "applicability",
+      "open": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "8": "not a repository change (applicability)",
+      "9": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "11": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)",
+      "17": "not a repository change (applicability)",
+      "18": "not a repository change (applicability)",
+      "19": "not a repository change (applicability)",
+      "20": "not a repository change (applicability)",
+      "21": "not a repository change (applicability)",
+      "22": "not a repository change (applicability)",
+      "open": "In cmd/entire/cli/e2e_test/agent_runner.go, Gemini CLIRunner now runs with --approval-mode yolo, attaches stdin to devNull, and sets ENTIRE_TEST_TTY=1. In addition, cmd/entire/cli/strategy/manual_commit_hooks.go handles GEMINI_CLI env to avoid TTY prompts."
+     },
+     "wall_sec": 18.9
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "8": "not_applicable",
+      "9": "not_applicable",
+      "10": "not_applicable",
+      "11": "not_applicable",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable",
+      "17": "not_applicable",
+      "18": "not_applicable",
+      "19": "not_applicable",
+      "20": "not_applicable",
+      "21": "not_applicable",
+      "22": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "7": "applicability",
+      "8": "applicability",
+      "9": "applicability",
+      "10": "applicability",
+      "11": "applicability",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability",
+      "17": "applicability",
+      "18": "applicability",
+      "19": "applicability",
+      "20": "applicability",
+      "21": "applicability",
+      "22": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "8": "not a repository change (applicability)",
+      "9": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "11": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)",
+      "17": "not a repository change (applicability)",
+      "18": "not a repository change (applicability)",
+      "19": "not a repository change (applicability)",
+      "20": "not a repository change (applicability)",
+      "21": "not a repository change (applicability)",
+      "22": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "8": "not_applicable",
+      "9": "not_applicable",
+      "10": "not_applicable",
+      "11": "not_applicable",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable",
+      "17": "not_applicable",
+      "18": "not_applicable",
+      "19": "not_applicable",
+      "20": "not_applicable",
+      "21": "not_applicable",
+      "22": "not_applicable",
+      "open": "not_satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "7": "applicability",
+      "8": "applicability",
+      "9": "applicability",
+      "10": "applicability",
+      "11": "applicability",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability",
+      "17": "applicability",
+      "18": "applicability",
+      "19": "applicability",
+      "20": "applicability",
+      "21": "applicability",
+      "22": "applicability",
+      "open": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "8": "not a repository change (applicability)",
+      "9": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "11": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)",
+      "17": "not a repository change (applicability)",
+      "18": "not a repository change (applicability)",
+      "19": "not a repository change (applicability)",
+      "20": "not a repository change (applicability)",
+      "21": "not a repository change (applicability)",
+      "22": "not a repository change (applicability)",
+      "open": "The repository changes address empty repository handling and session initialization, but do not address the Gemini e2e test hang or allowed tools."
+     },
+     "wall_sec": 10.2
+    }
+   },
+   {
+    "task": "cli-task-5a69ca",
+    "n_intents": 8,
+    "has_reference": true,
+    "reference_reward": 1.0,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm"
+    },
+    "cross_task_source": "cli-task-c425e4",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "open": "satisfied",
+      "2": "not_satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "open": "llm",
+      "2": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "open": "All changes specified in the plan (sentinel error, IsEmptyRepository helper, modified session initializers, setup warning, hook handlers, and unit tests) have been fully implemented.",
+      "2": "The IsEmptyRepository check was not moved into OpenRepository(), and modifications to manual_commit_session.go and auto_commit.go were retained instead of being removed."
+     },
+     "wall_sec": 50.5
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_addressed",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "applicability",
+      "2": "empty",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "empty diff",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "open": "not_addressed",
+      "2": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "open": "llm",
+      "2": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "open": "No changes have been made to the repository to implement the empty repository logic.",
+      "2": "No changes have been made to the repository to implement the empty repository logic."
+     },
+     "wall_sec": 5.6
+    }
+   },
+   {
+    "task": "cli-task-c425e4",
+    "n_intents": 7,
+    "has_reference": true,
+    "reference_reward": 0.7,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm"
+    },
+    "cross_task_source": "lock-code-manager-fix-7c955a",
+    "reference": {
+     "labels": {
+      "4": "not_applicable",
+      "open": "satisfied",
+      "0": "satisfied",
+      "1": "not_addressed",
+      "2": "not_addressed",
+      "3": "not_addressed",
+      "5": "satisfied"
+     },
+     "sources": {
+      "4": "applicability",
+      "open": "llm",
+      "0": "llm",
+      "1": "llm",
+      "2": "llm",
+      "3": "llm",
+      "5": "llm"
+     },
+     "evidence": {
+      "4": "not a repository change (applicability)",
+      "open": "The linter script `mise-tasks/lint/mise` is created to check `mise.toml` for inline scripts.",
+      "0": "The lint script `mise-tasks/lint/mise` successfully performs the multi-line script check.",
+      "1": "No changes to `lint/_default` are present in the repository.",
+      "2": "No task extractions from `mise.toml` are present in the cumulative diff.",
+      "3": "No changes to `mise.toml` are present in the diff.",
+      "5": "The awk patterns in `mise-tasks/lint/mise` were updated to allow leading spaces/tabs and correctly count lines, matching all test gates."
+     },
+     "wall_sec": 30.0
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "1": "not_addressed",
+      "2": "not_addressed",
+      "3": "not_addressed",
+      "4": "not_applicable",
+      "5": "not_addressed"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "empty",
+      "1": "empty",
+      "2": "empty",
+      "3": "empty",
+      "4": "applicability",
+      "5": "empty"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "empty diff",
+      "1": "empty diff",
+      "2": "empty diff",
+      "3": "empty diff",
+      "4": "not a repository change (applicability)",
+      "5": "empty diff"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "4": "not_applicable",
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "1": "not_addressed",
+      "2": "not_addressed",
+      "3": "not_addressed",
+      "5": "not_addressed"
+     },
+     "sources": {
+      "4": "applicability",
+      "open": "llm",
+      "0": "llm",
+      "1": "llm",
+      "2": "llm",
+      "3": "llm",
+      "5": "llm"
+     },
+     "evidence": {
+      "4": "not a repository change (applicability)",
+      "open": "The diff is completely unrelated, touching lock_code_manager components and tests.",
+      "0": "No lint script in mise-tasks/lint was created.",
+      "1": "No changes to lint/_default exist in the diff.",
+      "2": "No files were extracted from mise.toml.",
+      "3": "No modifications to the completions task are present.",
+      "5": "No awk patterns or linters were added or modified."
+     },
+     "wall_sec": 10.8
+    }
+   },
+   {
+    "task": "lock-code-manager-fix-7c955a",
+    "n_intents": 28,
+    "has_reference": true,
+    "reference_reward": 0.55,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm",
+     "7": "llm",
+     "8": "llm",
+     "9": "llm",
+     "10": "llm",
+     "11": "llm",
+     "12": "llm",
+     "13": "llm",
+     "14": "llm",
+     "15": "llm",
+     "16": "llm",
+     "17": "llm",
+     "18": "llm",
+     "19": "llm",
+     "20": "llm",
+     "21": "llm",
+     "22": "llm",
+     "23": "llm",
+     "24": "llm",
+     "25": "llm",
+     "26": "llm"
+    },
+    "cross_task_source": "sd-scripts-reg-image-dedup",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "10": "not_applicable",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "17": "not_applicable",
+      "18": "not_applicable",
+      "19": "not_applicable",
+      "20": "not_applicable",
+      "21": "not_applicable",
+      "22": "not_applicable",
+      "23": "not_applicable",
+      "24": "not_applicable",
+      "26": "not_applicable",
+      "open": "satisfied",
+      "5": "not_satisfied",
+      "8": "satisfied",
+      "9": "satisfied",
+      "11": "satisfied",
+      "15": "not_satisfied",
+      "16": "satisfied",
+      "25": "satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "6": "applicability",
+      "7": "applicability",
+      "10": "applicability",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "17": "applicability",
+      "18": "applicability",
+      "19": "applicability",
+      "20": "applicability",
+      "21": "applicability",
+      "22": "applicability",
+      "23": "applicability",
+      "24": "applicability",
+      "26": "applicability",
+      "open": "llm",
+      "5": "llm",
+      "8": "llm",
+      "9": "llm",
+      "11": "llm",
+      "15": "llm",
+      "16": "llm",
+      "25": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "17": "not a repository change (applicability)",
+      "18": "not a repository change (applicability)",
+      "19": "not a repository change (applicability)",
+      "20": "not a repository change (applicability)",
+      "21": "not a repository change (applicability)",
+      "22": "not a repository change (applicability)",
+      "23": "not a repository change (applicability)",
+      "24": "not a repository change (applicability)",
+      "26": "not a repository change (applicability)",
+      "open": "BaseLock implements the _setup_complete event, __init__.py awaits it and fixes start event unsubscribe, and new tests are added.",
+      "5": "__init__.py uses a nonlocal started flag closure rather than checking the Home Assistant state condition.",
+      "8": "BaseLock encapsulates the setup event inside the public async_wait_for_setup() method, which is called during lock reuse.",
+      "9": "test_coordinator_exists_after_setup in tests/test_init.py asserts on coordinator presence rather than the private _setup_complete event.",
+      "11": "BaseLock delegates actual setup work to a protected _async_setup method and sets the setup event in public async_setup.",
+      "15": "No changes were made to custom_components/lock_code_manager/providers/zwave_js.py to address the Copilot review comments.",
+      "16": "Three new tests covering the early-return branches of the duplicate-code handler were added to tests/providers/test_zwave_js.py.",
+      "25": "TODO.md was updated to remove obsolete tasks and revise status details."
+     },
+     "wall_sec": 524.8
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_addressed",
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "8": "not_addressed",
+      "9": "not_addressed",
+      "10": "not_applicable",
+      "11": "not_addressed",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_addressed",
+      "16": "not_addressed",
+      "17": "not_applicable",
+      "18": "not_applicable",
+      "19": "not_applicable",
+      "20": "not_applicable",
+      "21": "not_applicable",
+      "22": "not_applicable",
+      "23": "not_applicable",
+      "24": "not_applicable",
+      "25": "not_addressed",
+      "26": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "empty",
+      "6": "applicability",
+      "7": "applicability",
+      "8": "empty",
+      "9": "empty",
+      "10": "applicability",
+      "11": "empty",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "15": "empty",
+      "16": "empty",
+      "17": "applicability",
+      "18": "applicability",
+      "19": "applicability",
+      "20": "applicability",
+      "21": "applicability",
+      "22": "applicability",
+      "23": "applicability",
+      "24": "applicability",
+      "25": "empty",
+      "26": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "empty diff",
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "8": "empty diff",
+      "9": "empty diff",
+      "10": "not a repository change (applicability)",
+      "11": "empty diff",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "empty diff",
+      "16": "empty diff",
+      "17": "not a repository change (applicability)",
+      "18": "not a repository change (applicability)",
+      "19": "not a repository change (applicability)",
+      "20": "not a repository change (applicability)",
+      "21": "not a repository change (applicability)",
+      "22": "not a repository change (applicability)",
+      "23": "not a repository change (applicability)",
+      "24": "not a repository change (applicability)",
+      "25": "empty diff",
+      "26": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "10": "not_applicable",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "17": "not_applicable",
+      "18": "not_applicable",
+      "19": "not_applicable",
+      "20": "not_applicable",
+      "21": "not_applicable",
+      "22": "not_applicable",
+      "23": "not_applicable",
+      "24": "not_applicable",
+      "26": "not_applicable",
+      "open": "not_addressed",
+      "5": "not_addressed",
+      "8": "not_addressed",
+      "9": "not_addressed",
+      "11": "not_addressed",
+      "15": "not_addressed",
+      "16": "not_addressed",
+      "25": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "6": "applicability",
+      "7": "applicability",
+      "10": "applicability",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "17": "applicability",
+      "18": "applicability",
+      "19": "applicability",
+      "20": "applicability",
+      "21": "applicability",
+      "22": "applicability",
+      "23": "applicability",
+      "24": "applicability",
+      "26": "applicability",
+      "open": "llm",
+      "5": "llm",
+      "8": "llm",
+      "9": "llm",
+      "11": "llm",
+      "15": "llm",
+      "16": "llm",
+      "25": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "17": "not a repository change (applicability)",
+      "18": "not a repository change (applicability)",
+      "19": "not a repository change (applicability)",
+      "20": "not a repository change (applicability)",
+      "21": "not a repository change (applicability)",
+      "22": "not a repository change (applicability)",
+      "23": "not a repository change (applicability)",
+      "24": "not a repository change (applicability)",
+      "26": "not a repository change (applicability)",
+      "open": "The diff only modifies library/train_util.py and contains no changes to lock_code_manager.",
+      "5": "The diff only modifies library/train_util.py and contains no changes to lock_code_manager.",
+      "8": "The diff only modifies library/train_util.py and contains no changes to lock_code_manager.",
+      "9": "The diff only modifies library/train_util.py and contains no changes to lock_code_manager.",
+      "11": "The diff only modifies library/train_util.py and contains no changes to lock_code_manager.",
+      "15": "The diff only modifies library/train_util.py and contains no changes to lock_code_manager.",
+      "16": "The diff only modifies library/train_util.py and contains no changes to lock_code_manager.",
+      "25": "The diff only modifies library/train_util.py and contains no changes to TODO.md."
+     },
+     "wall_sec": 7.8
+    }
+   },
+   {
+    "task": "sd-scripts-reg-image-dedup",
+    "n_intents": 8,
+    "has_reference": true,
+    "reference_reward": 0.85,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm"
+    },
+    "cross_task_source": "cli-task-b12319",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "open": "satisfied",
+      "1": "not_satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "open": "llm",
+      "1": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "open": "The agent actively engaged with the regularization balancing code path, refactoring it substantively rather than using stubs or gutting the features.",
+      "1": "The refactored `filter_registered_images_by_orig_resolution` fails to call `self.update_dataset_image_counts()` when `is_training_dataset` is True, which leaves dataset counts outdated after filtering."
+     },
+     "wall_sec": 61.8
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_addressed",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "empty",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "empty diff",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "open": "not_addressed",
+      "1": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "open": "llm",
+      "1": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "open": "The diff and files are completely unrelated to regularization images or image balancing, focusing instead on the external agent plugin protocol.",
+      "1": "The diff and files are completely unrelated to regularization images or image balancing, focusing instead on the external agent plugin protocol."
+     },
+     "wall_sec": 9.7
+    }
+   },
+   {
+    "task": "cli-task-b12319",
+    "n_intents": 2,
+    "has_reference": true,
+    "reference_reward": 0.525,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm"
+    },
+    "cross_task_source": "gemini-voyager-task-4bddaf",
+    "reference": {
+     "labels": {
+      "open": "satisfied",
+      "0": "not_satisfied"
+     },
+     "sources": {
+      "open": "llm",
+      "0": "llm"
+     },
+     "evidence": {
+      "open": "Implemented the external agent protocol adapter in cmd/entire/cli/agent/external/ and documented it in docs/architecture/external-agent-protocol.md.",
+      "0": "No standalone Cursor agent binary (entire-agent-cursor) is implemented in this repository."
+     },
+     "wall_sec": 54.6
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_addressed"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "empty"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "empty diff"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_addressed"
+     },
+     "sources": {
+      "open": "llm",
+      "0": "llm"
+     },
+     "evidence": {
+      "open": "The diff only contains UI changes for a browser extension settings popup (Voyager) and does not contain any protocol specification, CLI adapter, or external agent work.",
+      "0": "No external Cursor agent or Go-related code is present in the diff."
+     },
+     "wall_sec": 13.0
+    }
+   },
+   {
+    "task": "gemini-voyager-task-4bddaf",
+    "n_intents": 5,
+    "has_reference": true,
+    "reference_reward": 1.0,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm"
+    },
+    "cross_task_source": "pi-mono-auto-d3b2130d",
+    "reference": {
+     "labels": {
+      "1": "not_applicable",
+      "3": "not_applicable",
+      "open": "satisfied",
+      "0": "satisfied",
+      "2": "not_addressed"
+     },
+     "sources": {
+      "1": "applicability",
+      "3": "applicability",
+      "open": "llm",
+      "0": "llm",
+      "2": "llm"
+     },
+     "evidence": {
+      "1": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "open": "Implemented custom settings section reordering in src/pages/popup/Popup.tsx with state persistence in StorageKeys.GV_POPUP_SECTION_ORDER.",
+      "0": "Implemented and persisted custom popup section order utilizing CSS flexbox order and chrome storage in src/pages/popup/Popup.tsx.",
+      "2": "No changes to docs configuration, package.json, or docs plugins were introduced in the diff."
+     },
+     "wall_sec": 228.1
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "1": "not_applicable",
+      "2": "not_addressed",
+      "3": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "empty",
+      "1": "applicability",
+      "2": "empty",
+      "3": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "empty diff",
+      "1": "not a repository change (applicability)",
+      "2": "empty diff",
+      "3": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "1": "not_applicable",
+      "3": "not_applicable",
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "2": "not_addressed"
+     },
+     "sources": {
+      "1": "applicability",
+      "3": "applicability",
+      "open": "llm",
+      "0": "llm",
+      "2": "llm"
+     },
+     "evidence": {
+      "1": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "open": "No changes were made to any popup components or state management code to handle section reordering.",
+      "0": "No popup UI files or section list ordering logic were added or modified in the repository.",
+      "2": "No documentation plugins were added to dependencies or registered in any docs configuration."
+     },
+     "wall_sec": 6.1
+    }
+   },
+   {
+    "task": "desloppify-zone-classification",
+    "n_intents": 19,
+    "has_reference": false,
+    "reference_reward": null,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm",
+     "7": "llm",
+     "8": "llm",
+     "9": "llm",
+     "10": "llm",
+     "11": "llm",
+     "12": "llm",
+     "13": "llm",
+     "14": "llm",
+     "15": "llm",
+     "16": "llm",
+     "17": "llm"
+    },
+    "cross_task_source": "pi-mono-auto-d3b2130d",
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "1": "not_addressed",
+      "2": "not_addressed",
+      "3": "not_addressed",
+      "4": "not_addressed",
+      "5": "not_addressed",
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "8": "not_addressed",
+      "9": "not_applicable",
+      "10": "not_applicable",
+      "11": "not_applicable",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable",
+      "17": "not_addressed"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "empty",
+      "1": "empty",
+      "2": "empty",
+      "3": "empty",
+      "4": "empty",
+      "5": "empty",
+      "6": "applicability",
+      "7": "applicability",
+      "8": "empty",
+      "9": "applicability",
+      "10": "applicability",
+      "11": "applicability",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability",
+      "17": "empty"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "empty diff",
+      "1": "empty diff",
+      "2": "empty diff",
+      "3": "empty diff",
+      "4": "empty diff",
+      "5": "empty diff",
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "8": "empty diff",
+      "9": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "11": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)",
+      "17": "empty diff"
+     },
+     "wall_sec": 10.9
+    },
+    "cross_task": {
+     "labels": {
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "9": "not_applicable",
+      "10": "not_applicable",
+      "11": "not_applicable",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable",
+      "open": "not_addressed",
+      "0": "not_addressed",
+      "1": "not_addressed",
+      "2": "not_addressed",
+      "3": "not_addressed",
+      "4": "not_addressed",
+      "5": "not_addressed",
+      "8": "not_addressed",
+      "17": "not_addressed"
+     },
+     "sources": {
+      "6": "applicability",
+      "7": "applicability",
+      "9": "applicability",
+      "10": "applicability",
+      "11": "applicability",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability",
+      "open": "llm",
+      "0": "llm",
+      "1": "llm",
+      "2": "llm",
+      "3": "llm",
+      "4": "llm",
+      "5": "llm",
+      "8": "llm",
+      "17": "llm"
+     },
+     "evidence": {
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "9": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "11": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)",
+      "open": "The cumulative diff only contains documentation updates for coding-agent and does not touch the desloppify codebase.",
+      "0": "The cumulative diff does not modify any files in desloppify/zones.py.",
+      "1": "The cumulative diff does not modify desloppify/zones.py or its classify_file function.",
+      "2": "The cumulative diff does not define COMMON_ZONE_RULES or any language-specific rules.",
+      "3": "The cumulative diff does not modify the potentials calculations or phase runners.",
+      "4": "The cumulative diff does not implement should_skip_finding or filter detector findings by zone.",
+      "5": "The cumulative diff does not implement any CLI or override mechanisms for zone classification.",
+      "8": "The cumulative diff does not contain any work toward resolving the related GitHub issues.",
+      "17": "The diff contains changes only to README.md and extensions.md regarding package discoverability, with no changes to package.json or any project version."
+     },
+     "wall_sec": 7.3
+    }
+   },
+   {
+    "task": "pi-mono-auto-d3b2130d",
+    "n_intents": 7,
+    "has_reference": true,
+    "reference_reward": 0.1,
+    "superseded": [
+     "1"
+    ],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm"
+    },
+    "cross_task_source": "sd-scripts-fp8-lumina",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "3": "not_applicable",
+      "5": "not_applicable",
+      "open": "not_satisfied",
+      "1": "not_addressed",
+      "2": "not_addressed",
+      "4": "satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "3": "applicability",
+      "5": "applicability",
+      "open": "llm",
+      "1": "llm",
+      "2": "llm",
+      "4": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "open": "While README.md and extensions.md document how npm search works, the codebase does not contain the actual search results of packages with the 'pi' keyword.",
+      "1": "No package.json files were modified to add the 'pi-package' keyword.",
+      "2": "No package.json files in the sibling directories or anywhere else were modified.",
+      "4": "Both packages/coding-agent/README.md and packages/coding-agent/docs/extensions.md were updated to document the 'pi-package' keyword convention and explain how to search for it."
+     },
+     "wall_sec": 132.2
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_addressed",
+      "2": "not_addressed",
+      "3": "not_applicable",
+      "4": "not_addressed",
+      "5": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "empty",
+      "2": "empty",
+      "3": "applicability",
+      "4": "empty",
+      "5": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "empty diff",
+      "2": "empty diff",
+      "3": "not a repository change (applicability)",
+      "4": "empty diff",
+      "5": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "3": "not_applicable",
+      "5": "not_applicable",
+      "open": "not_addressed",
+      "1": "not_addressed",
+      "2": "not_addressed",
+      "4": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "3": "applicability",
+      "5": "applicability",
+      "open": "llm",
+      "1": "llm",
+      "2": "llm",
+      "4": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "open": "The diff only contains Python files related to Lumina and FP8 optimization.",
+      "1": "The diff contains no package.json edits.",
+      "2": "No package.json edits exist for any package in or outside the tree.",
+      "4": "The diff contains no modifications to markdown files."
+     },
+     "wall_sec": 45.9
+    }
+   },
+   {
+    "task": "sd-scripts-fp8-lumina",
+    "n_intents": 8,
+    "has_reference": true,
+    "reference_reward": 1.0,
+    "superseded": [
+     "4"
+    ],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm"
+    },
+    "cross_task_source": "pi-mono-extensions-event-refactor",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "3": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "open": "satisfied",
+      "2": "satisfied",
+      "4": "satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "3": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "open": "llm",
+      "2": "llm",
+      "4": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "open": "In library/lumina_util.py, FP8_OPTIMIZATION_TARGET_KEYS is declared and weight loading is routed through load_safetensors_with_lora_and_fp8 and apply_fp8_monkey_patch, while lumina_train_network.py wires the fp8_scaled CLI flag.",
+      "2": "In library/fp8_optimization_utils.py, the fp8_linear_forward_patch function casts self.scale_weight to original_dtype (x.dtype) before the dequantization multiplication.",
+      "4": "In lumina_train_network.py, prepare_unet_with_accelerator uses compile_transformer to compile specific blocks (layers, context_refiner, and noise_refiner) instead of compiling the entire model."
+     },
+     "wall_sec": 25.2
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_addressed",
+      "3": "not_applicable",
+      "4": "not_addressed",
+      "5": "not_applicable",
+      "6": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "applicability",
+      "2": "empty",
+      "3": "applicability",
+      "4": "empty",
+      "5": "applicability",
+      "6": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "empty diff",
+      "3": "not a repository change (applicability)",
+      "4": "empty diff",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "3": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "open": "not_addressed",
+      "2": "not_addressed",
+      "4": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "3": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "open": "llm",
+      "2": "llm",
+      "4": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "open": "No changes to sd-scripts or Lumina-related files are present in the repository diff.",
+      "2": "No changes to lumina_models.py or related codebase exist in the repository diff.",
+      "4": "No changes implementing torch.compile or modifying sd-scripts exist in the repository diff."
+     },
+     "wall_sec": 9.1
+    }
+   },
+   {
+    "task": "vibecomfy-mcp-pr-integration",
+    "n_intents": 43,
+    "has_reference": false,
+    "reference_reward": null,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm",
+     "7": "llm",
+     "8": "llm",
+     "9": "llm",
+     "10": "llm",
+     "11": "llm",
+     "12": "llm",
+     "13": "llm",
+     "14": "llm",
+     "15": "llm",
+     "16": "llm",
+     "17": "llm",
+     "18": "llm",
+     "19": "llm",
+     "20": "llm",
+     "21": "llm",
+     "22": "llm",
+     "23": "llm",
+     "24": "llm",
+     "25": "llm",
+     "26": "llm",
+     "27": "llm",
+     "28": "llm",
+     "29": "llm",
+     "30": "llm",
+     "31": "llm",
+     "32": "llm",
+     "33": "llm",
+     "34": "llm",
+     "35": "llm",
+     "36": "llm",
+     "37": "llm",
+     "38": "llm",
+     "39": "llm",
+     "40": "llm",
+     "41": "llm"
+    },
+    "cross_task_source": "pi-mono-extensions-event-refactor",
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "8": "not_addressed",
+      "9": "not_applicable",
+      "10": "not_applicable",
+      "11": "not_addressed",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable",
+      "17": "not_applicable",
+      "18": "not_applicable",
+      "19": "not_applicable",
+      "20": "not_applicable",
+      "21": "not_applicable",
+      "22": "not_addressed",
+      "23": "not_applicable",
+      "24": "not_applicable",
+      "25": "not_applicable",
+      "26": "not_applicable",
+      "27": "not_applicable",
+      "28": "not_applicable",
+      "29": "not_applicable",
+      "30": "not_applicable",
+      "31": "not_applicable",
+      "32": "not_applicable",
+      "33": "not_applicable",
+      "34": "not_addressed",
+      "35": "not_addressed",
+      "36": "not_applicable",
+      "37": "not_applicable",
+      "38": "not_applicable",
+      "39": "not_applicable",
+      "40": "not_applicable",
+      "41": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "7": "applicability",
+      "8": "empty",
+      "9": "applicability",
+      "10": "applicability",
+      "11": "empty",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability",
+      "17": "applicability",
+      "18": "applicability",
+      "19": "applicability",
+      "20": "applicability",
+      "21": "applicability",
+      "22": "empty",
+      "23": "applicability",
+      "24": "applicability",
+      "25": "applicability",
+      "26": "applicability",
+      "27": "applicability",
+      "28": "applicability",
+      "29": "applicability",
+      "30": "applicability",
+      "31": "applicability",
+      "32": "applicability",
+      "33": "applicability",
+      "34": "empty",
+      "35": "empty",
+      "36": "applicability",
+      "37": "applicability",
+      "38": "applicability",
+      "39": "applicability",
+      "40": "applicability",
+      "41": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "8": "empty diff",
+      "9": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "11": "empty diff",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)",
+      "17": "not a repository change (applicability)",
+      "18": "not a repository change (applicability)",
+      "19": "not a repository change (applicability)",
+      "20": "not a repository change (applicability)",
+      "21": "not a repository change (applicability)",
+      "22": "empty diff",
+      "23": "not a repository change (applicability)",
+      "24": "not a repository change (applicability)",
+      "25": "not a repository change (applicability)",
+      "26": "not a repository change (applicability)",
+      "27": "not a repository change (applicability)",
+      "28": "not a repository change (applicability)",
+      "29": "not a repository change (applicability)",
+      "30": "not a repository change (applicability)",
+      "31": "not a repository change (applicability)",
+      "32": "not a repository change (applicability)",
+      "33": "not a repository change (applicability)",
+      "34": "empty diff",
+      "35": "empty diff",
+      "36": "not a repository change (applicability)",
+      "37": "not a repository change (applicability)",
+      "38": "not a repository change (applicability)",
+      "39": "not a repository change (applicability)",
+      "40": "not a repository change (applicability)",
+      "41": "not a repository change (applicability)"
+     },
+     "wall_sec": 23.8
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_applicable",
+      "7": "not_applicable",
+      "9": "not_applicable",
+      "10": "not_applicable",
+      "12": "not_applicable",
+      "13": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable",
+      "17": "not_applicable",
+      "18": "not_applicable",
+      "19": "not_applicable",
+      "20": "not_applicable",
+      "21": "not_applicable",
+      "23": "not_applicable",
+      "24": "not_applicable",
+      "25": "not_applicable",
+      "26": "not_applicable",
+      "27": "not_applicable",
+      "28": "not_applicable",
+      "29": "not_applicable",
+      "30": "not_applicable",
+      "31": "not_applicable",
+      "32": "not_applicable",
+      "33": "not_applicable",
+      "36": "not_applicable",
+      "37": "not_applicable",
+      "38": "not_applicable",
+      "39": "not_applicable",
+      "40": "not_applicable",
+      "41": "not_applicable",
+      "open": "not_satisfied",
+      "8": "not_addressed",
+      "11": "not_addressed",
+      "22": "not_addressed",
+      "34": "not_addressed",
+      "35": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "2": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "applicability",
+      "7": "applicability",
+      "9": "applicability",
+      "10": "applicability",
+      "12": "applicability",
+      "13": "applicability",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability",
+      "17": "applicability",
+      "18": "applicability",
+      "19": "applicability",
+      "20": "applicability",
+      "21": "applicability",
+      "23": "applicability",
+      "24": "applicability",
+      "25": "applicability",
+      "26": "applicability",
+      "27": "applicability",
+      "28": "applicability",
+      "29": "applicability",
+      "30": "applicability",
+      "31": "applicability",
+      "32": "applicability",
+      "33": "applicability",
+      "36": "applicability",
+      "37": "applicability",
+      "38": "applicability",
+      "39": "applicability",
+      "40": "applicability",
+      "41": "applicability",
+      "open": "llm",
+      "8": "llm",
+      "11": "llm",
+      "22": "llm",
+      "34": "llm",
+      "35": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "9": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "13": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)",
+      "17": "not a repository change (applicability)",
+      "18": "not a repository change (applicability)",
+      "19": "not a repository change (applicability)",
+      "20": "not a repository change (applicability)",
+      "21": "not a repository change (applicability)",
+      "23": "not a repository change (applicability)",
+      "24": "not a repository change (applicability)",
+      "25": "not a repository change (applicability)",
+      "26": "not a repository change (applicability)",
+      "27": "not a repository change (applicability)",
+      "28": "not a repository change (applicability)",
+      "29": "not a repository change (applicability)",
+      "30": "not a repository change (applicability)",
+      "31": "not a repository change (applicability)",
+      "32": "not a repository change (applicability)",
+      "33": "not a repository change (applicability)",
+      "36": "not a repository change (applicability)",
+      "37": "not a repository change (applicability)",
+      "38": "not a repository change (applicability)",
+      "39": "not a repository change (applicability)",
+      "40": "not a repository change (applicability)",
+      "41": "not a repository change (applicability)",
+      "open": "The cumulative diff contains changes to packages/coding-agent rather than any files in the VibeComfy repository such as cli_tools.",
+      "8": "No changes were made to any files in the cli_tools directory.",
+      "11": "No tests were added under tests/ or python testing layout.",
+      "22": "No changes were made to .claude/skills/.",
+      "34": "No changes were made to README.md.",
+      "35": "No changes were made to README.md."
+     },
+     "wall_sec": 10.8
+    }
+   },
+   {
+    "task": "pi-mono-extensions-event-refactor",
+    "n_intents": 18,
+    "has_reference": true,
+    "reference_reward": 1.0,
+    "superseded": [],
+    "route": {
+     "open": "llm",
+     "0": "llm",
+     "1": "llm",
+     "2": "llm",
+     "3": "llm",
+     "4": "llm",
+     "5": "llm",
+     "6": "llm",
+     "7": "llm",
+     "8": "llm",
+     "9": "llm",
+     "10": "llm",
+     "11": "llm",
+     "12": "llm",
+     "13": "llm",
+     "14": "llm",
+     "15": "llm",
+     "16": "llm"
+    },
+    "cross_task_source": "cli-task-2026-0",
+    "reference": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "7": "not_applicable",
+      "8": "not_applicable",
+      "10": "not_applicable",
+      "11": "not_applicable",
+      "12": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable",
+      "open": "satisfied",
+      "2": "not_satisfied",
+      "6": "satisfied",
+      "9": "not_satisfied",
+      "13": "satisfied"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "7": "applicability",
+      "8": "applicability",
+      "10": "applicability",
+      "11": "applicability",
+      "12": "applicability",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability",
+      "open": "llm",
+      "2": "llm",
+      "6": "llm",
+      "9": "llm",
+      "13": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "8": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "11": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)",
+      "open": "Analyzed the issue and proposed a refactoring plan that was subsequently implemented, while respecting all constraints of goal_0.",
+      "2": "Duplicate declaration of RunnerEmitEvent and type errors in getRegisteredCommandsWithPaths cause the TypeScript compilation to fail, preventing compile-time type safety verification.",
+      "6": "The emitToolResult method in runner.ts implements chained emission, mutating event state in load order, supporting partial patches, and returning undefined on no changes.",
+      "9": "The session_before cleanup still relies on unchecked type casting and broke getRegisteredCommandsWithPaths by returning an unbound generic type TEvent.",
+      "13": "test.sh was updated to unset KIMI_API_KEY and HF_TOKEN, ensuring they are excluded from test runs."
+     },
+     "wall_sec": 101.1
+    },
+    "base": {
+     "labels": {
+      "open": "not_addressed",
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "2": "not_addressed",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "6": "not_addressed",
+      "7": "not_applicable",
+      "8": "not_applicable",
+      "9": "not_addressed",
+      "10": "not_applicable",
+      "11": "not_applicable",
+      "12": "not_applicable",
+      "13": "not_addressed",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable"
+     },
+     "sources": {
+      "open": "empty",
+      "0": "applicability",
+      "1": "applicability",
+      "2": "empty",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "6": "empty",
+      "7": "applicability",
+      "8": "applicability",
+      "9": "empty",
+      "10": "applicability",
+      "11": "applicability",
+      "12": "applicability",
+      "13": "empty",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability"
+     },
+     "evidence": {
+      "open": "empty diff",
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "2": "empty diff",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "6": "empty diff",
+      "7": "not a repository change (applicability)",
+      "8": "not a repository change (applicability)",
+      "9": "empty diff",
+      "10": "not a repository change (applicability)",
+      "11": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "13": "empty diff",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)"
+     },
+     "wall_sec": 0.0
+    },
+    "cross_task": {
+     "labels": {
+      "0": "not_applicable",
+      "1": "not_applicable",
+      "3": "not_applicable",
+      "4": "not_applicable",
+      "5": "not_applicable",
+      "7": "not_applicable",
+      "8": "not_applicable",
+      "10": "not_applicable",
+      "11": "not_applicable",
+      "12": "not_applicable",
+      "14": "not_applicable",
+      "15": "not_applicable",
+      "16": "not_applicable",
+      "open": "not_addressed",
+      "2": "not_addressed",
+      "6": "not_addressed",
+      "9": "not_addressed",
+      "13": "not_addressed"
+     },
+     "sources": {
+      "0": "applicability",
+      "1": "applicability",
+      "3": "applicability",
+      "4": "applicability",
+      "5": "applicability",
+      "7": "applicability",
+      "8": "applicability",
+      "10": "applicability",
+      "11": "applicability",
+      "12": "applicability",
+      "14": "applicability",
+      "15": "applicability",
+      "16": "applicability",
+      "open": "llm",
+      "2": "llm",
+      "6": "llm",
+      "9": "llm",
+      "13": "llm"
+     },
+     "evidence": {
+      "0": "not a repository change (applicability)",
+      "1": "not a repository change (applicability)",
+      "3": "not a repository change (applicability)",
+      "4": "not a repository change (applicability)",
+      "5": "not a repository change (applicability)",
+      "7": "not a repository change (applicability)",
+      "8": "not a repository change (applicability)",
+      "10": "not a repository change (applicability)",
+      "11": "not a repository change (applicability)",
+      "12": "not a repository change (applicability)",
+      "14": "not a repository change (applicability)",
+      "15": "not a repository change (applicability)",
+      "16": "not a repository change (applicability)",
+      "open": "The cumulative diff only contains an unrelated change in detached_unix.go and does not include any analysis or proposal for issue_1280.md.",
+      "2": "There are no changes to the event emitting types or code in the repository diff.",
+      "6": "No changes related to tool result event chaining design are present in the repository diff.",
+      "9": "There is no cleanup or refactoring of the session_before block inside emit() in the repository diff.",
+      "13": "There are no changes to test.sh in the repository diff."
+     },
+     "wall_sec": 6.3
+    }
+   }
+  ],
+  "pass": false
+ },
+ "c2": {
+  "n_verdict_files": 52,
+  "same": {
+   "n": 65,
+   "agree": 45,
+   "agreement": 0.6923,
+   "judge_sat_gold_sat": 25,
+   "judge_unsat_gold_unsat": 20,
+   "judge_sat_gold_unsat": 10,
+   "judge_unsat_gold_sat": 10,
+   "cohen_kappa": 0.381
+  },
+  "same_or_narrower": {
+   "n": 78,
+   "agree": 52,
+   "agreement": 0.6667,
+   "judge_sat_gold_sat": 28,
+   "judge_unsat_gold_unsat": 24,
+   "judge_sat_gold_unsat": 16,
+   "judge_unsat_gold_sat": 10,
+   "cohen_kappa": 0.3355
+  },
+  "all_related": {
+   "n": 84,
+   "agree": 55,
+   "agreement": 0.6548,
+   "judge_sat_gold_sat": 29,
+   "judge_unsat_gold_unsat": 26,
+   "judge_sat_gold_unsat": 17,
+   "judge_unsat_gold_sat": 12,
+   "cohen_kappa": 0.3111
+  },
+  "criterion": "kappa >= 0.40 on `same` pairs (no criterion if n < 20)",
+  "rows": [
+   {
+    "source": "stage0/judge_calibration/cli-task-2026-0/base",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-2026-0/reference",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-33e050/base",
+    "task": "cli-task-33e050",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_2"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-33e050/base",
+    "task": "cli-task-33e050",
+    "intent": "0",
+    "relation": "same",
+    "goals": [
+     "goal_3"
+    ],
+    "bench_all_met": true,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-33e050/base",
+    "task": "cli-task-33e050",
+    "intent": "6",
+    "relation": "same",
+    "goals": [
+     "goal_5"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-33e050/reference",
+    "task": "cli-task-33e050",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-33e050/reference",
+    "task": "cli-task-33e050",
+    "intent": "0",
+    "relation": "same",
+    "goals": [
+     "goal_3"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-33e050/reference",
+    "task": "cli-task-33e050",
+    "intent": "6",
+    "relation": "same",
+    "goals": [
+     "goal_5"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-408b8c/base",
+    "task": "cli-task-408b8c",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_cached_avoids_repeated_git",
+     "goal_0"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-408b8c/base",
+    "task": "cli-task-408b8c",
+    "intent": "4",
+    "relation": "same",
+    "goals": [
+     "goal_reuse_existing_root_cache"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-408b8c/base",
+    "task": "cli-task-408b8c",
+    "intent": "5",
+    "relation": "broader",
+    "goals": [
+     "goal_cache_invalidation_and_uncacheable_failure"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-408b8c/base",
+    "task": "cli-task-408b8c",
+    "intent": "6",
+    "relation": "same",
+    "goals": [
+     "goal_worktree_root_resolution"
+    ],
+    "bench_all_met": true,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-408b8c/reference",
+    "task": "cli-task-408b8c",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_cached_avoids_repeated_git",
+     "goal_0"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-408b8c/reference",
+    "task": "cli-task-408b8c",
+    "intent": "4",
+    "relation": "same",
+    "goals": [
+     "goal_reuse_existing_root_cache"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-408b8c/reference",
+    "task": "cli-task-408b8c",
+    "intent": "5",
+    "relation": "broader",
+    "goals": [
+     "goal_cache_invalidation_and_uncacheable_failure"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-408b8c/reference",
+    "task": "cli-task-408b8c",
+    "intent": "6",
+    "relation": "same",
+    "goals": [
+     "goal_worktree_root_resolution"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-4a9dde/base",
+    "task": "cli-task-4a9dde",
+    "intent": "open",
+    "relation": "broader",
+    "goals": [
+     "goal_0"
+    ],
+    "bench_all_met": true,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-4a9dde/reference",
+    "task": "cli-task-4a9dde",
+    "intent": "open",
+    "relation": "broader",
+    "goals": [
+     "goal_0"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-5a69ca/base",
+    "task": "cli-task-5a69ca",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_detect_empty_repo",
+     "goal_unit_tests",
+     "goal_clear_user_message",
+     "goal_distinct_error_value"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-5a69ca/base",
+    "task": "cli-task-5a69ca",
+    "intent": "2",
+    "relation": "broader",
+    "goals": [
+     "goal_detect_empty_repo",
+     "goal_distinct_error_value"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-5a69ca/reference",
+    "task": "cli-task-5a69ca",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_detect_empty_repo",
+     "goal_unit_tests",
+     "goal_clear_user_message",
+     "goal_distinct_error_value"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-5a69ca/reference",
+    "task": "cli-task-5a69ca",
+    "intent": "2",
+    "relation": "broader",
+    "goals": [
+     "goal_detect_empty_repo",
+     "goal_distinct_error_value"
+    ],
+    "bench_all_met": true,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-cd4662/base",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_consecutive_unique_ids",
+     "goal_no_stale_id_reuse",
+     "goal_preserve_hook_rerun_idempotency"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-cd4662/base",
+    "task": "cli-task-cd4662",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_regression_test_added"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-cd4662/reference",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_consecutive_unique_ids",
+     "goal_no_stale_id_reuse",
+     "goal_preserve_hook_rerun_idempotency"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/cli-task-cd4662/reference",
+    "task": "cli-task-cd4662",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_regression_test_added"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/dataclaw-windows-path-fix/base",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/dataclaw-windows-path-fix/reference",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-aa88f5/base",
+    "task": "gemini-voyager-task-aa88f5",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-aa88f5/base",
+    "task": "gemini-voyager-task-aa88f5",
+    "intent": "0",
+    "relation": "same",
+    "goals": [
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-aa88f5/base",
+    "task": "gemini-voyager-task-aa88f5",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-aa88f5/base",
+    "task": "gemini-voyager-task-aa88f5",
+    "intent": "2",
+    "relation": "same",
+    "goals": [
+     "goal_3"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-aa88f5/reference",
+    "task": "gemini-voyager-task-aa88f5",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-aa88f5/reference",
+    "task": "gemini-voyager-task-aa88f5",
+    "intent": "0",
+    "relation": "same",
+    "goals": [
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-aa88f5/reference",
+    "task": "gemini-voyager-task-aa88f5",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_4"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-aa88f5/reference",
+    "task": "gemini-voyager-task-aa88f5",
+    "intent": "2",
+    "relation": "same",
+    "goals": [
+     "goal_3"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-f519c2/base",
+    "task": "gemini-voyager-task-f519c2",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-f519c2/base",
+    "task": "gemini-voyager-task-f519c2",
+    "intent": "0",
+    "relation": "same",
+    "goals": [
+     "goal_3"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-f519c2/reference",
+    "task": "gemini-voyager-task-f519c2",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/gemini-voyager-task-f519c2/reference",
+    "task": "gemini-voyager-task-f519c2",
+    "intent": "0",
+    "relation": "same",
+    "goals": [
+     "goal_3"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/judge_calibration/hyperswitch-8389/base",
+    "task": "hyperswitch-8389",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_pi_kv_storage",
+     "goal_pa_kv_storage",
+     "goal_v2_kv_route",
+     "goal_v2_apply_changeset"
+    ],
+    "bench_all_met": false,
+    "judge": "not_addressed",
+    "judge_source": "empty"
+   },
+   {
+    "source": "stage0/judge_calibration/hyperswitch-8389/reference",
+    "task": "hyperswitch-8389",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_pi_kv_storage",
+     "goal_pa_kv_storage",
+     "goal_v2_kv_route",
+     "goal_v2_apply_changeset"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/M_plumbing/trials/cli-task-c425e4__fGfcXhP",
+    "task": "cli-task-c425e4",
+    "intent": "2",
+    "relation": "same",
+    "goals": [
+     "goal_6"
+    ],
+    "bench_all_met": false,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/M_plumbing/trials/cli-task-c425e4__fGfcXhP",
+    "task": "cli-task-c425e4",
+    "intent": "5",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4",
+     "goal_5"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/M_plumbing_r2/trials/cli-task-c425e4__kcHqvyK",
+    "task": "cli-task-c425e4",
+    "intent": "2",
+    "relation": "same",
+    "goals": [
+     "goal_6"
+    ],
+    "bench_all_met": false,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/M_plumbing_r2/trials/cli-task-c425e4__kcHqvyK",
+    "task": "cli-task-c425e4",
+    "intent": "5",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4",
+     "goal_5"
+    ],
+    "bench_all_met": false,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/S_plumbing/trials/cli-task-c425e4__Eg9pccc",
+    "task": "cli-task-c425e4",
+    "intent": "2",
+    "relation": "same",
+    "goals": [
+     "goal_6"
+    ],
+    "bench_all_met": true,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/S_plumbing/trials/cli-task-c425e4__Eg9pccc",
+    "task": "cli-task-c425e4",
+    "intent": "5",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4",
+     "goal_5"
+    ],
+    "bench_all_met": false,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/S_plumbing_r2/trials/cli-task-c425e4__r9sKuun",
+    "task": "cli-task-c425e4",
+    "intent": "2",
+    "relation": "same",
+    "goals": [
+     "goal_6"
+    ],
+    "bench_all_met": true,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/S_plumbing_r2/trials/cli-task-c425e4__r9sKuun",
+    "task": "cli-task-c425e4",
+    "intent": "5",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2",
+     "goal_3",
+     "goal_4",
+     "goal_5"
+    ],
+    "bench_all_met": false,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/W_bringup/trials/cli-task-2026-0__iUfYU7E",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "not_satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage0/W_bringup/trials/cli-task-cd4662__Wouktmw",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_consecutive_unique_ids",
+     "goal_no_stale_id_reuse",
+     "goal_preserve_hook_rerun_idempotency"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/W_bringup/trials/cli-task-cd4662__Wouktmw",
+    "task": "cli-task-cd4662",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_regression_test_added"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/W_bringup/trials/dataclaw-windows-path-fix__5RAz7r7",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/W_docker_arm64/trials/cli-task-cd4662__Nw5eQY6",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_consecutive_unique_ids",
+     "goal_no_stale_id_reuse",
+     "goal_preserve_hook_rerun_idempotency"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage0/W_docker_arm64/trials/cli-task-cd4662__Nw5eQY6",
+    "task": "cli-task-cd4662",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_regression_test_added"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/W/claims_after/natural_r1/trials/cli-task-2026-0__kawWJi2",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "not_satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/W/claims_after/natural_r1/trials/dataclaw-windows-path-fix__QVHygGh",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/W/commit_before/natural_r1/trials/cli-task-2026-0__XRnvghZ",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/W/commit_before/natural_r1/trials/dataclaw-windows-path-fix__WbadiH6",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/W/commit_before/overlay_r1/trials/cli-task-2026-0__uD7LC2b",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/parity/docker/W/stock/natural_r1/trials/cli-task-2026-0__BRyiANj",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "not_satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/parity/docker/W/stock/natural_r1/trials/cli-task-cd4662__uLzbD22",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_consecutive_unique_ids",
+     "goal_no_stale_id_reuse",
+     "goal_preserve_hook_rerun_idempotency"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/docker/W/stock/natural_r1/trials/cli-task-cd4662__uLzbD22",
+    "task": "cli-task-cd4662",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_regression_test_added"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/docker/W/stock/natural_r1/trials/dataclaw-windows-path-fix__y4jjfve",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/docker/W/stock/natural_r2/trials/cli-task-2026-0__LLix5Bw",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/parity/docker/W/stock/natural_r2/trials/cli-task-cd4662__upHZ3bD",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_consecutive_unique_ids",
+     "goal_no_stale_id_reuse",
+     "goal_preserve_hook_rerun_idempotency"
+    ],
+    "bench_all_met": false,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/docker/W/stock/natural_r2/trials/cli-task-cd4662__upHZ3bD",
+    "task": "cli-task-cd4662",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_regression_test_added"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/docker/W/stock/natural_r2/trials/dataclaw-windows-path-fix__jUUWiWq",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/e2b/W/stock/natural_r1/trials/cli-task-2026-0__apjGYmT",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "not_satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/parity/e2b/W/stock/natural_r1/trials/cli-task-cd4662__RvkqUd3",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_consecutive_unique_ids",
+     "goal_no_stale_id_reuse",
+     "goal_preserve_hook_rerun_idempotency"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/e2b/W/stock/natural_r1/trials/cli-task-cd4662__RvkqUd3",
+    "task": "cli-task-cd4662",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_regression_test_added"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/e2b/W/stock/natural_r1/trials/dataclaw-windows-path-fix__jsXpDBF",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/e2b/W/stock/natural_r2/trials/cli-task-2026-0__AFVptzz",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "not_satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/parity/e2b/W/stock/natural_r2/trials/cli-task-cd4662__uZryA2L",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_consecutive_unique_ids",
+     "goal_no_stale_id_reuse",
+     "goal_preserve_hook_rerun_idempotency"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/e2b/W/stock/natural_r2/trials/cli-task-cd4662__uZryA2L",
+    "task": "cli-task-cd4662",
+    "intent": "1",
+    "relation": "same",
+    "goals": [
+     "goal_regression_test_added"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/parity/e2b/W/stock/natural_r2/trials/dataclaw-windows-path-fix__SzWGjR7",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/revB/W/claims_after/natural_r1/trials/cli-task-2026-0__BAJjWKn",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/revB/W/claims_after/natural_r1/trials/dataclaw-windows-path-fix__UjTWbuY",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/revB/W/commit_before/natural_r1/trials/cli-task-2026-0__D8J3P33",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "not_satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/revB/W/commit_before/natural_r1/trials/dataclaw-windows-path-fix__v3xCXhz",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "relation": "narrower",
+    "goals": [
+     "goal_0",
+     "goal_4"
+    ],
+    "bench_all_met": false,
+    "judge": "not_satisfied",
+    "judge_source": "llm"
+   },
+   {
+    "source": "stage1_smoke/revB/W/commit_before/overlay_r1/trials/cli-task-2026-0__TrdSjtG",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/revB/W/commit_before/overlay_r2/trials/cli-task-2026-0__NvP6ig2",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "exec"
+   },
+   {
+    "source": "stage1_smoke/revB/W/stock/overlay_r1/trials/cli-task-2026-0__BsVfH2E",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "relation": "same",
+    "goals": [
+     "goal_0",
+     "goal_1",
+     "goal_2"
+    ],
+    "bench_all_met": true,
+    "judge": "satisfied",
+    "judge_source": "exec"
+   }
+  ],
+  "pass": false
+ },
+ "c3": {
+  "labeller": "Claude (the agent), acting as the human-audit stand-in; labels written before the judge ran on the pairs",
+  "labels_file_sha256": "1742311ea06ad0e0242a51427688089e1a158947965937a87a5dcc9afd1f16b8",
+  "labels_written_at": "2026-09-27T17:43:29-0700",
+  "n": 60,
+  "binary_both_applicable": {
+   "n": 36,
+   "agree": 18,
+   "agreement": 0.5,
+   "judge_sat_gold_sat": 5,
+   "judge_unsat_gold_unsat": 13,
+   "judge_sat_gold_unsat": 9,
+   "judge_unsat_gold_sat": 9,
+   "cohen_kappa": -0.0519
+  },
+  "one_side_not_applicable": 11,
+  "exact_4way": 31,
+  "binary_with_na_as_disagreement": {
+   "n": 60,
+   "agree": 18,
+   "agreement": 0.3
+  },
+  "by_pool": {
+   "pilot": {
+    "n": 26,
+    "agree": 14,
+    "agreement": 0.5385,
+    "judge_sat_gold_sat": 4,
+    "judge_unsat_gold_unsat": 10,
+    "judge_sat_gold_unsat": 6,
+    "judge_unsat_gold_sat": 6,
+    "cohen_kappa": 0.025
+   },
+   "dev": {
+    "n": 9,
+    "agree": 4,
+    "agreement": 0.4444,
+    "judge_sat_gold_sat": 1,
+    "judge_unsat_gold_unsat": 3,
+    "judge_sat_gold_unsat": 2,
+    "judge_unsat_gold_sat": 3,
+    "cohen_kappa": -0.1538
+   },
+   "reference": {
+    "n": 1,
+    "agree": 0,
+    "agreement": 0.0,
+    "judge_sat_gold_sat": 0,
+    "judge_unsat_gold_unsat": 0,
+    "judge_sat_gold_unsat": 1,
+    "judge_unsat_gold_sat": 0,
+    "cohen_kappa": 0.0
+   }
+  },
+  "by_route": {
+   "exec": {
+    "n": 3,
+    "agree": 1,
+    "agreement": 0.3333,
+    "judge_sat_gold_sat": 1,
+    "judge_unsat_gold_unsat": 0,
+    "judge_sat_gold_unsat": 0,
+    "judge_unsat_gold_sat": 2,
+    "cohen_kappa": 0.0
+   },
+   "llm": {
+    "n": 33,
+    "agree": 17,
+    "agreement": 0.5152,
+    "judge_sat_gold_sat": 4,
+    "judge_unsat_gold_unsat": 13,
+    "judge_sat_gold_unsat": 9,
+    "judge_unsat_gold_sat": 7,
+    "cohen_kappa": -0.0435
+   },
+   "empty": {
+    "n": 0,
+    "agree": 0,
+    "agreement": null,
+    "judge_sat_gold_sat": 0,
+    "judge_unsat_gold_unsat": 0,
+    "judge_sat_gold_unsat": 0,
+    "judge_unsat_gold_sat": 0,
+    "cohen_kappa": null
+   }
+  },
+  "criterion": "binary agreement >= 0.85 and kappa >= 0.60 (both-applicable pairs)",
+  "rows": [
+   {
+    "id": "G01-c90e12",
+    "task": "desloppify-zone-classification",
+    "intent": "2",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "COMMON_ZONE_RULES, PY_ZONE_RULES, and TS_ZONE_RULES are defined in desloppify/zones.py where language-specific rules are prepended to the shared rules list for first-match-wins priority.",
+    "gold_note": "zones.py defines COMMON_ZONE_RULES and PY/TS_ZONE_RULES = [lang-specific] + COMMON_ZONE_RULES and passes them as LangConfig.zone_rules, but no production code ever builds a FileZoneMap from lang.zone_rules (lang._zone_map is only assigned in tests/test_phase_potentials.py), so the rules never classify anything at runtime."
+   },
+   {
+    "id": "G02-a0ff3c",
+    "task": "cli-task-c425e4",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The linter script in mise-tasks/lint/mise was updated and is used to prevent multi-line shell scripts from being placed in mise.toml.",
+    "gold_note": "The opening message defers extraction ('but first') and asks only whether a mise.toml linter exists; the base commit already contains mise-tasks/lint/mise wired into lint/_default. The diff's lint/extraction edits go beyond this question."
+   },
+   {
+    "id": "G03-722d0c",
+    "task": "cli-task-c425e4",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The linter script in `mise-tasks/lint/mise` was updated to correctly parse indentation and multi-line script lengths in `mise.toml`.",
+    "gold_note": "Same opening question ('is there a linter for mise.toml'): an informational question answerable without a code change, and the linter already exists at base (mise-tasks/lint/mise). Side note: this diff's ''' regex is broken, so the bench ''' block is no longer detected."
+   },
+   {
+    "id": "G04-949808",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "pool": "dev",
+    "gold": "satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "exec",
+    "judge_evidence": "gate:F2P_DISCARD_CONCEPT_COVERED=fail; gate:F2P_NIL_REMOVED=pass; gate:F2P_STDERR_DISCARD=pass; gate:F2P_STDOUT_DISCARD=pass; gate:P2P_BUILD_OK=pass; gate:P2P_TESTS_PASS=pass",
+    "gold_note": "detached_unix.go spawnDetachedAnalytics replaces cmd.Stdout/Stderr = nil with an os.OpenFile(os.DevNull, O_RDWR) handle assigned to Stdin/Stdout/Stderr (closed via defer after Start). This is the explicit /dev/null sink the intent names."
+   },
+   {
+    "id": "G05-255d3e",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "pool": "dev",
+    "gold": "satisfied",
+    "judge": "satisfied",
+    "judge_source": "exec",
+    "judge_evidence": "gate:F2P_DISCARD_CONCEPT_COVERED=pass; gate:F2P_NIL_REMOVED=pass; gate:F2P_STDERR_DISCARD=pass; gate:F2P_STDOUT_DISCARD=pass; gate:P2P_BUILD_OK=pass; gate:P2P_TESTS_PASS=pass",
+    "gold_note": "detached_unix.go sets cmd.Stdout = io.Discard and cmd.Stderr = io.Discard (io imported), so both streams are explicitly discarded rather than left nil."
+   },
+   {
+    "id": "G06-a31250",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "pool": "dev",
+    "gold": "not_satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "In `manual_commit_hooks.go`, the code has been changed to generate a new checkpoint ID via `id.Generate()` rather than reusing `session.LastCheckpointID` when preparing the commit message for manual commits, and idempotency is preserved via the existing checkpoint trailer parse check.",
+    "gold_note": "manual_commit_hooks.go PrepareCommitMsg only changes the no-new-content LastCheckpointID path to generate a fresh id (which breaks split-commit linking and yields an id with no condensed data). The PendingCheckpointID reuse for new-content commits, and in addTrailerForAgentCommit, is untouched, so the duplicate-ID cause remains."
+   },
+   {
+    "id": "G07-2c432f",
+    "task": "gemini-voyager-task-f519c2",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The folder's dragover/dragleave event handlers, which control the blue folder-level highlight getting stuck, are not modified in src/pages/content/folder/manager.ts, failing to address the folder highlight state issue (goal 1).",
+    "gold_note": "manager.ts setupConversationReorderZone/reorder-gap drops now pass incomingConvs and an undefined sourceParentId to reorderOrMoveConversations, which fixes dropping sidebar conversations onto a folder's conversations. But setupDropZone's dragleave still unconditionally removes and re-adds gv-folder-dragover, so the reported lingering blue highlight on the folder area is not addressed."
+   },
+   {
+    "id": "G08-1e3d9b",
+    "task": "pi-mono-auto-d3b2130d",
+    "intent": "1",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Only documentation files (README.md and docs/extensions.md) were updated; no actual package.json files were modified to include the 'pi-package' keyword.",
+    "gold_note": "The diff only adds documentation (README.md and docs/extensions.md) recommending the 'pi-package' keyword. No package.json in the repo gets the keyword, so the request to add it to the packages is not done."
+   },
+   {
+    "id": "G09-23fa54",
+    "task": "cli-task-c425e4",
+    "intent": "1",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "No changes were made to lint/_default; only mise-tasks/lint/mise was modified.",
+    "gold_note": "The diff never touches lint/_default, but at base commit e9c47e4 mise-tasks/lint/_default already has depends=[..., \"lint:mise\", ...], and this diff keeps lint/mise working (whitespace-tolerant delimiters, verified by running it). As left, the repo runs the multi-line check from lint/_default."
+   },
+   {
+    "id": "G10-6c0abd",
+    "task": "sd-scripts-fp8-lumina",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The changes in library/lumina_util.py implement loading and monkey patching for fp8_scaled, but do not expose the CLI argument or wire it into the training network, causing gate:t1_f2p_train_network_wires_fp8 to fail.",
+    "gold_note": "Only library/lumina_util.py load_lumina_model gains fp8_scaled/loading_device parameters (load_safetensors_with_lora_and_fp8 + apply_fp8_monkey_patch). No training/inference script or argparse option passes fp8_scaled, so fp8_scaled for Lumina can never be enabled at runtime."
+   },
+   {
+    "id": "G11-8f76cf",
+    "task": "cli-task-c425e4",
+    "intent": "1",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The change modified the awk script in mise-tasks/lint/mise, but did not add the check to lint/_default.",
+    "gold_note": "lint/_default is untouched, but it already depends on lint:mise at base e9c47e4, and this diff keeps lint/mise wired and functional. The threshold change to >=3 is a separate concern from this wiring intent."
+   },
+   {
+    "id": "G12-1ec01d",
+    "task": "cli-task-408b8c",
+    "intent": "2",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Pure explanatory question about go-git OpenRepository internals (memory vs mmap, cost of repeated calls). It asks for no repository change."
+   },
+   {
+    "id": "G13-ba842a",
+    "task": "cli-task-5a69ca",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Implemented sentinel error `ErrEmptyRepository`, helper `IsEmptyRepository`, handled empty repository logic in both strategy sessions, added clear user messaging in hooks and setup, and added comprehensive unit tests for these cases.",
+    "gold_note": "Production changes follow the plan (ErrEmptyRepository in strategy.go, IsEmptyRepository in common.go, detection in manual_commit_session.go and auto_commit.go, hook note, setup.go warning). But the new tests call agent.AgentClaudeCode, which does not exist (the constant is agent.AgentTypeClaudeCode), and auto_commit_test.go does not import the agent package, so the strategy package's tests no longer compile."
+   },
+   {
+    "id": "G14-48596d",
+    "task": "vibecomfy-mcp-pr-integration",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Substantive changes were made to cli_tools/analysis.py, cli_tools/registry/knowledge.py, and cli_tools/registry/mcp_server.py, alongside a comprehensive new test file tests/test_mcp_tools.py.",
+    "gold_note": "'Can you see the PR we have on this repo?' is a question about GitHub PR visibility and asks for no code change."
+   },
+   {
+    "id": "G15-8c6ea9",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "pool": "dev",
+    "gold": "not_satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Deleted the state.LastCheckpointID field and the logic reusing it in manual_commit_hooks.go, and added a test ensuring consecutive commits do not reuse checkpoint IDs.",
+    "gold_note": "Removes LastCheckpointID and its no-new-content reuse (manual_commit_hooks.go, state.go, condensation), but PrepareCommitMsg still reuses state.PendingCheckpointID for commits with new content, and addTrailerForAgentCommit is unchanged. Two consecutive commits during ACTIVE_COMMITTED can still get the same ID. The new integration test only covers the no-content case."
+   },
+   {
+    "id": "G16-56ecbf",
+    "task": "cli-task-2026-0",
+    "intent": "0",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Pure explanation request ('what does io.Discard do'); adopting io.Discard only comes from the later 'yes please' turn, so this intent asks for no repository change."
+   },
+   {
+    "id": "G17-f42a17",
+    "task": "sd-scripts-fp8-lumina",
+    "intent": "5",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "lumina_util.py sets FP8_OPTIMIZATION_EXCLUDE_KEYS = [norm, _emb, adaLN, modulation], so the dtype-sensitive adaLN_modulation projections in JointTransformerBlock/FinalLayer stay in high precision; fp8_linear_forward_patch also dequantizes in x.dtype. This fixes the cause of the high loss, and it is wired through load_lumina_model and lumina_train_network (fp8_scaled flag, cast_unet=False)."
+   },
+   {
+    "id": "G18-ccd21f",
+    "task": "cli-task-cd4662",
+    "intent": "1",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "In cmd/entire/cli/strategy/phase_prepare_commit_msg_test.go, TestPrepareCommitMsg_NormalCommitGeneratesNewCheckpointID was repurposed to assert that a normal commit generates a new unique checkpoint ID instead of reusing the PendingCheckpointID.",
+    "gold_note": "phase_prepare_commit_msg_test.go only repurposes TestPrepareCommitMsg_NormalCommitUsesPendingCheckpointID to assert NotEqual to a preset PendingCheckpointID. That tests the internal field rather than the scenario of two consecutive commits getting distinct IDs, which is what the user asked for, so I cannot confirm it meets the intent."
+   },
+   {
+    "id": "G19-f88588",
+    "task": "hyperswitch-8389",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Several critical gate checks, such as gate:t1_f2p_insert_pi_v2_kv_branch and gate:t1_f2p_pa_apply_changeset_v2, failed, showing the KV support for v2 models is incomplete.",
+    "gold_note": "storage_impl payment_attempt.rs update_payment_attempt (v2) now always calls diesel PaymentAttemptUpdateInternal::apply_changeset, which is still todo!() for v2 in diesel_models/payment_attempt.rs and is not implemented in the diff. So every v2 attempt update panics. Intent KV, the route and intent apply_changeset are otherwise present."
+   },
+   {
+    "id": "G20-09f0db",
+    "task": "lock-code-manager-fix-7c955a",
+    "intent": "2",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Pure question asking for an explanation of the 'started' variable; no repository change requested."
+   },
+   {
+    "id": "G21-0e6d1e",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "0",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "cli.py _find_export_file now also checks tempfile.gettempdir(), and parser.py adds an APPDATA opencode fallback. But the user-facing hints (HF steps text, setup message, next_command in _find_export_file) still hard-code /tmp/dataclaw_export.jsonl, so the Linux paths are only partly removed."
+   },
+   {
+    "id": "G22-b1a24b",
+    "task": "cli-task-5a69ca",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Only 'ErrEmptyRepository' was added to strategy.go; other planned files and changes are missing.",
+    "gold_note": "Only the ErrEmptyRepository sentinel is added in strategy/strategy.go. There is no IsEmptyRepository helper, no initializeSession/InitializeSession detection, no hook messaging, no enable warning and no tests, so the error is unused."
+   },
+   {
+    "id": "G23-780c67",
+    "task": "cli-task-b12319",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "All goals met: external-agent protocol doc, adapter with dynamic interface composition, PATH discovery, registry integration, and cursor extraction are implemented and verified by tests.",
+    "gold_note": "The external package, DiscoverExternal and the hooks_cmd import swap are added, but the cmd/entire/cli/agent/cursor/ directory is not deleted. The plan's Cursor extraction/removal step (and the condensation_test/architecture_test updates) is missing."
+   },
+   {
+    "id": "G24-ba884e",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "pool": "dev",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The change fails to address the root cause of stale PendingCheckpointID reuse from deferred condensation and still allows consecutive commits to share checkpoint IDs (explicitly verified/preserved in the added test).",
+    "gold_note": "manual_commit_hooks.go only adds a LastCheckpointIDUsed flag that limits LastCheckpointID reuse to once. The real cause, reusing a stale PendingCheckpointID for new-content commits in PrepareCommitMsg/addTrailerForAgentCommit, is untouched. The diff also commits junk .entire/ and test files."
+   },
+   {
+    "id": "G25-1f7500",
+    "task": "cli-task-c425e4",
+    "intent": "1",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "not_addressed",
+    "judge_source": "llm",
+    "judge_evidence": "No files or configurations referencing 'lint/_default' were added or modified in the repository.",
+    "gold_note": "At the starting commit, mise-tasks/lint/_default already lists lint:mise in its depends. The diff keeps that and fixes the multi-line check in mise-tasks/lint/mise, so the repository runs the check as part of lint."
+   },
+   {
+    "id": "G26-71faa4",
+    "task": "cli-task-2026-0",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "exec",
+    "judge_evidence": "gate:F2P_DISCARD_CONCEPT_COVERED=fail; gate:F2P_NIL_REMOVED=pass; gate:F2P_STDERR_DISCARD=pass; gate:F2P_STDOUT_DISCARD=pass; gate:P2P_BUILD_OK=pass; gate:P2P_TESTS_PASS=pass",
+    "gold_note": "detached_unix.go spawnDetachedAnalytics opens os.DevNull and assigns it to both cmd.Stdout and cmd.Stderr before Start, replacing the nil assignments. The redirect takes effect at runtime."
+   },
+   {
+    "id": "G27-7ce81b",
+    "task": "lock-code-manager-fix-7c955a",
+    "intent": "24",
+    "pool": "reference",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "A git workflow action (fast-forward main, delete the merged branch); no repository content change requested."
+   },
+   {
+    "id": "G28-0a0ab0",
+    "task": "cli-task-4a9dde",
+    "intent": "21",
+    "pool": "reference",
+    "gold": "not_satisfied",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "The pasted failure implies the leftover shadow branch must be fixed. content_overlap.go filesWithRemainingAgentChanges gains a HEAD-vs-shadow hash skip, but it is speculative (the session itself later doubts this analysis), and agent_runner.go sets ENTIRE_TEST_TTY=1, which forces hasTTY() true and bypasses the GEMINI_CLI fast path. I cannot confirm the fix works."
+   },
+   {
+    "id": "G29-f25798",
+    "task": "cli-task-2026-0",
+    "intent": "0",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Pure explanation request about io.Discard; no repository change requested by this intent."
+   },
+   {
+    "id": "G30-f3616e",
+    "task": "cli-task-2026-0",
+    "intent": "0",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Pure explanation request about io.Discard; no repository change requested by this intent."
+   },
+   {
+    "id": "G31-87762d",
+    "task": "gemini-voyager-task-4bddaf",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "SectionWrapper.tsx is created with the reordering buttons and state keys, but it is not imported or used in the popup UI component, making the feature completely unwired.",
+    "gold_note": "Only adds a new SectionWrapper.tsx (up/down buttons + DEFAULT_POPUP_SECTION_ORDER), a storage key and locale strings; the popup page is never modified to use it and no order is persisted/applied, so it is dead code with no runtime effect."
+   },
+   {
+    "id": "G32-5142f1",
+    "task": "cli-task-4a9dde",
+    "intent": "3",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Pure context: the user pastes the documented comma-separated --allowed-tools \"ShellTool(git status)\" syntax, which the base agent_runner.go already uses; no repository change is implied."
+   },
+   {
+    "id": "G33-f2f5c2",
+    "task": "cli-task-c425e4",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "No linter for mise.toml was added to the repository, and several of the shell script tasks were simply deleted rather than extracted.",
+    "gold_note": "mise.toml inline multi-line tasks (build, completions, dup, dup:staged, bench) are removed in favour of mise-tasks/ files (build/dup/bench exist in base; mise-tasks/completions created and .gitignore narrowed to /completions/), and a runnable linter (mise-tasks/lint/mise, wired into lint/_default) exists in the repo."
+   },
+   {
+    "id": "G34-c41cf0",
+    "task": "cli-task-33e050",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The change only optimizes Git reference loading in manual_commit_session.go, failing to address the transcript-flush wait/staleness check requirement.",
+    "gold_note": "Only change is a refs pre-scan map in listAllSessionStates (manual_commit_session.go), a micro-optimization; the actual slowness cause (waitForTranscriptFlush in claudecode/lifecycle.go polling for 3s on stale/nonexistent transcripts) is untouched."
+   },
+   {
+    "id": "G35-945fed",
+    "task": "cli-task-b12319",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Only the documentation file docs/architecture/external-agent-protocol.md was created, leaving the actual code implementation, adapter, and Cursor extraction completely unaddressed.",
+    "gold_note": "Diff only adds docs/architecture/external-agent-protocol.md; no cmd/entire/cli/agent/external adapter, capability wrappers, types, tests, discovery, or Cursor extraction as the plan requires."
+   },
+   {
+    "id": "G36-1ac15e",
+    "task": "hyperswitch-8389",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The implementation of V2 KV support is incomplete, failing multiple gate checks including un-gating KV imports and implementing V2 changesets.",
+    "gold_note": "KV paths are added for v2 payment_intent/payment_attempt in storage_impl, but v2 find_payment_attempts_by_payment_intent_id returns only a single attempt via a pa_pay_ lookup (and every attempt inserts the same pa_pay_ reverse lookup, which conflicts for multiple attempts), no v2 PaymentIntent UniqueConstraints/drainer support is shown, and the v2 /kv route reuses the v1 admin handler; not acceptably complete/correct."
+   },
+   {
+    "id": "G37-cb05cc",
+    "task": "cli-task-4a9dde",
+    "intent": "8",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Hang at Step 1 (Gemini started from exec.Command with inherited stdin) is not fixed: agent_runner.go switches to --approval-mode yolo and hasTTY() gets env-based agent detection, but cmd.Stdin is never set to /dev/null, so the cause of the Step-1 hang cannot be confirmed as addressed."
+   },
+   {
+    "id": "G38-d56539",
+    "task": "cli-task-408b8c",
+    "intent": "0",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Git workflow action (commit) - no repository content change requested."
+   },
+   {
+    "id": "G39-344521",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "In cmd/entire/cli/strategy/manual_commit_hooks.go, PrepareCommitMsg generates a unique checkpoint ID for consecutive commits instead of reusing LastCheckpointID. PostCommit duplicates metadata via DuplicateCommitted, as verified by integration tests in last_checkpoint_id_test.go.",
+    "gold_note": "PrepareCommitMsg (manual_commit_hooks.go) now reuses session.PendingCheckpointID for the reused-session path - the very reuse that causes consecutive commits to share an ID - and the other PendingCheckpointID reuse paths are not removed; the added DuplicateCommitted machinery addresses a different (LastCheckpointID) path; diff also carries stray random.rb/.entire/file.txt hunks."
+   },
+   {
+    "id": "G40-3cd39b",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "0",
+    "pool": "dev",
+    "gold": "not_satisfied",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Question implies fixing Linux-only paths for Windows; parser.py adds a LOCALAPPDATA fallback for OPENCODE_DIR, but the hard-coded /tmp/dataclaw_export.jsonl paths in cli.py (lines ~47/56/240/631/639) remain unchanged."
+   },
+   {
+    "id": "G41-57dc6d",
+    "task": "cli-task-408b8c",
+    "intent": "4",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "GetWorktreePath in cmd/entire/cli/strategy/common.go has been rewritten to delegate directly to paths.RepoRoot(), and ClearWorktreePathCache delegates to paths.ClearRepoRootCache(), removing the duplicate caching layer.",
+    "gold_note": "strategy/common.go GetWorktreePath now simply returns paths.RepoRoot() with no separate worktree cache, and ClearWorktreePathCache just calls paths.ClearRepoRootCache()."
+   },
+   {
+    "id": "G42-3afbd3",
+    "task": "cli-task-c425e4",
+    "intent": "1",
+    "pool": "dev",
+    "gold": "satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The change to mise-tasks/lint/mise updates the AWK script, but does not add this check to any lint/_default script or task.",
+    "gold_note": "The repository's mise-tasks/lint/_default (unchanged, base) already depends on lint:mise, and mise-tasks/lint/mise (the multi-line check) is present and updated by the diff, so lint/_default runs the check."
+   },
+   {
+    "id": "G43-967031",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "1",
+    "pool": "dev",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Pure context: user reports opencode.db lives at ~/.local/share/opencode on Windows; the base Path.home()/.local/share/opencode already resolves this, so no repository change is implied (diff keeps that path first in _get_opencode_dir)."
+   },
+   {
+    "id": "G44-7afe46",
+    "task": "cli-task-c425e4",
+    "intent": "3",
+    "pool": "dev",
+    "gold": "not_addressed",
+    "judge": "not_addressed",
+    "judge_source": "llm",
+    "judge_evidence": "The cumulative diff only contains changes to mise-tasks/lint/mise and does not contain any changes related to the completions task.",
+    "gold_note": "Diff only edits the awk patterns in mise-tasks/lint/mise; it neither removes the completions task from mise.toml nor creates mise-tasks/completions - nothing relates to this correction."
+   },
+   {
+    "id": "G45-b01514",
+    "task": "cli-task-408b8c",
+    "intent": "1",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Git workflow action (push to GitHub) - no repository content change requested."
+   },
+   {
+    "id": "G46-069e38",
+    "task": "cli-task-cd4662",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Deleted the LastCheckpointID reuse logic from PrepareCommitMsg in manual_commit_hooks.go, ensuring each manual commit generates a unique ID while preserving idempotency.",
+    "gold_note": "manual_commit_hooks.go PrepareCommitMsg drops LastCheckpointID reuse (and split-commit handling) but still checks PendingCheckpointID first, and addTrailerForAgentCommit is untouched, so the stale-pending-ID reuse that makes consecutive commits share an ID remains."
+   },
+   {
+    "id": "G47-4b2df4",
+    "task": "gemini-voyager-task-aa88f5",
+    "intent": "0",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Correctly updated public/contentStyle.css to add light-theme specific overrides for folder-import elements like .gv-folder-import-dialog, .gv-folder-import-strategy-label, .gv-folder-import-radio-option span, etc.",
+    "gold_note": "contentStyle.css adds body.light-theme/.theme-host.light-theme (and html.light/data-theme light) overrides after the dark rules for the import dialog title, strategy label, radio-option span, etc., with dark text that beats the prefers-color-scheme/html.dark rules by specificity or order."
+   },
+   {
+    "id": "G48-0ea2cf",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "0",
+    "pool": "pilot",
+    "gold": "not_addressed",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "The hard-coded Linux locations (cli.py /tmp/dataclaw_export.jsonl in the discovery list and hints, parser.py OPENCODE_DIR ~/.local/share) are untouched; the diff only adds encoding='utf-8' and Windows path anonymization and project-name handling."
+   },
+   {
+    "id": "G49-275058",
+    "task": "cli-task-c425e4",
+    "intent": "1",
+    "pool": "dev",
+    "gold": "satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The change only modifies `mise-tasks/lint/mise` and does not add or update any `lint/_default` task or file.",
+    "gold_note": "The base repo's mise-tasks/lint/_default already lists \"lint:mise\" in depends (checked in the task image), and the diff keeps the mise lint script, so the check is wired into lint/_default."
+   },
+   {
+    "id": "G50-2a08b6",
+    "task": "gemini-voyager-task-f519c2",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The `dragleave` handler for the folder drop zone in `setupDropZone` does not implement bounds checking or child-transition logic to distinguish leaving the folder entirely from entering a nested child, violating Goal 1.",
+    "gold_note": "manager.ts reorderOrMoveConversations now builds the ConversationReference from dragData when the conversation isn't in any folder (native sidebar drag), so dropping onto a folder's conversations works. clearAllDragStyles runs on every drop and on document dragend to clear the stale blue highlight."
+   },
+   {
+    "id": "G51-223866",
+    "task": "gemini-voyager-task-f519c2",
+    "intent": "0",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "In src/pages/content/folder/manager.ts, reorderOrMoveConversations was updated to construct conversations from dragData when sourceParentId is undefined, and insert them at the exact aimed position. Tests in conversationDropReorder.test.ts confirm this functionality.",
+    "gold_note": "The conversation drop handler passes targetConvId/isAbove, and reorderOrMoveConversations inserts relative to the target conversation's index in sameGroupSiblings instead of relying on the clamped insertIndex. Native drags get a constructed conv, so items land at the chosen spot."
+   },
+   {
+    "id": "G52-180f93",
+    "task": "gemini-voyager-task-f519c2",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Fixed dragover styling getting stuck using dragEnterCounter and relatedTarget checks in dragleave, and resolved drop issues on child conversation rows by passing dragData and fallback lookups in reorderOrMoveConversations.",
+    "gold_note": "manager.ts setupDropZone gains a dragenter/dragleave counter with a relatedTarget check, and clearAllDragOverStyles runs on drop and dragend. reorderOrMoveConversations searches all folders or constructs the conv from dragData, so drops onto a folder's conversations from the sidebar work at the right index."
+   },
+   {
+    "id": "G53-278dfe",
+    "task": "gemini-voyager-task-f519c2",
+    "intent": "1",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Commit request with an issue reference; this is a git action, not a repository change."
+   },
+   {
+    "id": "G54-617208",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "1",
+    "pool": "dev",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "Pure context statement about where opencode.db lives on the user's Windows machine; it asks for no change (and parser.py OPENCODE_DIR is left at ~/.local/share/opencode, consistent with it)."
+   },
+   {
+    "id": "G55-c89309",
+    "task": "dataclaw-windows-path-fix",
+    "intent": "open",
+    "pool": "dev",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "In `dataclaw/parser.py`, `Path(fp).is_absolute()` and `Path(fp).parts` fail to recognize and parse Windows absolute paths when the program is run on a POSIX platform.",
+    "gold_note": "parser.py _build_project_name only recognizes a '-C-Users-...' prefix, not the real encoding 'C--Users-...' (drive colon plus separator), so Windows project names still break. The hard-coded /tmp/dataclaw_export.jsonl paths in cli.py are also left unchanged."
+   },
+   {
+    "id": "G56-f36c56",
+    "task": "pi-mono-extensions-event-refactor",
+    "intent": "8",
+    "pool": "pilot",
+    "gold": "satisfied",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "runner.ts removes isSessionBeforeEvent and the union cast from emit() and adds typed emitSessionBeforeSwitch/Fork/Compact/Tree methods with per-type cancel short-circuit and result merging. agent-session.ts call sites drop their 'as SessionBefore*Result' casts."
+   },
+   {
+    "id": "G57-29f292",
+    "task": "pi-mono-extensions-event-refactor",
+    "intent": "6",
+    "pool": "reference",
+    "gold": "not_satisfied",
+    "judge": "satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "The emitToolResult method in runner.ts implements chained emission, mutating event state in load order, supporting partial patches, and returning undefined on no changes.",
+    "gold_note": "emitToolResult chaining is added and wired in wrapper.ts, but runner.ts no longer compiles. It declares a second 'type RunnerEmitEvent' next to the existing one, and inserts 'return result as RunnerEmitResult<TEvent>' into non-generic getRegisteredCommandsWithPaths."
+   },
+   {
+    "id": "G58-732ae7",
+    "task": "sd-scripts-fp8-lumina",
+    "intent": "1",
+    "pool": "pilot",
+    "gold": "not_applicable",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "A request to explain the modifications and whether they are consistent with musubi-tuner's fp8_scaled; a review/explanation question that asks for no repository change."
+   },
+   {
+    "id": "G59-fb3689",
+    "task": "hyperswitch-8389",
+    "intent": "open",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_satisfied",
+    "judge_source": "llm",
+    "judge_evidence": "Only the v2 merchant accounts KV routes were added, but no KV Redis storage support was implemented for the v2 payment_intent or payment_attempt models.",
+    "gold_note": "Only admin.rs v2 toggle_kv/kv_status handlers and an app.rs /kv route are added. Nothing in storage_impl/diesel_models makes the v2 models (payment intent/attempt) use Redis KV, so KV support for v2 models is not implemented."
+   },
+   {
+    "id": "G60-0b9c10",
+    "task": "lock-code-manager-fix-7c955a",
+    "intent": "0",
+    "pool": "pilot",
+    "gold": "not_satisfied",
+    "judge": "not_applicable",
+    "judge_source": "applicability",
+    "judge_evidence": "not a repository change (applicability)",
+    "gold_note": "The plan's code steps 1-3 are applied (_base.py _setup_complete Event, await on lock reuse, started-flag _safe_unsub in __init__.py), but step 4's required tests (overlapping-locks entities, reload listener error, setup_complete event) are not added."
+   }
+  ],
+  "pass": false
+ },
+ "stats": {
+  "llm_calls": 56,
+  "llm_cache_hits": 25,
+  "exec_runs": 60,
+  "exec_decided": 15,
+  "llm_decided": 190,
+  "input_tokens": 840484,
+  "output_tokens": 8460,
+  "reasoning_tokens": 152471,
+  "apply_failed": 20
+ },
+ "outcome": {
+  "c1_pass": false,
+  "c2_pass": false,
+  "c3_pass": false,
+  "frozen": false,
+  "note": "all three pre-declared criteria fail; per the plan the judge is not frozen as validated (docs/results/INTENT_JUDGE_VALIDATION.md)"
+ },
+ "exploratory_not_preregistered": {
+  "v1_diff_only_judge_on_gold_set (the overlay trigger)": {
+   "n_both_applicable": 36,
+   "agreement": 0.3889,
+   "cohen_kappa": -0.1379,
+   "judge_sat_gold_unsat": 16,
+   "judge_unsat_gold_sat": 6,
+   "one_side_not_applicable": 11
+  }
+ }
+}

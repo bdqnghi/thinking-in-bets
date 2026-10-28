@@ -1,0 +1,140 @@
+{
+ "labeller": "G1b",
+ "labels": {
+  "cli-task-b12319/goal_1": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/agent/external/external.go: every agent.Agent method plus all optional-interface methods shell out via run() (one subcommand each: info, detect, read-transcript raw bytes, chunk/reassemble-transcript as JSON chunks ([][]byte -> base64), parse-hook, ...), JSON parsed from stdout; run() sets cmd.Dir=repo root, ENTIRE_REPO_ROOT and ENTIRE_PROTOCOL_VERSION (matches docs Environment section) and returns error on non-zero exit (stderr included). go build ./... OK; go test -count=1 ./cmd/entire/cli/agent/external passes 13 tests incl. ErrorOnStderr, HookSupport, TranscriptAnalyzer against a mock binary.",
+   "confidence": 0.85
+  },
+  "cli-task-b12319/goal_2": {
+   "label": "not_satisfied",
+   "evidence": "capabilities.go Wrap(): switch only produces 5 fixed shapes: full (all six caps), hooks+analyzer, hooks, analyzer, base. Never over-exposes, but declared capabilities are dropped in other combinations: token_calculator/text_generator/hook_response_writer/subagent_aware_extractor alone or in any partial combo (e.g. hooks+token_calculator -> hooksAgent, no TokenCalculator) are not exposed, and transcript_preparer is never exposed by any wrapper (PrepareTranscript exists only on *Agent). Goal requires exposing exactly the declared capabilities.",
+   "confidence": 0.7
+  },
+  "cli-task-b12319/goal_3": {
+   "label": "satisfied",
+   "evidence": "discovery.go DiscoverAndRegister scans PATH for entire-agent-* executables, calls New() (info), Wrap(), agent.Register; skips names already in agent.List(). hooks_cmd.go:27 calls external.DiscoverAndRegister(context.Background()) in newHooksCmd before iterating agent.List().",
+   "confidence": 0.85
+  },
+  "cli-task-b12319/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "cmd/entire/cli/agent/cursor/ (cursor.go, hooks.go, lifecycle.go, transcript.go, tests) is still present in the tree (git status shows no deletion); only the blank imports in hooks_cmd.go and the condensation test were removed. Goal explicitly: not satisfied by leaving the built-in cursor package in place. (Build is green.)",
+   "confidence": 0.9
+  },
+  "cli-task-b12319/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "No standalone Cursor binary in repo: only cmd/entire exists under cmd/; grep for 'entire-agent-cursor' / new package main finds nothing; git status new files are only agent/external/ and the protocol doc.",
+   "confidence": 0.95
+  },
+  "cli-task-b12319/goal_6": {
+   "label": "satisfied",
+   "evidence": "docs/architecture/external-agent-protocol.md (411 lines, new): Discovery (PATH entire-agent-<name>), Environment vars, Communication Model (subcommands, stdin/stdout/args), per-subcommand I/O, capabilities object in info, Error Handling (non-zero exit = error), Versioning.",
+   "confidence": 0.9
+  },
+  "sd-scripts-reg-image-dedup/goal_2": {
+   "label": "satisfied",
+   "evidence": "library/train_util.py: the balancing loop (first_loop / while n < num_train_images) exists once, in DreamBoothDataset.register_balanced_regularization_images (l.1954-1972); both rebalance_regularization_images (l.1994) and __init__ (l.2284) call that helper; grep finds a single occurrence of first_loop/while loop. Module imports fine.",
+   "confidence": 0.85
+  },
+  "sd-scripts-reg-image-dedup/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "DreamBooth override (l.1996-2002) calls super().filter_registered_images_by_orig_resolution(update_counts=not self.is_training_dataset) and then only rebalance_regularization_images(), which never calls update_dataset_image_counts; the trailing update call was deleted. Probe (DreamBoothDataset training, 4 train + 4 reg, 2 train filtered): 'filtered 2 update calls 0 counts 4 4' while true counts are 2 2. Double call eliminated but the once-call no longer fires when counts are dirty (stale num_train_images/num_reg_images).",
+   "confidence": 0.9
+  },
+  "sd-scripts-reg-image-dedup/goal_5": {
+   "label": "satisfied",
+   "evidence": "The proposed fix (update_counts: bool = True parameter on BaseDataset.filter_registered_images_by_orig_resolution l.809/822, used by the DreamBooth override l.1997, removal of the second call) is present in the on-disk source, not just proposed. (Its correctness defect is scored under goal_4.)",
+   "confidence": 0.7
+  },
+  "sd-scripts-reg-image-dedup/goal_6": {
+   "label": "satisfied",
+   "evidence": "rebalance_regularization_images still defined (l.1974-1994) with full original body (collect reg infos, reset repeats, re-register via balanced helper) and is called from the filter override.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_1": {
+   "label": "satisfied",
+   "evidence": "providers/_base.py: `_setup_complete: asyncio.Event = field(default_factory=asyncio.Event, init=False)`; async_setup wraps `await self._async_setup(config_entry)` in try/finally that calls self._setup_complete.set(), so normal completion, the coordinator-exists early return inside _async_setup, and exceptions all release waiters; Event.set is idempotent. (Caveat: virtual provider's async_setup override runs async_hard_refresh_codes before super(), so an exception there would skip the base routine entirely.)",
+   "confidence": 0.8
+  },
+  "lock-code-manager-fix-7c955a/goal_2": {
+   "label": "satisfied",
+   "evidence": "__init__.py async_update_listener reuse branch (~l.495-498): after taking the lock from hass_data[CONF_LOCKS], `await lock.async_wait_for_setup()` before connection check and invoke_lock_slot_adders; async_wait_for_setup is a public BaseLock method (_base.py) wrapping _setup_complete.wait(); no external access to the private attribute.",
+   "confidence": 0.85
+  },
+  "lock-code-manager-fix-7c955a/goal_3": {
+   "label": "satisfied",
+   "evidence": "__init__.py async_setup_entry not-running branch: `started = False`; _on_started does `nonlocal started; started = True`; _safe_unsub does `if not started: unsub()`; the try/except ValueError is removed. Swapping only this block back to HEAD makes test_reload_after_started_no_listener_error fail; with the ref it passes.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_4": {
+   "label": "satisfied",
+   "evidence": "_base.py: public async_setup is the single entry point that always signals (try/finally) and delegates to protected `_async_setup` containing the former body, so subclasses can override _async_setup. Existing providers (virtual.py:42, zwave_js.py:455) still override async_setup but call super() and do not re-implement signaling; they were not migrated to the hook.",
+   "confidence": 0.7
+  },
+  "lock-code-manager-fix-7c955a/goal_5": {
+   "label": "satisfied",
+   "evidence": "tests/test_init.py::test_overlapping_locks_both_entries_get_entities: second MockConfigEntry sharing the fixture's locks; asserts 'Coordinator missing' not in caplog, both entries have registry entities, entry_2 locks have coordinator not None. Passes (pytest -k overlapping).",
+   "confidence": 0.8
+  },
+  "lock-code-manager-fix-7c955a/goal_6": {
+   "label": "satisfied",
+   "evidence": "tests/test_init.py::test_reload_after_started_no_listener_error (preferred name not used): sets up under patch hass.state=CoreState.starting (listener registered), fires EVENT_HOMEASSISTANT_STARTED, unloads, asserts 'Unable to remove unknown job' not in caplog. Passes with ref; fails when the _safe_unsub block is reverted to HEAD (verified), so it genuinely exercises the path.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_7": {
+   "label": "not_satisfied",
+   "evidence": "Three tests added in tests/providers/test_zwave_js.py (test_handle_duplicate_code_early_return_*), but they ERROR: `fixture 'mock_zwave_usercodes' not found`, and the production code has no duplicate-code handler at all (grep for _async_handle_duplicate_code/_set_in_progress_code_slot/dupe in custom_components/ finds nothing).",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_8": {
+   "label": "not_satisfied",
+   "evidence": "No _set_in_progress_code_slot (or any in-progress slot tracking / duplicate-code handling) exists in custom_components/ (grep empty); providers/zwave_js.py unchanged by the patch.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_9": {
+   "label": "not_satisfied",
+   "evidence": "No duplicate-code notification exists in production code (grep for dupe/duplicate/_async_handle_duplicate_code in custom_components/ finds only an unrelated comment at zwave_js.py:355); nothing adds the config entry title.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_10": {
+   "label": "not_satisfied",
+   "evidence": "No duplicate-code handler / in-progress-slot fallback exists in custom_components/ (grep empty), so no task/log name substitution.",
+   "confidence": 0.9
+  },
+  "lock-code-manager-fix-7c955a/goal_11": {
+   "label": "satisfied",
+   "evidence": "TODO.md diff: removed obsolete 'Add Z-Wave JS provider tests' item and 'Add mypy to pre-commit hooks' sub-bullet (noted as already in pre-commit), revised 'as of Jan 2026' error count and '2024.1 through 2025.10' range. Non-trivial content edit.",
+   "confidence": 0.85
+  },
+  "cli-task-c425e4/goal_1": {
+   "label": "satisfied",
+   "evidence": "mise-tasks/lint/mise: start/close regexes changed to /^[ \\t]*run = \"\"\"/ and /^[ \\t]*\"\"\"/ inside the awk matcher (no input preprocessing). Probe: generated mise.toml files (run = / closing delimiter with indent '', 4 spaces, tab; both quote styles; 3/4/6 content lines) and ran sh mise-tasks/lint/mise (mawk 1.3.4) in each dir. \"\"\" with 4-space or tab indent and 4/6 lines -> rc=1 'multi-line script (4|6 lines)'.",
+   "confidence": 0.9
+  },
+  "cli-task-c425e4/goal_2": {
+   "label": "satisfied",
+   "evidence": "Same [ \\t]* prefix applied to the ''' start and close patterns. Probe: generated mise.toml files (run = / closing delimiter with indent '', 4 spaces, tab; both quote styles; 3/4/6 content lines) and ran sh mise-tasks/lint/mise (mawk 1.3.4) in each dir. ''' indented (spaces/tab) 4/6 lines -> rc=1 with error.",
+   "confidence": 0.9
+  },
+  "cli-task-c425e4/goal_3": {
+   "label": "satisfied",
+   "evidence": "[ \\t]* allows zero whitespace. Probe: generated mise.toml files (run = / closing delimiter with indent '', 4 spaces, tab; both quote styles; 3/4/6 content lines) and ran sh mise-tasks/lint/mise (mawk 1.3.4) in each dir. column-1 \"\"\" and ''' blocks with 4/6 lines -> rc=1 with error.",
+   "confidence": 0.9
+  },
+  "cli-task-c425e4/goal_4": {
+   "label": "satisfied",
+   "evidence": "Probe: generated mise.toml files (run = / closing delimiter with indent '', 4 spaces, tab; both quote styles; 3/4/6 content lines) and ran sh mise-tasks/lint/mise (mawk 1.3.4) in each dir. all 3-content-line cases (both delimiters, indented or not) -> rc=0, no output.",
+   "confidence": 0.9
+  },
+  "cli-task-c425e4/goal_5": {
+   "label": "satisfied",
+   "evidence": "Closing-delimiter check now precedes lines++ and does `next`. Probe: generated mise.toml files (run = / closing delimiter with indent '', 4 spaces, tab; both quote styles; 3/4/6 content lines) and ran sh mise-tasks/lint/mise (mawk 1.3.4) in each dir. reported counts equal N (4 and 6) for all indent/delimiter combinations.",
+   "confidence": 0.9
+  },
+  "cli-task-c425e4/goal_6": {
+   "label": "not_satisfied",
+   "evidence": "git status shows only mise-tasks/lint/mise modified; mise.toml unchanged and still carries inline multi-line bodies (run = \"\"\" at l.26, 39, 49, 86; run = ''' at l.101). No extraction to mise-tasks/.",
+   "confidence": 0.95
+  }
+ }
+}

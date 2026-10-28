@@ -1,0 +1,54 @@
+{
+ "benchmark": "swe-interact",
+ "frozen_subset_digest": "017d368e5e29a531b594a74ade3de65ce9289753809c69dd43d2cb7f72f8524f",
+ "recorded": "2026-09-26",
+ "rule": "a selected task is replaced only for an infrastructure reason recorded before any result (e.g. arm64 image fails gold validation), by the next task in its stratum's replacement list",
+ "before_any_result": true,
+ "replacements": [
+  {
+   "removed": "rf_task-694b4b99829f00e24fd118a1",
+   "reason": "upstream verifier defect (scapy): the verifier's Python 3.12 runs none of the task tests, so tests reward is 1 without testing; identical on the official amd64 image",
+   "replacement": "rf_task-696719205599a51110d4b40c"
+  },
+  {
+   "removed": "rf_task-696719205599a51110d4b476",
+   "reason": "upstream verifier defect (scapy): no task test executes; identical on the official amd64 image",
+   "replacement": "rf_task-696719205599a51110d4b455"
+  },
+  {
+   "removed": "rf_task-69b7c2a04b6f8ff9ed988137",
+   "reason": "upstream verifier defect (suricata): make clean fails, so the task can only score 0; identical on the official amd64 image",
+   "replacement": "rf_task-694b4b99829f00e24fd11885"
+  }
+ ],
+ "skipped_in_replacement_order": [
+  {
+   "task": "rf_task-69b7c2a04b6f8ff9ed98813b",
+   "reason": "netdata: none of its 7 relevant tests execute (empty pass); official-image comparison pending"
+  }
+ ],
+ "validation": "replacements' reference solutions pass their executed tests (tests_reward 1): 40c 13 relevant tests, 455 11, 11885 35; images bdqnghi/swe-interact:<task>",
+ "effective_subset": [
+  "deepswe_fastapi-implicit-head-options",
+  "deepswe_helm-array-merge-strategies",
+  "deepswe_httpx-streaming-json-iteration",
+  "deepswe_returns-validated-error-accumulation",
+  "deepswe_sqlite-utils-safe-import-checkpoints",
+  "deepswe_testem-bail-on-test-failure",
+  "rf_task-694b4b99829f00e24fd11885",
+  "rf_task-694b4b99829f00e24fd11889",
+  "rf_task-694b4b99829f00e24fd11891",
+  "rf_task-696719205599a51110d4b40c",
+  "rf_task-696719205599a51110d4b436",
+  "rf_task-696719205599a51110d4b446",
+  "rf_task-696719205599a51110d4b455",
+  "swebenchpro_instance_flipt-io__flipt-e5fe37c379e1eec2dd3492c5737c0be761050b26",
+  "swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e",
+  "swebenchpro_instance_gravitational__teleport-d6ffe82aaf2af1057b69c61bf9df777f5ab5635a-vee9b09fb20c43af7e520f57e9239bbcf46b7113d",
+  "swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12",
+  "swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+  "swebenchpro_instance_nodebb__nodebb-f083cd559d69c16481376868c8da65172729c0ca-vnan",
+  "swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367"
+ ],
+ "effective_digest": "c8a72f9f3fda6c4e259848152ad280b16df50c781a82728787a1cd225323b29e"
+}

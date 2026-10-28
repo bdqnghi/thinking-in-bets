@@ -1,0 +1,469 @@
+diff --git a/data/multiturn/deepswe_fastapi-implicit-head-options/task.toml b/data/multiturn/deepswe_fastapi-implicit-head-options/task.toml
+index 4ce42a0..70fde2e 100644
+--- a/data/multiturn/deepswe_fastapi-implicit-head-options/task.toml
++++ b/data/multiturn/deepswe_fastapi-implicit-head-options/task.toml
+@@ -70,7 +70,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7191qb52n5pfwh0a4yhahmt18343sn"
++docker_image = "tib/swe-interact-amd64:deepswe_fastapi-implicit-head-options"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/data/multiturn/deepswe_helm-array-merge-strategies/task.toml b/data/multiturn/deepswe_helm-array-merge-strategies/task.toml
+index 407f2e4..37a9e26 100644
+--- a/data/multiturn/deepswe_helm-array-merge-strategies/task.toml
++++ b/data/multiturn/deepswe_helm-array-merge-strategies/task.toml
+@@ -70,7 +70,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72a3qcr0kjpdr153havavn8s83bx8t"
++docker_image = "tib/swe-interact-amd64:deepswe_helm-array-merge-strategies"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/data/multiturn/deepswe_httpx-streaming-json-iteration/task.toml b/data/multiturn/deepswe_httpx-streaming-json-iteration/task.toml
+index f0e7000..757a4ba 100644
+--- a/data/multiturn/deepswe_httpx-streaming-json-iteration/task.toml
++++ b/data/multiturn/deepswe_httpx-streaming-json-iteration/task.toml
+@@ -70,7 +70,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73snc7v9x3psk69rg4eqvjgs836v5a"
++docker_image = "tib/swe-interact-amd64:deepswe_httpx-streaming-json-iteration"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/data/multiturn/deepswe_returns-validated-error-accumulation/task.toml b/data/multiturn/deepswe_returns-validated-error-accumulation/task.toml
+index 4bb7c04..f5cd2f0 100644
+--- a/data/multiturn/deepswe_returns-validated-error-accumulation/task.toml
++++ b/data/multiturn/deepswe_returns-validated-error-accumulation/task.toml
+@@ -70,7 +70,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh754n098chwgtm24jakheqsw5833ec6"
++docker_image = "tib/swe-interact-amd64:deepswe_returns-validated-error-accumulation"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/data/multiturn/deepswe_sqlite-utils-safe-import-checkpoints/task.toml b/data/multiturn/deepswe_sqlite-utils-safe-import-checkpoints/task.toml
+index ca36132..deb4e03 100644
+--- a/data/multiturn/deepswe_sqlite-utils-safe-import-checkpoints/task.toml
++++ b/data/multiturn/deepswe_sqlite-utils-safe-import-checkpoints/task.toml
+@@ -70,7 +70,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73xpqyc0vqx9prf3m106nqe5821dcb"
++docker_image = "tib/swe-interact-amd64:deepswe_sqlite-utils-safe-import-checkpoints"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/data/multiturn/deepswe_testem-bail-on-test-failure/task.toml b/data/multiturn/deepswe_testem-bail-on-test-failure/task.toml
+index e2ab09e..d1ba414 100644
+--- a/data/multiturn/deepswe_testem-bail-on-test-failure/task.toml
++++ b/data/multiturn/deepswe_testem-bail-on-test-failure/task.toml
+@@ -70,7 +70,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77k18d31qx7jj0c7nyv0xd8s82cznp"
++docker_image = "tib/swe-interact-amd64:deepswe_testem-bail-on-test-failure"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/data/multiturn/rf_task-694b4b99829f00e24fd11885/task.toml b/data/multiturn/rf_task-694b4b99829f00e24fd11885/task.toml
+index c424224..e997208 100644
+--- a/data/multiturn/rf_task-694b4b99829f00e24fd11885/task.toml
++++ b/data/multiturn/rf_task-694b4b99829f00e24fd11885/task.toml
+@@ -69,7 +69,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_trufflesecurity_trufflehog_694b4b99829f00e24fd11885_1.0@sha256:29535eb72b8f6883a83ff50107bf812b5bf1092162ca7a22f7c3d63553f42b5f"
++docker_image = "tib/swe-interact-amd64:rf_task-694b4b99829f00e24fd11885"
+ os = "linux"
+ cpus = 16
+ memory_mb = 16384
+diff --git a/data/multiturn/rf_task-694b4b99829f00e24fd11889/task.toml b/data/multiturn/rf_task-694b4b99829f00e24fd11889/task.toml
+index 582c2e0..2bd8343 100644
+--- a/data/multiturn/rf_task-694b4b99829f00e24fd11889/task.toml
++++ b/data/multiturn/rf_task-694b4b99829f00e24fd11889/task.toml
+@@ -69,7 +69,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_trufflesecurity_trufflehog_694b4b99829f00e24fd11889_1.0@sha256:68f800df9360a8b9aac766a3f2345a70899f127fa4d7c0b78961c7ca72ea48f4"
++docker_image = "tib/swe-interact-amd64:rf_task-694b4b99829f00e24fd11889"
+ os = "linux"
+ cpus = 16
+ memory_mb = 16384
+diff --git a/data/multiturn/rf_task-694b4b99829f00e24fd11891/task.toml b/data/multiturn/rf_task-694b4b99829f00e24fd11891/task.toml
+index fcefe0f..a945ac8 100644
+--- a/data/multiturn/rf_task-694b4b99829f00e24fd11891/task.toml
++++ b/data/multiturn/rf_task-694b4b99829f00e24fd11891/task.toml
+@@ -69,7 +69,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_Automattic_wp-calypso_694b4b99829f00e24fd11891_1.0@sha256:0dd613c90d6bcfc266fb8f266d350d5e6236872425bf86d022c1847b28a5d6d3"
++docker_image = "tib/swe-interact-amd64:rf_task-694b4b99829f00e24fd11891"
+ os = "linux"
+ cpus = 16
+ memory_mb = 16384
+diff --git a/data/multiturn/rf_task-696719205599a51110d4b40c/task.toml b/data/multiturn/rf_task-696719205599a51110d4b40c/task.toml
+index d958a6d..04eec25 100644
+--- a/data/multiturn/rf_task-696719205599a51110d4b40c/task.toml
++++ b/data/multiturn/rf_task-696719205599a51110d4b40c/task.toml
+@@ -69,7 +69,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_trufflesecurity_trufflehog_696719205599a51110d4b40c_1.0@sha256:c6fcd6e39177b9bd30fe550676e838918544f3ba53b02fb488c3f78f29041e1a"
++docker_image = "tib/swe-interact-amd64:rf_task-696719205599a51110d4b40c"
+ os = "linux"
+ cpus = 16
+ memory_mb = 16384
+diff --git a/data/multiturn/rf_task-696719205599a51110d4b436/task.toml b/data/multiturn/rf_task-696719205599a51110d4b436/task.toml
+index 88750b4..3260b6a 100644
+--- a/data/multiturn/rf_task-696719205599a51110d4b436/task.toml
++++ b/data/multiturn/rf_task-696719205599a51110d4b436/task.toml
+@@ -69,7 +69,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_grafana_k6_696719205599a51110d4b436_1.0@sha256:8a8ff0dfe3c9c5430f3b876fd167a4239e0760e8ceabb3c2525af50d4df0a442"
++docker_image = "tib/swe-interact-amd64:rf_task-696719205599a51110d4b436"
+ os = "linux"
+ cpus = 16
+ memory_mb = 16384
+diff --git a/data/multiturn/rf_task-696719205599a51110d4b446/task.toml b/data/multiturn/rf_task-696719205599a51110d4b446/task.toml
+index 223bb68..863205a 100644
+--- a/data/multiturn/rf_task-696719205599a51110d4b446/task.toml
++++ b/data/multiturn/rf_task-696719205599a51110d4b446/task.toml
+@@ -69,7 +69,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_grafana_k6_696719205599a51110d4b446_1.0@sha256:de3821109167af1d24a8ce3207b14a6840ee11aea0909c838c471fd9b2c372b5"
++docker_image = "tib/swe-interact-amd64:rf_task-696719205599a51110d4b446"
+ os = "linux"
+ cpus = 16
+ memory_mb = 16384
+diff --git a/data/multiturn/rf_task-696719205599a51110d4b455/task.toml b/data/multiturn/rf_task-696719205599a51110d4b455/task.toml
+index f41492d..53876ea 100644
+--- a/data/multiturn/rf_task-696719205599a51110d4b455/task.toml
++++ b/data/multiturn/rf_task-696719205599a51110d4b455/task.toml
+@@ -69,7 +69,7 @@ timeout_sec = 600.0
+ [environment]
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+-docker_image = "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_grafana_grafana_696719205599a51110d4b455_1.0@sha256:3fe50147daa3cbe3e56dd7879fa1b7625c129d6f89bca4ab9d07c5040d6ef9c4"
++docker_image = "tib/swe-interact-amd64:rf_task-696719205599a51110d4b455"
+ os = "linux"
+ cpus = 16
+ memory_mb = 16384
+diff --git a/data/multiturn/swebenchpro_instance_ansible__ansible-4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6-v1055803c3a812189a1133297f7f5468579283f86/task.toml b/data/multiturn/swebenchpro_instance_ansible__ansible-4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6-v1055803c3a812189a1133297f7f5468579283f86/task.toml
+index 1df500b..695b1a7 100644
+--- a/data/multiturn/swebenchpro_instance_ansible__ansible-4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6-v1055803c3a812189a1133297f7f5468579283f86/task.toml
++++ b/data/multiturn/swebenchpro_instance_ansible__ansible-4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6-v1055803c3a812189a1133297f7f5468579283f86/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_ansible__ansible-4c5ce5a1a9e79a845aff4978cfeb72a0d4ecf7d6-v1055803c3a812189a1133297f7f5468579283f86"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_ansible__ansible-c616e54a6e23fa5616a1d56d243f69576164ef9b-v1055803c3a812189a1133297f7f5468579283f86/task.toml b/data/multiturn/swebenchpro_instance_ansible__ansible-c616e54a6e23fa5616a1d56d243f69576164ef9b-v1055803c3a812189a1133297f7f5468579283f86/task.toml
+index 63bdd11..5be4e75 100644
+--- a/data/multiturn/swebenchpro_instance_ansible__ansible-c616e54a6e23fa5616a1d56d243f69576164ef9b-v1055803c3a812189a1133297f7f5468579283f86/task.toml
++++ b/data/multiturn/swebenchpro_instance_ansible__ansible-c616e54a6e23fa5616a1d56d243f69576164ef9b-v1055803c3a812189a1133297f7f5468579283f86/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_ansible__ansible-c616e54a6e23fa5616a1d56d243f69576164ef9b-v1055803c3a812189a1133297f7f5468579283f86"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_ansible__ansible-e40889e7112ae00a21a2c74312b330e67a766cc0-v1055803c3a812189a1133297f7f5468579283f86/task.toml b/data/multiturn/swebenchpro_instance_ansible__ansible-e40889e7112ae00a21a2c74312b330e67a766cc0-v1055803c3a812189a1133297f7f5468579283f86/task.toml
+index 600c6bc..57e3840 100644
+--- a/data/multiturn/swebenchpro_instance_ansible__ansible-e40889e7112ae00a21a2c74312b330e67a766cc0-v1055803c3a812189a1133297f7f5468579283f86/task.toml
++++ b/data/multiturn/swebenchpro_instance_ansible__ansible-e40889e7112ae00a21a2c74312b330e67a766cc0-v1055803c3a812189a1133297f7f5468579283f86/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_ansible__ansible-e40889e7112ae00a21a2c74312b330e67a766cc0-v1055803c3a812189a1133297f7f5468579283f86"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_element-hq__element-web-d06cf09bf0b3d4a0fbe6bd32e4115caea2083168-vnan/task.toml b/data/multiturn/swebenchpro_instance_element-hq__element-web-d06cf09bf0b3d4a0fbe6bd32e4115caea2083168-vnan/task.toml
+index 4165594..0c1a1f6 100644
+--- a/data/multiturn/swebenchpro_instance_element-hq__element-web-d06cf09bf0b3d4a0fbe6bd32e4115caea2083168-vnan/task.toml
++++ b/data/multiturn/swebenchpro_instance_element-hq__element-web-d06cf09bf0b3d4a0fbe6bd32e4115caea2083168-vnan/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_element-hq__element-web-d06cf09bf0b3d4a0fbe6bd32e4115caea2083168-vnan"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan/task.toml b/data/multiturn/swebenchpro_instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan/task.toml
+index 768f95d..e6e7b0d 100644
+--- a/data/multiturn/swebenchpro_instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan/task.toml
++++ b/data/multiturn/swebenchpro_instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_flipt-io__flipt-96820c3ad10b0b2305e8877b6b303f7fafdf815f/task.toml b/data/multiturn/swebenchpro_instance_flipt-io__flipt-96820c3ad10b0b2305e8877b6b303f7fafdf815f/task.toml
+index 830aba6..13b2a56 100644
+--- a/data/multiturn/swebenchpro_instance_flipt-io__flipt-96820c3ad10b0b2305e8877b6b303f7fafdf815f/task.toml
++++ b/data/multiturn/swebenchpro_instance_flipt-io__flipt-96820c3ad10b0b2305e8877b6b303f7fafdf815f/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_flipt-io__flipt-96820c3ad10b0b2305e8877b6b303f7fafdf815f"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_flipt-io__flipt-c1728053367c753688f114ec26e703c8fdeda125/task.toml b/data/multiturn/swebenchpro_instance_flipt-io__flipt-c1728053367c753688f114ec26e703c8fdeda125/task.toml
+index 929535c..3eaaebe 100644
+--- a/data/multiturn/swebenchpro_instance_flipt-io__flipt-c1728053367c753688f114ec26e703c8fdeda125/task.toml
++++ b/data/multiturn/swebenchpro_instance_flipt-io__flipt-c1728053367c753688f114ec26e703c8fdeda125/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_flipt-io__flipt-c1728053367c753688f114ec26e703c8fdeda125"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_flipt-io__flipt-e5fe37c379e1eec2dd3492c5737c0be761050b26/task.toml b/data/multiturn/swebenchpro_instance_flipt-io__flipt-e5fe37c379e1eec2dd3492c5737c0be761050b26/task.toml
+index 3fef7aa..700f97e 100644
+--- a/data/multiturn/swebenchpro_instance_flipt-io__flipt-e5fe37c379e1eec2dd3492c5737c0be761050b26/task.toml
++++ b/data/multiturn/swebenchpro_instance_flipt-io__flipt-e5fe37c379e1eec2dd3492c5737c0be761050b26/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_flipt-io__flipt-e5fe37c379e1eec2dd3492c5737c0be761050b26"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e/task.toml b/data/multiturn/swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e/task.toml
+index b29733d..551de42 100644
+--- a/data/multiturn/swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e/task.toml
++++ b/data/multiturn/swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_gravitational__teleport-d6ffe82aaf2af1057b69c61bf9df777f5ab5635a-vee9b09fb20c43af7e520f57e9239bbcf46b7113d/task.toml b/data/multiturn/swebenchpro_instance_gravitational__teleport-d6ffe82aaf2af1057b69c61bf9df777f5ab5635a-vee9b09fb20c43af7e520f57e9239bbcf46b7113d/task.toml
+index 285df2e..d74ecaf 100644
+--- a/data/multiturn/swebenchpro_instance_gravitational__teleport-d6ffe82aaf2af1057b69c61bf9df777f5ab5635a-vee9b09fb20c43af7e520f57e9239bbcf46b7113d/task.toml
++++ b/data/multiturn/swebenchpro_instance_gravitational__teleport-d6ffe82aaf2af1057b69c61bf9df777f5ab5635a-vee9b09fb20c43af7e520f57e9239bbcf46b7113d/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_gravitational__teleport-d6ffe82aaf2af1057b69c61bf9df777f5ab5635a-vee9b09fb20c43af7e520f57e9239bbcf46b7113d"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12/task.toml b/data/multiturn/swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12/task.toml
+index 0013150..08f35f6 100644
+--- a/data/multiturn/swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12/task.toml
++++ b/data/multiturn/swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-0a90f9f0256e4f933523e9842799e39f95ae29ce-v76304ecdb3a5954fcf13feb710e8c40fcf24b73c/task.toml b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-0a90f9f0256e4f933523e9842799e39f95ae29ce-v76304ecdb3a5954fcf13feb710e8c40fcf24b73c/task.toml
+index 191f01b..581ace7 100644
+--- a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-0a90f9f0256e4f933523e9842799e39f95ae29ce-v76304ecdb3a5954fcf13feb710e8c40fcf24b73c/task.toml
++++ b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-0a90f9f0256e4f933523e9842799e39f95ae29ce-v76304ecdb3a5954fcf13feb710e8c40fcf24b73c/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_internetarchive__openlibrary-0a90f9f0256e4f933523e9842799e39f95ae29ce-v76304ecdb3a5954fcf13feb710e-c9f8fd90"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-4b7ea2977be2747496ba792a678940baa985f7ea-v0f5aece3601a5b4419f7ccec1dbda2071be28ee4/task.toml b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-4b7ea2977be2747496ba792a678940baa985f7ea-v0f5aece3601a5b4419f7ccec1dbda2071be28ee4/task.toml
+index fa23582..059ed0a 100644
+--- a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-4b7ea2977be2747496ba792a678940baa985f7ea-v0f5aece3601a5b4419f7ccec1dbda2071be28ee4/task.toml
++++ b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-4b7ea2977be2747496ba792a678940baa985f7ea-v0f5aece3601a5b4419f7ccec1dbda2071be28ee4/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_internetarchive__openlibrary-4b7ea2977be2747496ba792a678940baa985f7ea-v0f5aece3601a5b4419f7ccec1db-7cc2b427"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-5de7de19211e71b29b2f2ba3b1dff2fe065d660f-v08d8e8889ec945ab821fb156c04c7d2e2810debb/task.toml b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-5de7de19211e71b29b2f2ba3b1dff2fe065d660f-v08d8e8889ec945ab821fb156c04c7d2e2810debb/task.toml
+index 9c51f99..e34ef50 100644
+--- a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-5de7de19211e71b29b2f2ba3b1dff2fe065d660f-v08d8e8889ec945ab821fb156c04c7d2e2810debb/task.toml
++++ b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-5de7de19211e71b29b2f2ba3b1dff2fe065d660f-v08d8e8889ec945ab821fb156c04c7d2e2810debb/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_internetarchive__openlibrary-5de7de19211e71b29b2f2ba3b1dff2fe065d660f-v08d8e8889ec945ab821fb156c04-920fbacf"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-b67138b316b1e9c11df8a4a8391fe5cc8e75ff9f-ve8c8d62a2b60610a3c4631f5f23ed866bada9818/task.toml b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-b67138b316b1e9c11df8a4a8391fe5cc8e75ff9f-ve8c8d62a2b60610a3c4631f5f23ed866bada9818/task.toml
+index 1e4e719..c16b793 100644
+--- a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-b67138b316b1e9c11df8a4a8391fe5cc8e75ff9f-ve8c8d62a2b60610a3c4631f5f23ed866bada9818/task.toml
++++ b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-b67138b316b1e9c11df8a4a8391fe5cc8e75ff9f-ve8c8d62a2b60610a3c4631f5f23ed866bada9818/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_internetarchive__openlibrary-b67138b316b1e9c11df8a4a8391fe5cc8e75ff9f-ve8c8d62a2b60610a3c4631f5f23-4624e421"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26/task.toml b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26/task.toml
+index 3cc93ef..e3890d0 100644
+--- a/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26/task.toml
++++ b/data/multiturn/swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf812-8e644201"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_navidrome__navidrome-3972616585e82305eaf26aa25697b3f5f3082288/task.toml b/data/multiturn/swebenchpro_instance_navidrome__navidrome-3972616585e82305eaf26aa25697b3f5f3082288/task.toml
+index fc25cda..a91b516 100644
+--- a/data/multiturn/swebenchpro_instance_navidrome__navidrome-3972616585e82305eaf26aa25697b3f5f3082288/task.toml
++++ b/data/multiturn/swebenchpro_instance_navidrome__navidrome-3972616585e82305eaf26aa25697b3f5f3082288/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_navidrome__navidrome-3972616585e82305eaf26aa25697b3f5f3082288"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_nodebb__nodebb-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e/task.toml b/data/multiturn/swebenchpro_instance_nodebb__nodebb-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e/task.toml
+index 8ef2431..daa8a88 100644
+--- a/data/multiturn/swebenchpro_instance_nodebb__nodebb-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e/task.toml
++++ b/data/multiturn/swebenchpro_instance_nodebb__nodebb-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_nodebb__nodebb-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_nodebb__nodebb-f083cd559d69c16481376868c8da65172729c0ca-vnan/task.toml b/data/multiturn/swebenchpro_instance_nodebb__nodebb-f083cd559d69c16481376868c8da65172729c0ca-vnan/task.toml
+index 9cd09fd..bfac8e1 100644
+--- a/data/multiturn/swebenchpro_instance_nodebb__nodebb-f083cd559d69c16481376868c8da65172729c0ca-vnan/task.toml
++++ b/data/multiturn/swebenchpro_instance_nodebb__nodebb-f083cd559d69c16481376868c8da65172729c0ca-vnan/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_nodebb__nodebb-f083cd559d69c16481376868c8da65172729c0ca-vnan"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_protonmail__webclients-e65cc5f33719e02e1c378146fb981d27bc24bdf4/task.toml b/data/multiturn/swebenchpro_instance_protonmail__webclients-e65cc5f33719e02e1c378146fb981d27bc24bdf4/task.toml
+index f2aa4ff..1d14c8d 100644
+--- a/data/multiturn/swebenchpro_instance_protonmail__webclients-e65cc5f33719e02e1c378146fb981d27bc24bdf4/task.toml
++++ b/data/multiturn/swebenchpro_instance_protonmail__webclients-e65cc5f33719e02e1c378146fb981d27bc24bdf4/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_protonmail__webclients-e65cc5f33719e02e1c378146fb981d27bc24bdf4"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-70248f256f93ed9b1984494d0a1a919ddd774892-v2ef375ac784985212b1805e1d0431dc8f1b3c171/task.toml b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-70248f256f93ed9b1984494d0a1a919ddd774892-v2ef375ac784985212b1805e1d0431dc8f1b3c171/task.toml
+index ce9d17e..2310207 100644
+--- a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-70248f256f93ed9b1984494d0a1a919ddd774892-v2ef375ac784985212b1805e1d0431dc8f1b3c171/task.toml
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-70248f256f93ed9b1984494d0a1a919ddd774892-v2ef375ac784985212b1805e1d0431dc8f1b3c171/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_qutebrowser__qutebrowser-70248f256f93ed9b1984494d0a1a919ddd774892-v2ef375ac784985212b1805e1d0431dc8f1b3c171"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml
+index d5ea533..1b1b81d 100644
+--- a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-bedc9f7fadf93f83d8dee95feeecb9922b6f063f-v2ef375ac784985212b1805e1d0431dc8f1b3c171/task.toml b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-bedc9f7fadf93f83d8dee95feeecb9922b6f063f-v2ef375ac784985212b1805e1d0431dc8f1b3c171/task.toml
+index 488d4c9..55abf60 100644
+--- a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-bedc9f7fadf93f83d8dee95feeecb9922b6f063f-v2ef375ac784985212b1805e1d0431dc8f1b3c171/task.toml
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-bedc9f7fadf93f83d8dee95feeecb9922b6f063f-v2ef375ac784985212b1805e1d0431dc8f1b3c171/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_qutebrowser__qutebrowser-bedc9f7fadf93f83d8dee95feeecb9922b6f063f-v2ef375ac784985212b1805e1d0431dc8f1b3c171"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-deeb15d6f009b3ca0c3bd503a7cef07462bd16b4-v363c8a7e5ccdf6968fc7ab84a2053ac78036691d/task.toml b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-deeb15d6f009b3ca0c3bd503a7cef07462bd16b4-v363c8a7e5ccdf6968fc7ab84a2053ac78036691d/task.toml
+index 858cc45..cbe06b5 100644
+--- a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-deeb15d6f009b3ca0c3bd503a7cef07462bd16b4-v363c8a7e5ccdf6968fc7ab84a2053ac78036691d/task.toml
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-deeb15d6f009b3ca0c3bd503a7cef07462bd16b4-v363c8a7e5ccdf6968fc7ab84a2053ac78036691d/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_qutebrowser__qutebrowser-deeb15d6f009b3ca0c3bd503a7cef07462bd16b4-v363c8a7e5ccdf6968fc7ab84a2053ac78036691d"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-fea33d607fde83cf505b228238cf365936437a63-v9f8e9d96c85c85a605e382f1510bd08563afc566/task.toml b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-fea33d607fde83cf505b228238cf365936437a63-v9f8e9d96c85c85a605e382f1510bd08563afc566/task.toml
+index 5e97901..24ca059 100644
+--- a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-fea33d607fde83cf505b228238cf365936437a63-v9f8e9d96c85c85a605e382f1510bd08563afc566/task.toml
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-fea33d607fde83cf505b228238cf365936437a63-v9f8e9d96c85c85a605e382f1510bd08563afc566/task.toml
+@@ -63,6 +63,7 @@ timeout_sec = 600.0
+ [agent]
+ 
+ [environment]
++docker_image = "tib/swe-interact-amd64:swebenchpro_instance_qutebrowser__qutebrowser-fea33d607fde83cf505b228238cf365936437a63-v9f8e9d96c85c85a605e382f1510bd08563afc566"
+ network_mode = "public"
+ build_timeout_sec = 1800.0
+ os = "linux"

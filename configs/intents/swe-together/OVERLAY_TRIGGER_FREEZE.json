@@ -1,0 +1,55 @@
+{
+ "schema": "redo_v1/swt-trigger-freeze/1",
+ "frozen_at": "2026-09-28T03:30:56-0700",
+ "config": {
+  "version": "v3-trigger",
+  "judge": "agentic_v3",
+  "unit": "goals",
+  "model": "gemini-3.8-flash",
+  "reasoning_effort": "low",
+  "max_steps": 16,
+  "max_wall_sec": 600,
+  "cmd_timeout_sec": 600,
+  "tool_output_chars": 12000,
+  "inline_diff_chars": 30000,
+  "show_rationale": true,
+  "refute": false,
+  "refute_steps": 16,
+  "slots": 3,
+  "output_subdir": "agentic_judge_v3",
+  "prompt_file": "fsa/redo/swe_together/prompts/agentic_judge_v3_system.md",
+  "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+  "tools_sha256": "c94983af0e1ae44ca91025987810ad61c4b1e49cbf87d210f5dabb1fdc9197f0",
+  "recipe": "swt-exec/1",
+  "schema": "redo_v1/swt-agentic-judge/1"
+ },
+ "judge_freeze_sha256": "6c78b6761fbe34697a1984ce8d77cb16f87c282e9f3e64415e3fcf31dc075c10",
+ "decision": "fire when every revealed goal unit of the snapshot is `satisfied` (units: the frozen judge's)",
+ "validation": {
+  "binary": {
+   "n": 66,
+   "agree": 58,
+   "agreement": 0.8788,
+   "judge_sat_ref_sat": 41,
+   "judge_unsat_ref_unsat": 17,
+   "judge_sat_ref_unsat": 7,
+   "judge_unsat_ref_sat": 1,
+   "cohen_kappa": 0.7233
+  },
+  "snapshot_all_satisfied": {
+   "n": 19,
+   "agree": 15,
+   "agreement": 0.7895,
+   "judge_sat_ref_sat": 7,
+   "judge_unsat_ref_unsat": 8,
+   "judge_sat_ref_unsat": 4,
+   "judge_unsat_ref_sat": 0,
+   "cohen_kappa": 0.5957,
+   "note": "trigger-style decision: all labelled (revealed) units satisfied at the snapshot"
+  },
+  "criterion": "binary agreement >= 0.85 and kappa >= 0.60 on the held-out gold pairs",
+  "pass": true
+ },
+ "caveat": "snapshot-level precision of a fire on the held-out gold was 0.64; caving is measured with the frozen judge on the pre-overlay snapshot, never read from the trigger",
+ "applies_to": "SWE-Together overlay cells launched after this freeze"
+}

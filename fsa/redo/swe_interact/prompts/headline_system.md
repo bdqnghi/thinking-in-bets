@@ -1,0 +1,1 @@
+Below are the rubric items that define a refactoring task, and the task's request text. Pick the one item that best states the overall change the user wants, the one a user would state first in a single sentence. Return JSON only: {"headline_key": "<key>"}.

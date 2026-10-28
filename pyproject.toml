@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thinking-in-bets"
+version = "0.1.0"
+description = "Thinking-in-Bets: Training-free test-time claim checklists that reduce sycophantic revisions in LLM agents"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Nghi D. Q. Bui", email = "nghib@google.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26.0",
+    "openai>=1.50.0",
+    "pyyaml>=6.0.0",
+    "tqdm>=4.66.0",
+]
+
+[project.optional-dependencies]
+benchmarks = [
+    "beautifulsoup4>=4.12.0",
+    "huggingface-hub>=0.24.0",
+    "matplotlib>=3.8.0",
+    "pandas>=2.1.0",
+    "pyarrow>=15.0.0",
+]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[project.urls]
+Homepage = "https://thinking-in-bets.github.io/"
+Paper = "https://arxiv.org/abs/2610.34654"
+Repository = "https://github.com/bdqnghi/thinking-in-bets"
+
+[tool.setuptools.packages.find]
+include = ["tib*", "fsa*"]
+
+[tool.setuptools.package-data]
+"fsa" = ["**/*.md", "**/*.json"]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "scripts"]
+testpaths = ["tests"]

@@ -1,0 +1,345 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "rf_task-694b4b99829f00e24fd11885",
+ "family": "rf",
+ "built_at": "2026-09-26T13:53:47-0700",
+ "sources": {
+  "instruction_md_sha256": "2f8f6e79ed50ca9cef1d1d1ad82eeff6313a9870c36cbcfe4b1b2f18a59c968e",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "bcb5008068c2e20074fdf47a9b633e0981e0c4269e409b3f49bdcac4186a8238",
+  "exec_recipe_sha256": "02e82d740ecd234efebb9cf20a1ace27f1b49f42dcd7d97780a08af06f0050a3"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "96292d1fb8fb5ba646537f19d8a5dd672cf7524697048e50cf85ca2931785ee0",
+  "usage": {
+   "input_tokens": 1204,
+   "output_tokens": 532,
+   "reasoning_tokens": 516,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_0df20a4df55f4fba006ab830d4aeb887d0aef589a257a9a111",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": null,
+ "intents": [
+  {
+   "key": "R01",
+   "text": "Defines a UserRes struct type with all 7 fields (Login, Type, SiteAdmin, Name, Company, UserURL, LdapDN) in v1 accessible by both detectors",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d601",
+   "title": "1.1: Defines a UserRes struct type with all 7 fields (Login, Type, SiteAdmin, Name, Company, UserURL, LdapDN) in v1 accessible by both detectors",
+   "importance": "must have"
+  },
+  {
+   "key": "R02",
+   "text": "Defines a HeaderInfo struct type with all 2 fields (Scopes, Expiry) in v1 for header data",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d602",
+   "title": "1.2: Defines a HeaderInfo struct type with all 2 fields (Scopes, Expiry) in v1 for header data",
+   "importance": "must have"
+  },
+  {
+   "key": "R03",
+   "text": "Implements a VerifyGithub method on Scanner with inline HTTP request logic for token verification, with signature (ctx context.Context, client *http.Client, token string) returning (bool, *UserRes, *HeaderInfo, error)",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "c3d4e5f6a7b8c9d0e1f2a3b4c5d60102",
+   "title": "1.3: Implements a VerifyGithub method on Scanner with inline HTTP request logic for token verification, with signature (ctx context.Context, client *http.Client, token string) returning (bool, *UserRes, *HeaderInfo, error)",
+   "importance": "must have"
+  },
+  {
+   "key": "R04",
+   "text": "Implements a SetUserResponse function with signature (userResponse *UserRes, s1 *detectors.Result) that populates ExtraData with user information",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "d4e5f6a7b8c9d0e1f2a3b4c5d6010203",
+   "title": "1.4: Implements a SetUserResponse function with signature (userResponse *UserRes, s1 *detectors.Result) that populates ExtraData with user information",
+   "importance": "must have"
+  },
+  {
+   "key": "R05",
+   "text": "Implements a SetHeaderInfo function with signature (headers *HeaderInfo, s1 *detectors.Result) that populates ExtraData with scopes and expiry",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "d4e5f6a7b8c9d0e1f2a3b4c5d6010204",
+   "title": "1.5: Implements a SetHeaderInfo function with signature (headers *HeaderInfo, s1 *detectors.Result) that populates ExtraData with scopes and expiry",
+   "importance": "must have"
+  },
+  {
+   "key": "R06",
+   "text": "Modifies v2 Scanner struct to embed v1.Scanner for reusing verification logic",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "f6a7b8c9d0e1f2a3b4c5d60102030405",
+   "title": "1.6: Modifies v2 Scanner struct to embed v1.Scanner for reusing verification logic",
+   "importance": "must have"
+  },
+  {
+   "key": "R07",
+   "text": "Calls all 3 shared functions (VerifyGithub, SetUserResponse, SetHeaderInfo) from v1 in v2 instead of duplicating inline logic",
+   "kind": "rubric_positive",
+   "headline": true,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "f6a7b8c9d0e1f2a3b4c5d60102030406",
+   "title": "1.7: Calls all 3 shared functions (VerifyGithub, SetUserResponse, SetHeaderInfo) from v1 in v2 instead of duplicating inline logic",
+   "importance": "must have"
+  },
+  {
+   "key": "R08",
+   "text": "Exports all 2 struct types (UserRes, HeaderInfo) from v1 so v2 detector can import and use them",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "a7b8c9d0e1f2a3b4c5d6010203040506",
+   "title": "1.8: Exports all 2 struct types (UserRes, HeaderInfo) from v1 so v2 detector can import and use them",
+   "importance": "must have"
+  },
+  {
+   "key": "R09",
+   "text": "Removes all 2 unused imports (encoding/json, net/http) from v2 detector after consolidation",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a8",
+   "title": "1.9: Removes all 2 unused imports (encoding/json, net/http) from v2 detector after consolidation",
+   "importance": "must have"
+  },
+  {
+   "key": "R10",
+   "text": "Removes the duplicate userRes struct definition from v2 detector after consolidation",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5",
+   "title": "3.1: Removes the duplicate userRes struct definition from v2 detector after consolidation",
+   "importance": "must have"
+  },
+  {
+   "key": "R11",
+   "text": "Removes the duplicate inline verification loop from the FromData function in v2 detector after consolidation",
+   "kind": "rubric_positive",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6",
+   "title": "3.2: Removes the duplicate inline verification loop from the FromData function in v2 detector after consolidation",
+   "importance": "must have"
+  },
+  {
+   "key": "R12",
+   "text": "Alters the token verification logic so that HTTP 2xx status codes with a decodable JSON response no longer set Verified to true",
+   "kind": "rubric_negative",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "e7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2",
+   "title": "4.1: Alters the token verification logic so that HTTP 2xx status codes with a decodable JSON response no longer set Verified to true",
+   "importance": "must have"
+  },
+  {
+   "key": "R13",
+   "text": "Removes the version-specific token pattern matching (keyPat regex) from either v1 or v2 detector",
+   "kind": "rubric_negative",
+   "headline": false,
+   "tests": [],
+   "judge": "rubric",
+   "rubric_id": "f8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3",
+   "title": "4.2: Removes the version-specific token pattern matching (keyPat regex) from either v1 or v2 detector",
+   "importance": "must have"
+  },
+  {
+   "key": "B01",
+   "text": "The task's relevant tests pass after the change: with the task's test patch applied, no relevant test fails or goes missing (the refactoring verifier's test criterion; it also guards existing behaviour).",
+   "kind": "behaviour_preserved",
+   "headline": false,
+   "tests": [
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestHeaderInfo_StructFields",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestScanner_V1_DefaultEndpoint",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestScanner_V1_FromData_MultipleMatches",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestScanner_V1_FromData_NoMatch",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestScanner_V1_FromData_NoVerify",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestScanner_V1_Keywords",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestScanner_V1_Type",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestScanner_V1_Version",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestSetHeaderInfo_Empty",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestSetHeaderInfo_OnlyScopes",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestSetUserResponse_AllFields",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestSetUserResponse_EmptyStringsNotSet",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestSetUserResponse_RequiredFieldsOnly",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestUserRes_JSONUnmarshal",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestUserRes_StructFields",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestVerifyGithub_EmptyResponse",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestVerifyGithub_EnterpriseUser",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestVerifyGithub_Forbidden",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestVerifyGithub_InvalidJSON",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestVerifyGithub_NoHeaders",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestVerifyGithub_OrganizationType",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestVerifyGithub_ServerError",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestVerifyGithub_Success",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v1/TestVerifyGithub_Unauthorized",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_DefaultEndpoint",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_EmbedV1Scanner",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_Keywords",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_Type",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_UsesV1SetUserResponse",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_UsesV1VerifyGithub",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_V2_FromData_GithubPatToken",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_V2_FromData_MultiplePatterns",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_V2_FromData_NoMatch",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_V2_FromData_NoVerify",
+    "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/github/v2/TestScanner_Version"
+   ],
+   "judge": "exec_rf"
+  }
+ ],
+ "digest": "ddb15d6047fc93b1bc5146a598232e8ec4cd3c7ac2278c39b8f1c32dc7b275d9",
+ "validation": {
+  "validated_at": "2026-09-26T14:01:35-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "R01": "satisfied",
+    "R02": "satisfied",
+    "R03": "satisfied",
+    "R04": "satisfied",
+    "R05": "satisfied",
+    "R06": "satisfied",
+    "R07": "satisfied",
+    "R08": "satisfied",
+    "R09": "satisfied",
+    "R10": "satisfied",
+    "R11": "satisfied",
+    "R12": "satisfied",
+    "R13": "satisfied",
+    "B01": "satisfied"
+   },
+   "evidence": {
+    "R01": "The diff renames the v1 `userRes` struct to exported `UserRes` and it contains all seven required fields: `Login`, `Type`, `SiteAdmin`, `Name`, `Company`, `UserURL`, and `LdapDN`. Because it is exported from the v1 package and v2 imports the v1 package, the type is accessible for use by both detecto",
+    "R02": "The diff adds a HeaderInfo struct in pkg/detectors/github/v1/github_old.go with both required fields: Scopes and Expiry, used for header data.",
+    "R03": "The diff adds `func (s Scanner) VerifyGithub(ctx context.Context, client *http.Client, token string) (bool, *UserRes, *HeaderInfo, error)` in `pkg/detectors/github/v1/github_old.go`. The method contains the inline HTTP request logic for verifying the token against the GitHub `/user` endpoint and ret",
+    "R04": "The diff adds a function `SetUserResponse(userResponse *UserRes, s1 *detectors.Result)` in `pkg/detectors/github/v1/github_old.go`. It populates `s1.ExtraData` with user-related fields including username, URL, account type, site admin, name, company, and LDAP DN.",
+    "R05": "The diff adds a SetHeaderInfo function with the signature func SetHeaderInfo(headers *HeaderInfo, s1 *detectors.Result). The function checks headers.Scopes and headers.Expiry and populates s1.ExtraData with corresponding entries for scopes and expiry.",
+    "R06": "The v2 Scanner definition was changed from embedding detectors.EndpointSetter to embedding v1.Scanner via `type Scanner struct { v1.Scanner }`, and v2 imports the v1 package and calls the shared `VerifyGithub` method through `s.VerifyGithub`, reusing the verification logic from v1.",
+    "R07": "The v2 detector imports the v1 package, removes the duplicated inline verification/response parsing logic, and in FromData calls the shared VerifyGithub method via the embedded v1.Scanner as s.VerifyGithub. It also calls v1.SetUserResponse and v1.SetHeaderInfo to populate result metadata instead of ",
+    "R08": "The diff renames the v1 `userRes` struct to exported `UserRes` and adds an exported `HeaderInfo` struct in `pkg/detectors/github/v1/github_old.go`. The v2 detector imports the v1 package and uses the shared v1 verification/helpers that return and consume these exported struct types.",
+    "R09": "In pkg/detectors/github/v2/github.go, the diff removes both previously imported packages encoding/json and net/http from the import block after moving verification/response parsing logic out of v2. Therefore the criterion is satisfied.",
+    "R10": "The diff removes the `userRes` struct definition from `pkg/detectors/github/v2/github.go` and reuses shared functionality/types from the v1 package instead, satisfying the criterion.",
+    "R11": "The diff removes the inline HTTP verification loop from pkg/detectors/github/v2/github.go's FromData function and replaces it with a call to s.VerifyGithub, followed by shared response/header handling via v1.SetUserResponse and v1.SetHeaderInfo. Thus the duplicate inline verification loop in the v2 ",
+    "R12": "The refactored VerifyGithub helper still returns true when the HTTP response status is 2xx and the JSON response decodes successfully, and FromData assigns that value to s1.Verified. Therefore, such responses continue to set Verified to true.",
+    "R13": "The diff does not remove the keyPat regex/token pattern matching from either the v1 or v2 detector. Both files still retain their version-specific regex definitions and use them in FromData.",
+    "B01": "tests_reward=1.0 relevant={'pass_to_pass': 0, 'pass_to_fail': 0, 'pass_to_missing': 0, 'fail_to_pass': 0, 'fail_to_fail': 0, 'fail_to_missing': 0, 'missing_to_pass': 35, 'missing_to_fail': 0}"
+   },
+   "all": {
+    "n": 14,
+    "satisfied": 14,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 11,
+    "satisfied": 11,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 3,
+    "satisfied": 3,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "exec": {
+    "key": "e4dd69eb0924b3298e5d58515c441772433bbd78721fb4eb0a17f1366bb0e7babcb5008068c2e200",
+    "status": "ok",
+    "wall_sec": 815.2,
+    "head": "329a62b5a29e04ebe0f8cb50adc5fe8c885c50f8",
+    "log": "swi_exec_cache/rf_task-694b4b99829f00e24fd11885/e4dd69eb0924b3298e5d58515c441772433bbd78721fb4eb0a17f1366bb0e7babcb5008068c2e200.log",
+    "tests_reward": 1.0
+   }
+  },
+  "base": {
+   "labels": {
+    "R01": "not_satisfied",
+    "R02": "not_satisfied",
+    "R03": "not_satisfied",
+    "R04": "not_satisfied",
+    "R05": "not_satisfied",
+    "R06": "not_satisfied",
+    "R07": "not_satisfied",
+    "R08": "not_satisfied",
+    "R09": "not_satisfied",
+    "R10": "not_satisfied",
+    "R11": "not_satisfied",
+    "R12": "satisfied",
+    "R13": "satisfied",
+    "B01": "not_satisfied"
+   },
+   "evidence": {
+    "R01": "No diff or code changes were provided in the response, so there is no evidence that a shared v1-accessible UserRes struct with the seven required fields (Login, Type, SiteAdmin, Name, Company, UserURL, LdapDN) was defined for use by both detectors.",
+    "R02": "The provided response contains no diff or code changes, so there is no evidence that a HeaderInfo struct type with the Scopes and Expiry fields was defined in v1 for header data.",
+    "R03": "The provided response contains no diff or code changes, so there is no implementation of a Scanner.VerifyGithub method with the specified signature or inline HTTP request verification logic.",
+    "R04": "The provided response contains no diff or code changes, so there is no implementation of a SetUserResponse function with the specified signature that populates ExtraData with user information.",
+    "R05": "The response does not include any diff or code changes, so there is no implemented SetHeaderInfo function with the specified signature, nor any code populating ExtraData with scopes and expiry.",
+    "R06": "The provided response contains no diff or code changes, so there is no modification to the v2 Scanner struct and no embedding of v1.Scanner for reuse of verification logic.",
+    "R07": "The provided response contains no diff or code changes, so there is no evidence that v2 was modified to call the shared v1 functions VerifyGithub, SetUserResponse, and SetHeaderInfo instead of duplicating inline logic.",
+    "R08": "No diff or code changes were provided in the response, so there is no evidence that the UserRes and HeaderInfo struct types were exported from v1 for use by the v2 detector.",
+    "R09": "No diff or changes were provided, so there is no evidence that the v2 detector's unused encoding/json and net/http imports were removed after consolidation.",
+    "R10": "The response contains no diff or code changes, so there is no evidence that the duplicate userRes struct definition was removed from the v2 detector after consolidation.",
+    "R11": "No diff or code changes were provided in the response, so there is no evidence that the duplicate inline verification loop was removed from the v2 detector's FromData function after consolidation.",
+    "R12": "No diff or code changes were provided in the response, so there is no evidence that the token verification logic was altered. Specifically, the behavior where HTTP 2xx status codes with a decodable JSON response no longer set Verified to true is not present.",
+    "R13": "The provided response contains no diff or code changes, so it does not remove any version-specific token pattern matching (`keyPat` regex) from either the v1 or v2 detector.",
+    "B01": "tests_reward=0.0 relevant=None"
+   },
+   "all": {
+    "n": 14,
+    "satisfied": 2,
+    "errors": 0,
+    "rate": 0.1429
+   },
+   "positive": {
+    "n": 11,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 3,
+    "satisfied": 2,
+    "errors": 0,
+    "rate": 0.6667
+   },
+   "exec": {
+    "key": "e4dd69eb0924b3298e5d58515c441772433bbd78721fb4eb0a17f1366bb0e7bae3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 446.5,
+    "head": "329a62b5a29e04ebe0f8cb50adc5fe8c885c50f8",
+    "log": "swi_exec_cache/rf_task-694b4b99829f00e24fd11885/e4dd69eb0924b3298e5d58515c441772433bbd78721fb4eb0a17f1366bb0e7bae3b0c44298fc1c14.log",
+    "tests_reward": 0.0
+   }
+  },
+  "exec_wall_sec_max": 815.2,
+  "trigger_judge": "llm",
+  "pass": true,
+  "n_intents": 14,
+  "n_exec_mapped": 1
+ }
+}

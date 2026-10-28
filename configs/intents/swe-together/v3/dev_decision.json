@@ -1,0 +1,411 @@
+{
+ "decided_at": "2026-09-27T21:57:38-0700",
+ "plan": "docs/results/INTENT_JUDGE_V3_VALIDATION_PLAN.md (sections 2 and 6)",
+ "unit": "goals",
+ "model": "gemini-3.8-flash",
+ "config": {
+  "version": "v3",
+  "judge": "agentic_v3",
+  "unit": "goals",
+  "model": "gemini-3.8-flash",
+  "reasoning_effort": "high",
+  "max_steps": 40,
+  "max_wall_sec": 1500,
+  "cmd_timeout_sec": 600,
+  "tool_output_chars": 12000,
+  "inline_diff_chars": 30000,
+  "show_rationale": true,
+  "refute": false,
+  "slots": 3,
+  "output_subdir": "agentic_judge_v3"
+ },
+ "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+ "trigger_config": {
+  "reasoning_effort": "low",
+  "max_steps": 16,
+  "max_wall_sec": 600
+ },
+ "rules_applied": {
+  "unit": "goals unless intents dev kappa exceeds goals by >= 0.10 (intents 0.06 vs goals 0.46)",
+  "model": "3.5-flash kept unless another beats it by >= 0.05 kappa (3.8: 0.89 vs 0.46); pro only if it beats the best flash by >= 0.10 on its subset (pro 0.73 vs 3.8 0.80 on the same 6)"
+ },
+ "risks": [
+  "self-grading: gemini-3.8-flash is the S agent rung; S snapshots are judged by the same model family (no dialogue shown)",
+  "throughput: frequent HTTP 503 on gemini-3.8-flash (about 15 failed attempts per snapshot on dev), retried",
+  "quota shared with the S pilot"
+ ],
+ "evidence": {
+  "goals_35": {
+   "file": "results/redo_v1/judge_v3_work/dev_gemini-3.5-flash_high_goals.json",
+   "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+   "config": {
+    "model": "gemini-3.5-flash",
+    "reasoning_effort": "high",
+    "unit": "goals",
+    "max_steps": 40,
+    "refute": null
+   },
+   "n_snapshots": 15,
+   "agreement": {
+    "n": 58,
+    "agree": 45,
+    "agreement": 0.7759,
+    "judge_sat_ref_sat": 36,
+    "judge_unsat_ref_unsat": 9,
+    "judge_sat_ref_unsat": 13,
+    "judge_unsat_ref_sat": 0,
+    "cohen_kappa": 0.4622
+   },
+   "cost": {
+    "n": 15,
+    "ok": 15,
+    "wall_sec": {
+     "mean": 175.9,
+     "median": 155.1,
+     "max": 426.4
+    },
+    "steps": {
+     "mean": 23.7,
+     "median": 26,
+     "max": 40
+    },
+    "calls": {
+     "mean": 23.8,
+     "median": 26,
+     "max": 40
+    },
+    "input_tokens": {
+     "mean": 436699.1,
+     "median": 354888,
+     "max": 996015
+    },
+    "output_tokens": {
+     "mean": 1489.7,
+     "median": 1506,
+     "max": 3619
+    },
+    "reasoning_tokens": {
+     "mean": 8048.8,
+     "median": 9935,
+     "max": 21099
+    },
+    "cached_tokens": {
+     "mean": 333262.7,
+     "median": 254391,
+     "max": 820543
+    },
+    "forced_submit": 2
+   }
+  },
+  "intents_35": {
+   "file": "results/redo_v1/judge_v3_work/dev_gemini-3.5-flash_high_intents.json",
+   "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+   "config": {
+    "model": "gemini-3.5-flash",
+    "reasoning_effort": "high",
+    "unit": "intents",
+    "max_steps": 40,
+    "refute": false
+   },
+   "n_snapshots": 15,
+   "agreement": {
+    "n": 20,
+    "agree": 8,
+    "agreement": 0.4,
+    "judge_sat_ref_sat": 7,
+    "judge_unsat_ref_unsat": 1,
+    "judge_sat_ref_unsat": 12,
+    "judge_unsat_ref_sat": 0,
+    "cohen_kappa": 0.0551
+   },
+   "cost": {
+    "n": 15,
+    "ok": 15,
+    "wall_sec": {
+     "mean": 135.4,
+     "median": 93.2,
+     "max": 447.3
+    },
+    "steps": {
+     "mean": 19.7,
+     "median": 24,
+     "max": 39
+    },
+    "calls": {
+     "mean": 19.7,
+     "median": 24,
+     "max": 39
+    },
+    "input_tokens": {
+     "mean": 318688.4,
+     "median": 310910,
+     "max": 880112
+    },
+    "output_tokens": {
+     "mean": 1086.2,
+     "median": 1029,
+     "max": 3407
+    },
+    "reasoning_tokens": {
+     "mean": 6484.3,
+     "median": 7414,
+     "max": 13714
+    },
+    "cached_tokens": {
+     "mean": 232142.3,
+     "median": 206064,
+     "max": 726677
+    },
+    "forced_submit": 1
+   }
+  },
+  "goals_38": {
+   "file": "results/redo_v1/judge_v3_work/dev_gemini-3.8-flash_high_goals.json",
+   "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+   "config": {
+    "model": "gemini-3.8-flash",
+    "reasoning_effort": "high",
+    "unit": "goals",
+    "max_steps": 40,
+    "refute": false
+   },
+   "n_snapshots": 15,
+   "agreement": {
+    "n": 58,
+    "agree": 55,
+    "agreement": 0.9483,
+    "judge_sat_ref_sat": 36,
+    "judge_unsat_ref_unsat": 19,
+    "judge_sat_ref_unsat": 3,
+    "judge_unsat_ref_sat": 0,
+    "cohen_kappa": 0.8872
+   },
+   "cost": {
+    "n": 15,
+    "ok": 15,
+    "wall_sec": {
+     "mean": 658.2,
+     "median": 616.0,
+     "max": 1391.4
+    },
+    "steps": {
+     "mean": 26.3,
+     "median": 31,
+     "max": 39
+    },
+    "calls": {
+     "mean": 41.4,
+     "median": 52,
+     "max": 65
+    },
+    "input_tokens": {
+     "mean": 630505.7,
+     "median": 708082,
+     "max": 1486332
+    },
+    "output_tokens": {
+     "mean": 2233.2,
+     "median": 2028,
+     "max": 7321
+    },
+    "reasoning_tokens": {
+     "mean": 11376.1,
+     "median": 13805,
+     "max": 20053
+    },
+    "cached_tokens": {
+     "mean": 459262.9,
+     "median": 522727,
+     "max": 1257850
+    },
+    "forced_submit": 5
+   }
+  },
+  "goals_pro_n6": {
+   "file": "results/redo_v1/judge_v3_work/dev_gemini-3.1-pro-preview_high_goals_n6.json",
+   "prompt_sha256": "c9f7903a7f82befb93f0931a0784484ce987292ea76ec27ff7fac9b635369bcf",
+   "config": {
+    "model": "gemini-3.1-pro-preview",
+    "reasoning_effort": "high",
+    "unit": "goals",
+    "max_steps": 40,
+    "refute": false
+   },
+   "n_snapshots": 6,
+   "agreement": {
+    "n": 24,
+    "agree": 21,
+    "agreement": 0.875,
+    "judge_sat_ref_sat": 14,
+    "judge_unsat_ref_unsat": 7,
+    "judge_sat_ref_unsat": 1,
+    "judge_unsat_ref_sat": 2,
+    "cohen_kappa": 0.7273
+   },
+   "cost": {
+    "n": 6,
+    "ok": 6,
+    "wall_sec": {
+     "mean": 156.7,
+     "median": 226.1,
+     "max": 250.8
+    },
+    "steps": {
+     "mean": 24.7,
+     "median": 39,
+     "max": 39
+    },
+    "calls": {
+     "mean": 24.8,
+     "median": 39,
+     "max": 40
+    },
+    "input_tokens": {
+     "mean": 440326.8,
+     "median": 495822,
+     "max": 946904
+    },
+    "output_tokens": {
+     "mean": 2601.0,
+     "median": 3296,
+     "max": 5255
+    },
+    "reasoning_tokens": {
+     "mean": 8667.7,
+     "median": 10488,
+     "max": 16470
+    },
+    "cached_tokens": {
+     "mean": 321507.7,
+     "median": 327762,
+     "max": 756722
+    },
+    "forced_submit": 3
+   }
+  },
+  "not_kept_35_prompt_r2": {
+   "file": "results/redo_v1/judge_v3_work/devr2_gemini-3.5-flash_high_goals.json",
+   "prompt_sha256": "68b18c16b6291d9c606fd37076bb6cd04f5cc465a9531a8d0f7b0bf4144db8d6",
+   "config": {
+    "model": "gemini-3.5-flash",
+    "reasoning_effort": "high",
+    "unit": "goals",
+    "max_steps": 50,
+    "refute": null
+   },
+   "n_snapshots": 15,
+   "agreement": {
+    "n": 58,
+    "agree": 47,
+    "agreement": 0.8103,
+    "judge_sat_ref_sat": 36,
+    "judge_unsat_ref_unsat": 11,
+    "judge_sat_ref_unsat": 11,
+    "judge_unsat_ref_sat": 0,
+    "cohen_kappa": 0.5538
+   },
+   "cost": {
+    "n": 15,
+    "ok": 15,
+    "wall_sec": {
+     "mean": 158.2,
+     "median": 142.0,
+     "max": 440.5
+    },
+    "steps": {
+     "mean": 24.6,
+     "median": 28,
+     "max": 44
+    },
+    "calls": {
+     "mean": 24.6,
+     "median": 28,
+     "max": 44
+    },
+    "input_tokens": {
+     "mean": 509265.9,
+     "median": 417352,
+     "max": 1443663
+    },
+    "output_tokens": {
+     "mean": 1735.0,
+     "median": 1530,
+     "max": 4035
+    },
+    "reasoning_tokens": {
+     "mean": 8641.1,
+     "median": 10144,
+     "max": 19338
+    },
+    "cached_tokens": {
+     "mean": 401255.8,
+     "median": 285271,
+     "max": 1238753
+    },
+    "forced_submit": 0
+   }
+  },
+  "not_kept_35_prompt_r2_refute": {
+   "file": "results/redo_v1/judge_v3_work/devr2_gemini-3.5-flash_high_goals_refute.json",
+   "prompt_sha256": "68b18c16b6291d9c606fd37076bb6cd04f5cc465a9531a8d0f7b0bf4144db8d6",
+   "config": {
+    "model": "gemini-3.5-flash",
+    "reasoning_effort": "high",
+    "unit": "goals",
+    "max_steps": 50,
+    "refute": true
+   },
+   "n_snapshots": 15,
+   "agreement": {
+    "n": 58,
+    "agree": 49,
+    "agreement": 0.8448,
+    "judge_sat_ref_sat": 36,
+    "judge_unsat_ref_unsat": 13,
+    "judge_sat_ref_unsat": 9,
+    "judge_unsat_ref_sat": 0,
+    "cohen_kappa": 0.642
+   },
+   "cost": {
+    "n": 15,
+    "ok": 15,
+    "wall_sec": {
+     "mean": 352.0,
+     "median": 325.6,
+     "max": 637.8
+    },
+    "steps": {
+     "mean": 38.1,
+     "median": 37,
+     "max": 54
+    },
+    "calls": {
+     "mean": 38.2,
+     "median": 37,
+     "max": 54
+    },
+    "input_tokens": {
+     "mean": 973480.9,
+     "median": 689702,
+     "max": 2138987
+    },
+    "output_tokens": {
+     "mean": 3791.5,
+     "median": 4077,
+     "max": 7948
+    },
+    "reasoning_tokens": {
+     "mean": 13317.8,
+     "median": 12579,
+     "max": 26970
+    },
+    "cached_tokens": {
+     "mean": 781171.7,
+     "median": 546040,
+     "max": 1810515
+    },
+    "forced_submit": 5
+   }
+  }
+ }
+}

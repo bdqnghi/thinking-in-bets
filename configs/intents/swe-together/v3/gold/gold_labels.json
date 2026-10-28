@@ -1,0 +1,369 @@
+{
+ "labeller": "Claude (the agent) via three Claude Opus subagents (parts A, B, C), acting as the human-audit stand-in; labels written before any judge ran on these snapshots",
+ "rubric": "label definitions of prompts/agentic_judge_v3_system.md 'What to decide'; labellers saw the same inputs as the judge (goal text + rationale, diff, a container with the snapshot applied and /tests), no dialogue, no task directory, no judge output",
+ "written_at": "2026-09-27T22:05:38-0700",
+ "labels": {
+  "S01-a9d09f/goal_2": {
+   "label": "satisfied",
+   "evidence": "library/train_util.py:1954-1985 register_regularization_images holds the only balancing while/first_loop loop (verifier F2P1: while-pattern occurrences=1); __init__ (line 2284) and rebalance_regularization_images (line 2004) both call it. Base (git show HEAD) already had this helper; snapshot additionally moved the reg-count logging/warnings into it. Verifier F2P6 balancing math: total reg num_repeats=10 (target 10) PASS.",
+   "note": "Dedup already present at base and preserved; minor side effect: num_reg_images now sums subset.num_repeats (differs from 1-repeat for validation datasets), display-only.",
+   "part": "A"
+  },
+  "S01-a9d09f/goal_4": {
+   "label": "satisfied",
+   "evidence": "train_util.py:2006-2012 DreamBooth override no longer calls update_dataset_image_counts after rebalance; only BaseDataset filter (line 823) calls it once when filtered_count>0. Verifier F2P7: invoked 1 time. My test (/tmp/my.py: 4 train x2 repeats with 2 filtered, 6 reg): after filter num_train_images=4 (correct), num_reg_images=6, reg subset img_count=6 — consistent with __init__ semantics (raw reg count with repeats; register_regularization_images sets self.num_reg_images).",
+   "note": "Confidence ~0.7. The single count update runs before rebalance; num_reg_images/reg img_count follow __init__'s raw-count semantics rather than the base post-filter value (4 registered reg images). Only used for display/metadata. Not the oracle update_counts=False mechanism (verifier F2P4 fails), which the goal does not require.",
+   "part": "A"
+  },
+  "S01-a9d09f/goal_5": {
+   "label": "satisfied",
+   "evidence": "git diff HEAD: the redundant self.update_dataset_image_counts() line is removed from DreamBoothDataset.filter_registered_images_by_orig_resolution and count-setting moved into register_regularization_images; change is on disk, not a TODO.",
+   "part": "A"
+  },
+  "S01-a9d09f/goal_6": {
+   "label": "satisfied",
+   "evidence": "train_util.py:1987-2004 rebalance_regularization_images still present and functional (collects reg infos, resets repeats, re-registers via helper); called from the filter override at line 2010.",
+   "part": "A"
+  },
+  "S02-cb89e0/goal_1": {
+   "label": "satisfied",
+   "evidence": "New desloppify/zones.py _match_pattern (directory /x/ segment match, prefix_ startswith, .suffix endswith, exact-basename equality). My script: all five traps (src/contests/foo.py vs /tests/, src/contest_results.py & src/my_test_helpers.py vs test_, src/my_config.py & src/config.python.py vs config.py) -> PRODUCTION; src/tests/test_foo.py, tests/test_foo.py -> TEST; config.py, a/b/config.py -> CONFIG. Verifier F2P1 11/11.",
+   "part": "A"
+  },
+  "S02-cb89e0/goal_2": {
+   "label": "satisfied",
+   "evidence": "zones.py COMMON_ZONE_RULES covers vendor/generated/test/script; PY_ZONE_RULES = [test_ , _test.py, conftest.py, config..., migrations] + COMMON; TS_ZONE_RULES = [.test., .spec., /__tests__/, config..., .d.ts] + COMMON; classify_file is first-match-wins so per-language rules take priority. Checked src/a.test.ts, src/__tests__/x.ts -> TEST.",
+   "part": "A"
+  },
+  "S02-cb89e0/goal_3": {
+   "label": "satisfied",
+   "evidence": "zones.py adjust_potential(zone_map, files, total): None -> total, [] with 0 -> 0, 3 files (1 prod) -> 1. Applied in lang/python/__init__.py (_phase_unused/_structural/_coupling/_smells) and lang/typescript/__init__.py (logs/unused/structural/coupling/smells); plan.py:53-56 builds lang._zone_map. Real scan of repo root with PythonConfig: zone dist {production:72,test:2}, potentials unused/structural/smells=72 (74 files minus 2 tests).",
+   "part": "A"
+  },
+  "S02-cb89e0/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "zones.py defines should_skip_finding and ZONE_POLICIES, but grep -rn should_skip_finding desloppify shows no call site outside zones.py; no detector/phase filters findings by zone.",
+   "note": "Helper defined but unwired.",
+   "part": "A"
+  },
+  "S02-cb89e0/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "FileZoneMap(overrides=...) honours overrides and leaves other paths alone (config.py overridden to production, settings.py still CONFIG), but no persistence in state (grep zone_overrides/zone in state.py, cli.py, commands/: none) and no show/set/clear CLI subcommands.",
+   "note": "Only parts (a)-(c) of the five-part goal.",
+   "part": "A"
+  },
+  "S02-cb89e0/goal_6": {
+   "label": "satisfied",
+   "evidence": "lang/base.py:92 LangConfig.zone_rules field; PythonConfig/TypeScriptConfig set zone_rules=PY_/TS_ZONE_RULES; plan.py:53-56 builds FileZoneMap from getattr(lang,'zone_rules') with no per-language conditional.",
+   "part": "A"
+  },
+  "S02-cb89e0/goal_8": {
+   "label": "not_addressed",
+   "evidence": "git diff HEAD touches only lang/base.py, lang/python, lang/typescript, plan.py plus new zones.py/tests; narrative.py and query/scan output code unchanged; grep for zone in commands/ and narrative.py: no hits. FileZoneMap.distribution() exists but is never surfaced.",
+   "part": "A"
+  },
+  "S03-be5c6d/goal_3": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/e2e_test/agent_runner.go:266-300 GeminiCLIRunner.RunPromptWithTools now passes --approval-mode yolo by default (E2E_GEMINI_APPROVAL_MODE override), replacing auto_edit; the Claude-style tool names (Bash/Write/Edit/...) are filtered out of the passed-in tools. go vet -tags e2e ./cmd/entire/cli/e2e_test/ clean.",
+   "note": "The default ShellTool(git status/add/commit/diff/log) prefix-style entries are still sent (the verifier's F2P_NO_HARDCODED_GIT_TOOLS gate would fail), but under yolo mode approval no longer depends on the allowlist, and these entries are command prefixes rather than fully-parameterized command lines. Confidence ~0.75.",
+   "part": "A"
+  },
+  "S04-84733b/goal_2": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/agent/claudecode/lifecycle.go:242-255 waitForTranscriptFlush: os.Stat(transcriptPath) and return early if time.Since(info.ModTime()) > staleThreshold (runtime mtime check). File unchanged by snapshot (already in base). go build ./... OK; go test ./cmd/entire/cli/agent/claudecode -run Stale|Flush: TestWaitForTranscriptFlush_StaleFile_SkipsWait PASS (0.00s vs 3s poll).",
+   "note": "Behaviour pre-exists in base and is preserved by the snapshot.",
+   "part": "A"
+  },
+  "S04-84733b/goal_3": {
+   "label": "satisfied",
+   "evidence": "lifecycle.go:247 const staleThreshold = 2 * time.Minute used in the live elapsed-time comparison; TestWaitForTranscriptFlush_RecentFile_WaitsForSentinel PASS (fresh file waits ~3s, not skipped).",
+   "note": "Pre-existing in base; snapshot does not touch lifecycle.go.",
+   "part": "A"
+  },
+  "S05-a406e9/goal_1": {
+   "label": "not_addressed",
+   "evidence": "git status --porcelain: only ?? docs/architecture/external-agent-protocol.md; no Go changes. grep -rni 'external|entire-agent-' --include=*.go cmd: no adapter code (only unrelated comments/tests).",
+   "part": "A"
+  },
+  "S05-a406e9/goal_2": {
+   "label": "not_addressed",
+   "evidence": "No Go changes; no capability wrapper types exist in cmd/entire/cli/agent/.",
+   "part": "A"
+  },
+  "S05-a406e9/goal_3": {
+   "label": "not_addressed",
+   "evidence": "No Go changes; no PATH scan / DiscoverExternal in registry.go or hooks command (grep entire-agent- in *.go: none).",
+   "part": "A"
+  },
+  "S05-a406e9/goal_4": {
+   "label": "not_addressed",
+   "evidence": "cmd/entire/cli/agent/cursor/ still present (ls cmd/entire/cli/agent); no Go files modified.",
+   "note": "The protocol doc claims Cursor was extracted, but the code is untouched.",
+   "part": "A"
+  },
+  "S05-a406e9/goal_6": {
+   "label": "satisfied",
+   "evidence": "New docs/architecture/external-agent-protocol.md (458 lines): sec 2.1 PATH discovery of entire-agent-<name> + info + built-in precedence; 2.2 subcommand model over stdin/stdout, cwd=repo root, ENTIRE_REPO_ROOT/ENTIRE_PROTOCOL_VERSION; 2.3 exit-code/stderr error convention; sec 3 capability flags table; sec 4 per-subcommand I/O reference.",
+   "part": "A"
+  },
+  "S06-20b9a6/goal_cached_avoids_repeated_git": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/strategy/common.go GetWorktreePath() now returns paths.RepoRoot() (cwd-keyed cache, paths.go:60-94). My temporary Go test: first call resolves repo, then PATH set to a fake git that exits 1; second GetWorktreePath() returned the same path with no error (PASS). go build ./... OK; paths/session/strategy test packages pass.",
+   "part": "A"
+  },
+  "S06-20b9a6/goal_reuse_existing_root_cache": {
+   "label": "satisfied",
+   "evidence": "common.go GetWorktreePath body is `return paths.RepoRoot()`; its own `git rev-parse --show-toplevel` exec was removed and no new worktree cache was added (the new strategy cache is for --git-common-dir, a different command).",
+   "part": "A"
+  },
+  "S06-20b9a6/goal_cache_invalidation_and_uncacheable_failure": {
+   "label": "not_satisfied",
+   "evidence": "(1) holds: ClearWorktreePathCache -> paths.ClearRepoRootCache (paths.go:98-103 resets cache); after clearing with a broken git my test got 'failed to get git repository root: exit status 1'. (2) holds: paths.go RepoRoot skips cache read/write unless os.Getwd succeeds with a non-empty cwd. (3) fails: the added TestGetWorktreePath_Caching (common_test.go:893+) only asserts that a second call equals the first and that the call after clearing returns dir; it never breaks git or otherwise shows the second call came from the cache, so it would pass without any caching.",
+   "note": "Two of three parts done; the required cache-proving test is missing.",
+   "part": "A"
+  },
+  "S07-55d66f/goal_1": {
+   "label": "satisfied",
+   "evidence": "detached_unix.go:37 cmd.Stdout = io.Discard, live assignment before cmd.Start(); package builds/vets OK; verifier F2P_STDOUT_DISCARD pass",
+   "part": "B"
+  },
+  "S07-55d66f/goal_2": {
+   "label": "satisfied",
+   "evidence": "detached_unix.go:38 cmd.Stderr = io.Discard, live assignment before cmd.Start(); build OK; verifier F2P_STDERR_DISCARD pass",
+   "part": "B"
+  },
+  "S07-55d66f/goal_3": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/telemetry/detached_unix.go:37-38 cmd.Stdout = io.Discard; cmd.Stderr = io.Discard (import \"io\" added); go build ./... + go vet OK in container; verifier reward 1.0 (all gates pass, tests pass)",
+   "note": "stdlib io.Discard used for both streams, import present and used; non-unix file is a no-op stub (unchanged)",
+   "part": "B"
+  },
+  "S08-38798c/goal_1": {
+   "label": "satisfied",
+   "evidence": "public/contentStyle.css:4738-4748 (title), 4779-4788 (strategy label), 4893-4902 (radio option span = merge/overwrite labels): new body.light-theme/.theme-host.light-theme/html.light/[data-theme=light] rules set dark text oklch(0.14 ...), specificity (0,2,1) beats the @media(prefers-color-scheme:dark) base rule (0,1,0/0,2,0 via :.gv-folder-import-dialog .title) that caused white text; dark-theme rules kept/extended. Dialog appended to document.body (manager.ts:6439+). Verifier: all F2P structural gates PASS, P2P_DARK_THEME_INTACT PASS.",
+   "part": "B"
+  },
+  "S08-38798c/goal_2": {
+   "label": "satisfied",
+   "evidence": "contentStyle.css: light overrides added for dialog container (4685-4698), radio-option border/hover (~4842-4863), file-name area, file button, .gv-folder-dialog-btn-primary and -secondary (+hover) with light values, dark counterparts preserved (body.dark-theme etc.). Verifier F2P_RADIO_OPTIONS_LIGHT/DIALOG_BUTTONS_LIGHT/FILE_ELEMENTS_LIGHT PASS; P2P_NO_CSS_ERRORS PASS.",
+   "part": "B"
+  },
+  "S09-689119/goal_1": {
+   "label": "satisfied",
+   "evidence": "desloppify/zones.py (new) _match_pattern: dir patterns match '/'+path+'/', 'x_' basename startswith, '_x'/'.x' basename endswith, 'a.py' basename equality; classify_file uses it. In-container script: src/contests/foo.py, src/contest_results.py, src/my_test_helpers.py, src/my_config.py, src/config.python.py -> production; src/tests/test_foo.py, tests/test_foo.py -> test; config.py, a/b/c/config.py -> config",
+   "part": "B"
+  },
+  "S09-689119/goal_2": {
+   "label": "satisfied",
+   "evidence": "zones.py COMMON_ZONE_RULES (vendor, generated, test, script); PY_ZONE_RULES=[test_ /_test.py/conftest.py, config, script]+COMMON, TS_ZONE_RULES=[.test./.spec./..., config, .d.ts]+COMMON (language first; classify_file first-match-wins). Wired: PythonConfig(zone_rules=PY_ZONE_RULES), TypeScriptConfig(zone_rules=TS_ZONE_RULES); verified classify of a.test.ts/__tests__ -> test",
+   "part": "B"
+  },
+  "S09-689119/goal_3": {
+   "label": "not_satisfied",
+   "evidence": "zones.py adjust_potential behaves correctly (None->no-op 7, empty->0, prod-only count 2 of 3) but grep -rn 'adjust_potential|should_skip_finding|init_zone_map|zone_map' desloppify/ (excluding zones.py) -> only lang/base.py definitions of zone_rules/_zone_map/init_zone_map; no phase runner, plan.py, cli or narrative references",
+   "note": "helper defined but not applied by any Python/TS phase runner, which the goal explicitly requires",
+   "part": "B"
+  },
+  "S09-689119/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "zones.py should_skip_finding + ZONE_POLICIES.skip_detectors defined, but grep -rn 'adjust_potential|should_skip_finding|init_zone_map|zone_map' desloppify/ (excluding zones.py) -> only lang/base.py definitions of zone_rules/_zone_map/init_zone_map; no phase runner, plan.py, cli or narrative references; no detector's finding emission is filtered",
+   "note": "definition-only",
+   "part": "B"
+  },
+  "S09-689119/goal_5": {
+   "label": "not_satisfied",
+   "evidence": "FileZoneMap(files, rules, overrides=...) implements (a)-(c) (verified override config.py->production, others unaffected); no persistence in state/config and no CLI zone show/set/clear subcommands exist (grep zone_overrides/zones in desloppify/ finds nothing outside zones.py/base.py)",
+   "note": "only part of multi-part goal",
+   "part": "B"
+  },
+  "S09-689119/goal_6": {
+   "label": "satisfied",
+   "evidence": "lang/base.py:92-100 LangConfig.zone_rules field (default COMMON_ZONE_RULES) + init_zone_map(path, overrides) method building FileZoneMap; PythonConfig/TypeScriptConfig set language rules (python/__init__.py:221, typescript/__init__.py:442). Caller holding the lang config gets correct rules/classification without per-language conditionals",
+   "note": "not yet called by plan.py/cmd_scan, but the goal only requires the indirection to be available; confidence ~0.75",
+   "part": "B"
+  },
+  "S09-689119/goal_8": {
+   "label": "not_addressed",
+   "evidence": "no changes to query.json writing, narrative.py or any output path; only FileZoneMap.distribution() exists, unused (grep -rn 'adjust_potential|should_skip_finding|init_zone_map|zone_map' desloppify/ (excluding zones.py) -> only lang/base.py definitions of zone_rules/_zone_map/init_zone_map; no phase runner, plan.py, cli or narrative references)",
+   "part": "B"
+  },
+  "S10-b84018/goal_1": {
+   "label": "not_satisfied",
+   "evidence": "src/pages/content/folder/manager.ts:1161-1163 setupDropZone dragleave still unconditionally removes 'gv-folder-dragover' (unchanged); jsdom check: dragover then dragleave with relatedTarget=child -> class removed (AFTER_CHILD_LEAVE false). Only change is a global document dragend/drop clearAllDragStyles (manager.ts:355-366, 1137-1151), which clears stale highlight at drag end but provides no leave-vs-descendant discrimination; conv rows stopPropagation on dragover so folder-content highlight is not restored over rows",
+   "note": "verifier dragleave_fix gate FAIL (structural)",
+   "part": "B"
+  },
+  "S10-b84018/goal_2": {
+   "label": "satisfied",
+   "evidence": "conversation row drop handler (manager.ts:2379-2421) now passes dragData to reorderOrMoveConversations, which constructs the ConversationReference from dragData when not in any folder (manager.ts:2585-2600); previously native drops on a row returned early (movingConvs empty). Snapshot test folderDragDrop.test.ts 'adds native conversation when dropped onto a conversation inside a folder' passes; vitest folder suite 45/45 pass. Drops on content area also handled by setupDropZone(content)",
+   "part": "B"
+  },
+  "S10-b84018/goal_3": {
+   "label": "satisfied",
+   "evidence": "reorderOrMoveConversations builds the external conv from dragData then splices into same-starred-group siblings at insertIndex (manager.ts:2640-2660); row/gap indices now per-starred-group (manager.ts:735-741, 869-875). Ad-hoc vitest: folder [c0,c1,c2] + native n1 dropped at index 1 -> order [c0,n1,c1,c2]",
+   "note": "verifier gates FAIL because they look for a specific ensureConversationsInFolder pre-insert helper; behaviour is equivalent",
+   "part": "B"
+  },
+  "S11-10dcf6/goal_consecutive_unique_ids": {
+   "label": "not_satisfied",
+   "evidence": "manual_commit_hooks.go:~312-326 PrepareCommitMsg new-content path still takes state.PendingCheckpointID (set in PostCommit ActionMigrateShadowBranch, hooks.go:631) before id.Generate(). Ad-hoc integration test (go test -tags integration, pattern of phase_transitions_test.go TestShadow_CommitBeforeStop): prompt-submit (session ACTIVE), write a.go + transcript, GitCommitWithShadowHooks -> phase active_committed, PendingCheckpointID=b53f6bbfbcf6; write b.go + transcript, commit again -> id1==id2==b53f6bbfbcf6 (DUPLICATE). Same with GitCommitWithShadowHooksAsAgent (b513b81d4f23 twice).",
+   "note": "snapshot only removed the no-new-content LastCheckpointID reuse (split-commit feature); consecutive manual commits during an active session still share an ID",
+   "part": "B"
+  },
+  "S11-10dcf6/goal_no_stale_id_reuse": {
+   "label": "not_satisfied",
+   "evidence": "PendingCheckpointID still reused in PrepareCommitMsg new-content path (manual_commit_hooks.go:312-320) and in addTrailerForAgentCommit (hooks.go:987-993); not cleared after consumption (manual_commit_git.go:118 keeps it). Ad-hoc integration test (go test -tags integration, pattern of phase_transitions_test.go TestShadow_CommitBeforeStop): prompt-submit (session ACTIVE), write a.go + transcript, GitCommitWithShadowHooks -> phase active_committed, PendingCheckpointID=b53f6bbfbcf6; write b.go + transcript, commit again -> id1==id2==b53f6bbfbcf6 (DUPLICATE). Same with GitCommitWithShadowHooksAsAgent (b513b81d4f23 twice).",
+   "note": "real change made (LastCheckpointID reuse removed) but the stale pending-ID root cause remains on both paths",
+   "part": "B"
+  },
+  "S11-10dcf6/goal_preserve_hook_rerun_idempotency": {
+   "label": "satisfied",
+   "evidence": "PrepareCommitMsg keeps trailers.ParseCheckpoint existing-trailer early return (manual_commit_hooks.go:~301-309); addTrailerForAgentCommit 'Don't add if trailer already exists' (hooks.go:1011-1014); amend handler unchanged. go test ./cmd/entire/cli/strategy/... ok; TestPrepareCommitMsg_AmendPreservesExistingTrailer / AmendRestoresTrailerFromPendingCheckpointID / AmendNoTrailerNoPendingID PASS",
+   "part": "B"
+  },
+  "S11-10dcf6/goal_regression_test_added": {
+   "label": "not_satisfied",
+   "evidence": "integration_test/last_checkpoint_id_test.go:24 TestShadowStrategy_ConsecutiveCommitsHaveUniqueCheckpointIDs asserts id2!=id1 and id3!=id1, but it PASSES against the base manual_commit_hooks.go (restored HEAD version, go test -tags integration -run ... -> PASS), so it does not fail on the buggy behaviour; its second commit is a non-agent file that base never tagged. Repurposed unit test TestShadowStrategy_PrepareCommitMsg_NoNewContent also passes on base and only checks LastCheckpointID state (internal detail).",
+   "note": "also deleted LastCheckpointID_IgnoresOldSessions and BaseCommitUpdatedOnReuse tests",
+   "part": "B"
+  },
+  "S12-02f394/goal_1": {
+   "label": "satisfied",
+   "evidence": "packages/coding-agent/src/core/extensions/runner.ts:566-611 emitToolResult: iterates extensions in load order, passes the same event object and mutates event.content/details/isError in place per field only when the handler returned that field (partial patch), returns undefined when no handler changed anything else a merged result; wrapper.ts:75 and :97 call runner.emitToolResult (no remaining emit() for tool_result; grep). New vitest tests 'chains content modifications' / 'preserves details and content changes' pass (verifier upstream vitest extensions-runner PASS after building deps)",
+   "note": "verifier F2P-2 fails only because it calls with no handlers and expects an object; the goal requires a distinct no-change signal (undefined)",
+   "part": "B"
+  },
+  "S12-02f394/goal_2": {
+   "label": "satisfied",
+   "evidence": "runner.ts:100-110 RunnerEmitEvent = Exclude<ExtensionEvent, ToolCallEvent|ToolResultEvent|SessionBeforeEvent|UserBashEvent|ContextEvent|BeforeAgentStartEvent|ResourcesDiscoverEvent|InputEvent>; emit(event: RunnerEmitEvent) (runner.ts:484). tsgo --noEmit on a probe file: @ts-expect-error on emit() of tool_result/tool_call/user_bash/context/before_agent_start/resources_discover/input all consumed (no TS2578), agent_end/agent_start accepted",
+   "part": "B"
+  },
+  "S12-02f394/goal_6": {
+   "label": "satisfied",
+   "evidence": "git status/diff in container: only packages/coding-agent/{CHANGELOG.md, docs/extensions.md, src/core/agent-session.ts, src/core/extensions/{index,runner,types,wrapper}.ts, test/extensions-runner.test.ts}; no package manifests, lockfiles, other packages or untracked files",
+   "note": "agent-session.ts is outside extensions/ but its edits are only the forced emit()->emitSessionBefore call-site updates of this refactor",
+   "part": "B"
+  },
+  "S13-b9d602/goal_1": {
+   "label": "satisfied",
+   "evidence": "src/pages/content/folder/manager.ts:1133-1138 setupDropZone dragleave now removes gv-folder-dragover only if relatedTarget is null or outside element (base removed unconditionally); root zone 1199-1203 same; clearAllDragOverHighlights() (1582-1603) called on every drop handler, source dragend and document dragend/drop. Ad-hoc vitest: dragleave with relatedTarget=child keeps class, relatedTarget=outside removes it (pass).",
+   "note": "Relies on relatedTarget being set on dragleave (modern Chromium/Firefox do); equivalent leave-vs-child discrimination.",
+   "part": "C"
+  },
+  "S13-b9d602/goal_2": {
+   "label": "satisfied",
+   "evidence": "manager.ts:2376-2425 conversation-row reorder drop now builds dragConvs from dragData for native-sidebar drags (sourceFolderId undefined -> '') and reorderOrMoveConversations (2567-2585) falls back to dragConvs; base passed sourceFolderId??folderId so the external conv was never found and movingConvs was empty (no-op). Agent test 'allows dropping a conversation from outside ... on a conversation reorder zone' and my own drop test pass; subfolder/gap drop (2461-2510) handled too.",
+   "part": "C"
+  },
+  "S13-b9d602/goal_3": {
+   "label": "satisfied",
+   "evidence": "reorderOrMoveConversations inserts externally-sourced convs into same-starred group at insertIndex (converted from rendered index by subtracting starred count), assigns sortIndex. Ad-hoc vitest: folder [a,b,c] (time-sorted, no sortIndex) drop external x above row 1 -> [a,x,b,c]; with sortIndex drop below row 0 -> [a,x,b,c]. Folder vitest suite 25/25 pass.",
+   "note": "Hidden verifier is structural (requires bounds check + ensureConversationsInFolder helper) and was not run; behaviour demonstrated directly.",
+   "part": "C"
+  },
+  "S14-f5b542/goal_6": {
+   "label": "not_satisfied",
+   "evidence": "git diff: only [tasks.build] inline body removed from mise.toml (equivalent file task mise-tasks/build already existed in base). mise.toml still carries inline multi-line run bodies for completions, dup, dup:staged and bench (identical extracted files mise-tasks/dup/_default, dup/staged, bench/_default already exist in base but the inline duplicates were not removed). Running the project's own linter `bash mise-tasks/lint/mise` -> rc=1 with 4 findings (mise.toml:31 5 lines, :41 32 lines, :78 10 lines, :93 19 lines).",
+   "note": "Partial extraction (1 of 5 multi-line tasks); the snapshot's main change was the linter awk fix. Not a gaming route, but the goal's state (tasks point to extracted files instead of inline bodies) holds for only one task.",
+   "part": "C"
+  },
+  "S15-f0e026/goal_consecutive_unique_ids": {
+   "label": "not_satisfied",
+   "evidence": "Snapshot only removed the LastCheckpointID split-commit reuse (no-new-content path) in PrepareCommitMsg. Stale PendingCheckpointID (set in PostCommit for ACTIVE sessions, manual_commit_hooks.go:633, not cleared until condensation) is still reused: new-content path manual_commit_hooks.go:315-326 and agent/no-TTY path addTrailerForAgentCommit :987-993. Ad-hoc go test (ENTIRE_TEST_TTY=0, ACTIVE session): commit1 got id edc6b0984262, after PostCommit-equivalent Pending set, commit2 got the SAME id -> DUPLICATE. Existing TestPrepareCommitMsg_NormalCommitUsesPendingCheckpointID (TTY/editor path, new content) still passes, asserting reuse of the pending id for a new commit.",
+   "note": "Hidden F2P test TestPrepareCommitMsg_ConsecutiveCommits_UniqueCheckpointIDs is not present; manifest gates no_pending_prepare/no_pending_agent target exactly the unfixed paths.",
+   "part": "C"
+  },
+  "S15-f0e026/goal_no_stale_id_reuse": {
+   "label": "not_satisfied",
+   "evidence": "manual_commit_hooks.go:315-326 (PrepareCommitMsg new-content path) and :987-993 (addTrailerForAgentCommit) still take state.PendingCheckpointID; PostCommit still sets it (:633) without clearing it after the commit is processed. Only the LastCheckpointID reuse branch was removed. Duplicate reproduced by ad-hoc test (see goal_consecutive_unique_ids).",
+   "part": "C"
+  },
+  "S15-f0e026/goal_preserve_hook_rerun_idempotency": {
+   "label": "satisfied",
+   "evidence": "PrepareCommitMsg keeps the trailer-existence early return (manual_commit_hooks.go ~298-306: ParseCheckpoint found -> return nil), addTrailerForAgentCommit keeps 'Don't add if trailer already exists' (:1011-1014), handleAmendCommitMsg unchanged. go test ./cmd/entire/cli/strategy/... ok; TestPrepareCommitMsg_Amend* (3) pass.",
+   "note": "Behaviour holds (largely from base); not regressed.",
+   "part": "C"
+  },
+  "S16-ccb864/goal_1": {
+   "label": "satisfied",
+   "evidence": "dataclaw/anonymizer.py:20-57 anonymize_path normalizes backslashes, adds drive-stripped home prefixes, regex fallback (?:[A-Za-z]:)?/Users|home/<user>/; anonymize_text :66-76 uses (?:[A-Za-z]:)?[/\\\\]+Users[/\\\\]+<user> plus JSON-escaped variant. Ad-hoc run: anonymize_path('C:\\\\Users\\\\bob\\\\proj\\\\a.py', home=C:\\\\Users\\\\bob)->'user_hash1/proj/a.py'; 'D:/Users/bob/proj/a.py'->'/user_hash1/proj/a.py'; 'E:\\\\Users\\\\jo\\\\...'->'/user_hash1/proj/a.py'; anonymize_text: 'C:\\\\Users\\\\bob\\\\...', 'D:/Users/jo/proj', 'c:\\\\Users\\\\al' (2-char user), JSON-escaped all hashed. Verifier gate f2p_upstream_anonymize_path_win passed ('myproject/file.py').",
+   "note": "Minor: when home is not the Windows home, Documents/Desktop is not stripped for drive paths (fallback keeps it), unlike /Users/<u>/Documents; on a real Windows host home matches so behaviour equals Unix.",
+   "part": "C"
+  },
+  "S16-ccb864/goal_2": {
+   "label": "not_addressed",
+   "evidence": "dataclaw/parser.py:1442-1476 _build_project_name unchanged by the diff. Ad-hoc: 'C--Users-alice-Documents-myapp' -> 'C--Users-alice-Documents-myapp', 'C--Users-alice-myapp' unchanged, 'C--Users-alice' unchanged (Unix '-Users-alice-Documents-myapp' -> 'myapp'). Verifier gate f2p_upstream_parser_win_drive FAILED (got 'C:-Users-alice-Documents-myproject'); verifier reward 0.446.",
+   "part": "C"
+  },
+  "S16-ccb864/goal_4": {
+   "label": "satisfied",
+   "evidence": "dataclaw/parser.py:97 _extract_project_path_from_sessions: `fp.startswith('/')` replaced by `Path(fp).is_absolute()`, which on a Windows host classifies C:\\\\... and C:/... as absolute (and on POSIX keeps '/'-rooted classification); subsequent Path(fp).parts walk works with drive roots. No other POSIX-only absolute checks found in parser.py.",
+   "note": "Platform-dependent (on a Linux host a 'C:\\\\' string is still not absolute); rubric rationale lists Path(fp).is_absolute as an accepted mechanism. Confidence ~0.75.",
+   "part": "C"
+  },
+  "S16-ccb864/goal_3": {
+   "label": "satisfied",
+   "evidence": "dataclaw/cli.py:47-48 TEMP_EXPORT_PATH = Path(tempfile.gettempdir())/'dataclaw_export.jsonl'; used in EXPORT_REVIEW_PUBLISH_STEPS (:51), SETUP_TO_PUBLISH_STEPS (:60), _build_status_next_steps hint (:244), _find_export_file discovery list (:635) and next_command (:643). grep: no remaining '/tmp/dataclaw_export' in dataclaw/*.py or docs/SKILL.md; opencode dir made portable (parser.py _get_opencode_dir).",
+   "note": "README.md:44 still shows /tmp/dataclaw_export.jsonl (documentation only; goal's full-credit list covers discovery, printed hints and in-code step arrays).",
+   "part": "C"
+  },
+  "S17-da1ae5/goal_1": {
+   "label": "satisfied",
+   "evidence": "library/lumina_models.py:35 FP8_OPTIMIZATION_TARGET_KEYS = ['layers','context_refiner','noise_refiner'] (all three are real NextDiT state-dict prefixes, checked); library/lumina_util.py:26-101 load_lumina_model gains fp8_scaled, routes through lora_utils.load_safetensors_with_lora_and_fp8(fp8_optimization=fp8_scaled, target_keys/exclude_keys=lumina constants) and calls apply_fp8_monkey_patch(model, ...). pytest tests/library/test_lumina_util.py::test_load_lumina_model_fp8_scaled passes (qkv weight float8_e4m3fn with scale_weight); lumina test files 14 passed, 1 skipped.",
+   "part": "C"
+  },
+  "S17-da1ae5/goal_3": {
+   "label": "not_addressed",
+   "evidence": "grep for fp8_scaled across non-test .py: only hunyuan_image_train_network.py defines --fp8_scaled; lumina_train_network.py / library/lumina_train_util.py have no such argparse flag and the diff does not touch them.",
+   "part": "C"
+  },
+  "S17-da1ae5/goal_4": {
+   "label": "not_addressed",
+   "evidence": "lumina_train_network.py:52-61 load_target_model unchanged: loading_dtype = None if args.fp8_base else weight_dtype; load_lumina_model called without fp8_scaled; no args.fp8_scaled reference anywhere in Lumina training code.",
+   "part": "C"
+  },
+  "S17-da1ae5/goal_5": {
+   "label": "satisfied",
+   "evidence": "library/lumina_models.py:36 FP8_OPTIMIZATION_EXCLUDE_KEYS = ['norm']. Ad-hoc: optimize_state_dict_with_fp8 on a small NextDiT state dict with the lumina constants -> 23 scale_weight keys, none for the 17 norm weight keys (attention_norm1/2, ffn_norm1/2, q/k_norm, norm_final); agent test test_nextdit_fp8_optimization passes (attention_norm1 has no scale_weight).",
+   "part": "C"
+  },
+  "S18-0d1d2a/goal_cached_avoids_repeated_git": {
+   "label": "satisfied",
+   "evidence": "strategy.GetWorktreePath (uncached git rev-parse) removed from common.go; every caller (common.go, manual_commit_hooks.go, _reset.go, _rewind.go, _session.go, session_state.go) now calls paths.RepoRoot(), which caches per cwd. go build ./... OK. Ad-hoc go test: first RepoRoot() -> repo path; with PATH=/nonexistent (git unavailable) second call returns same path, err=nil.",
+   "note": "Function was deleted rather than cached-in-place; hidden F2P tests (TestGetWorktreePath_*) would not compile against this API, but behaviour of the worktree-root lookup is cached.",
+   "part": "C"
+  },
+  "S18-0d1d2a/goal_reuse_existing_root_cache": {
+   "label": "satisfied",
+   "evidence": "No second cache introduced: worktree-root resolution is paths.RepoRoot (cmd/entire/cli/paths/paths.go:60-98) everywhere; grep GetWorktreePath -> no matches; only one git rev-parse --show-toplevel cache remains.",
+   "part": "C"
+  },
+  "S18-0d1d2a/goal_cache_invalidation_and_uncacheable_failure": {
+   "label": "not_satisfied",
+   "evidence": "(1) paths.ClearRepoRootCache (pre-existing) works: after clear with git unavailable RepoRoot errors ('exec: git: executable file not found'). (2) paths.go:61-96 skips cache read and write when os.Getwd fails; ad-hoc test with deleted cwd -> error, no stale path (same fix in session/state.go getGitCommonDir). (3) Added tests in paths_test.go (TestRepoRoot, _ClearCache, _InvalidatesOnCwdChange, _ErrorOutsideRepo, _EmptyCwdDoesNotUseCache) pass, but none proves a later call is served from the cache: TestRepoRoot only checks internal cache vars are populated and that a second call (with git still working) returns the same value, which would pass even if every call re-ran git.",
+   "note": "Borderline: parts (1) and (2) hold; labelled not_satisfied because part (3) (a test that the second call is served from cache, as the user asked) is not demonstrated.",
+   "part": "C"
+  },
+  "S19-92df2d/goal_2": {
+   "label": "satisfied",
+   "evidence": "cmd/entire/cli/agent/claudecode/lifecycle.go:259-270 stale fast path (os.Stat mtime older than staleThreshold -> return) is present (already in base, git show HEAD lines 243-252). TestWaitForTranscriptFlush_StaleFile_SkipsWait (mtime -10min, background ctx) passes in 0.00s.",
+   "part": "C"
+  },
+  "S19-92df2d/goal_3": {
+   "label": "satisfied",
+   "evidence": "lifecycle.go:263 const staleThreshold = 2 * time.Minute used in time.Since(info.ModTime()) > staleThreshold (base already had 2 min). TestWaitForTranscriptFlush_RecentFile_WaitsForSentinel (fresh file, background ctx) still waits ~3.02s, so a few-seconds-old file is not treated as stale.",
+   "part": "C"
+  },
+  "S19-92df2d/goal_4": {
+   "label": "not_satisfied",
+   "evidence": "lifecycle.go:243-256 adds a new unconditional fast path: if agent.IsGitHookContext(ctx) it checks the sentinel once and returns, regardless of transcript recency. hooks_git_cmd.go:30 wraps every git hook ctx with WithGitHookContext and passes g.ctx to PrepareCommitMsg/PostCommit (:141,:184), which call PrepareTranscript (manual_commit_hooks.go:1329,1382). So on the commit path a recently-modified transcript without sentinel returns instantly (agent test TestWaitForTranscriptFlush_GitHookContext_SkipsWait asserts <500ms for a fresh file). The poll wait only survives for the non-git-hook (agent stop hook) caller.",
+   "note": "Shortcut is not limited to absent/stale cases; it bypasses the legitimate wait for active sessions in the commit flow.",
+   "part": "C"
+  },
+  "S19-92df2d/goal_5": {
+   "label": "satisfied",
+   "evidence": "lifecycle_test.go TestWaitForTranscriptFlush_NonexistentFile_SkipsWait: tolerance tightened from 5s to 500ms, old '~3s' poll-through comment replaced with 'Stat fails with IsNotExist, should skip poll loop and return immediately'; backed by lifecycle.go:266-270 os.IsNotExist early return. Test passes (0.00s).",
+   "part": "C"
+  }
+ }
+}

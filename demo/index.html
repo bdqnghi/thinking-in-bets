@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Standard agent vs TIB agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f3ef;--paper:#fff;--ink:#1b2030;--ink2:#555c6b;--ink3:#8b919d;--line:#e4e1da;--soft:#f6f5f1;
+  --left:#4f6079;--left-bg:#eef1f5;--right:#16735f;--right-bg:#e9f5f1;
+  --user:#b4621c;--user-bg:#fdf2e6;--pass:#1d7a3b;--pass-bg:#e3f3e8;--fail:#bb3328;--fail-bg:#fbe7e5;
+  --term:#171c28;--term-ink:#e8e4da;--term-dim:#8d94a6;--term-acc:#71d7b8;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --sh:0 1px 2px rgba(20,24,40,.05),0 8px 24px -12px rgba(20,24,40,.18);
+}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 20px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header h1{font-size:15px;margin:0 10px 0 0;font-weight:600;letter-spacing:-.01em;white-space:nowrap}
+header h1 i{display:inline-block;width:12px;height:12px;border-radius:3px;background:linear-gradient(135deg,var(--left) 50%,var(--right) 50%);margin-right:8px;vertical-align:-1px}
+select,button{font:inherit;font-size:13.5px;padding:7px 12px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink)}
+select{max-width:360px;text-overflow:ellipsis}#model{max-width:180px}button{cursor:pointer;transition:background .15s,transform .08s}button:hover{background:var(--soft)}button:active{transform:translateY(1px)}
+button.run{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600;padding:7px 20px}button.run:hover{background:#2a3146}
+.mode{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.mode button{border:0;border-radius:0;padding:7px 12px;color:var(--ink2);white-space:nowrap}.mode button.on{background:var(--ink);color:#fff}
+.mode button[data-m=live].on{background:var(--right)}
+.clock{font:12.5px var(--mono);color:var(--ink3);min-width:60px}
+#livenote{color:var(--right);font-weight:500}
+.sp{margin-left:auto;display:flex;align-items:center;gap:10px;color:var(--ink2);font-size:12.5px}
+input[type=range]{accent-color:var(--ink);width:140px}
+.task{margin:14px 20px 0;padding:12px 16px;background:var(--paper);border:1px solid var(--line);border-radius:12px;white-space:pre-wrap;max-height:140px;overflow:auto;font-size:13.5px;box-shadow:var(--sh)}
+.task b{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;font-weight:600}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:14px 20px 16px;height:calc(100vh - 222px);min-height:460px}
+.col{display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
+.col h2{margin:0;padding:10px 14px;font-size:14px;font-weight:600;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.col h2 .av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700;position:relative}
+.col.l .av{background:var(--left)}.col.r .av{background:var(--right)}
+.col h2 .av.busy:after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid currentColor;opacity:.35;animation:pulse 1.4s ease-out infinite}
+.col.l .av.busy:after{color:var(--left)}.col.r .av.busy:after{color:var(--right)}
+@keyframes pulse{0%{transform:scale(.8);opacity:.5}100%{transform:scale(1.35);opacity:0}}
+.col h2 .sub{color:var(--ink3);font-weight:400;font-size:12.5px}
+.col h2 .status{margin-left:auto;font-size:12px;color:var(--ink3);font-weight:500;display:flex;align-items:center;gap:6px}
+.col h2 .status.ok{color:var(--pass)}.col h2 .status.bad{color:var(--fail)}
+.feed{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.feed>*{flex-shrink:0}
+.msg{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;animation:in .32s cubic-bezier(.2,.7,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg .ic{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;margin-top:2px}
+.col.l .msg .ic{background:var(--left)}.col.r .msg .ic{background:var(--right)}
+.msg.k-user .ic{background:var(--user)!important}.msg.k-harness .ic{background:#9fcfc3!important;color:#124e42}.msg.k-verdict .ic{background:#9aa1ad!important}
+.b{min-width:0}
+.agent{background:var(--soft);border:1px solid var(--line);border-radius:12px;border-top-left-radius:4px;padding:9px 12px;white-space:pre-wrap;font-size:13.5px}
+.term{border-radius:12px;border-top-left-radius:4px;overflow:hidden;border:1px solid #0f131c}
+.cmd{font:12.3px/1.5 var(--mono);background:var(--term);color:var(--term-ink);padding:8px 12px;white-space:pre-wrap;word-break:break-word;max-height:150px;overflow:auto;position:relative}
+.cmd .ps{color:var(--term-acc);user-select:none}.cmd .caret{display:inline-block;width:7px;height:13px;background:var(--term-ink);vertical-align:-2px;margin-left:1px;animation:blink .9s steps(2) infinite}
+@keyframes blink{to{opacity:0}}
+.cmd .tag{position:absolute;right:10px;top:7px;font-size:10.5px;color:var(--term-dim);letter-spacing:.04em}
+.out{font:11.8px/1.5 var(--mono);background:#fbfaf7;color:var(--ink2);padding:7px 12px;white-space:pre-wrap;word-break:break-word;max-height:190px;overflow:auto;border-top:1px solid var(--line);animation:in .3s}
+.out.err{color:var(--fail)}.out.empty{color:var(--ink3);font-style:italic}
+.running{display:flex;align-items:center;gap:8px;font:11.5px var(--mono);color:var(--term-dim);background:#fbfaf7;padding:7px 12px;border-top:1px solid var(--line)}
+.spin{width:12px;height:12px;border-radius:50%;border:2px solid #cfd4dd;border-top-color:var(--ink2);animation:rot .8s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
+.k-write .cmd{background:#3b3022}.k-write .cmd .ps{color:#f1c777}
+.k-submit .cmd{background:#2f3a4d}.k-submit .cmd .ps{color:#f1c777}
+.k-user .bub{background:var(--user-bg);border:1px solid #f1dcc4;border-radius:12px;border-top-left-radius:4px;padding:9px 13px;white-space:pre-wrap;font-size:14px}
+.k-user .bub b{display:block;color:var(--user);font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px}
+.k-harness .bub{background:#eef8f5;border:1px dashed #a9d6ca;border-radius:12px;border-top-left-radius:4px;padding:8px 12px;font-size:12.5px;color:#17584b;white-space:pre-wrap}
+.k-harness .bub b{color:var(--right)}
+.bet{border:1px solid #a9d6ca;border-radius:12px;border-top-left-radius:4px;background:#f3faf8;overflow:hidden}
+.bet .hd{padding:8px 12px;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--right);font-weight:600;border-bottom:1px solid #d6ebe5;display:flex;gap:8px;align-items:center}
+.bet table{width:100%;border-collapse:collapse;font-size:12.3px}
+.bet tr{animation:in .3s}.bet td{padding:6px 10px 6px 0;border-top:1px solid #dfeee9;vertical-align:top}.bet td:first-child{padding-left:12px;font-family:var(--mono);color:var(--ink3);font-size:11.5px;width:40px}
+.bet td.p{font-family:var(--mono);white-space:nowrap;text-align:right;font-weight:600;padding-right:12px;width:92px}
+.bet .bar{display:inline-block;width:38px;height:5px;border-radius:3px;background:#dbe8e4;vertical-align:middle;margin-right:7px;overflow:hidden}.bet .bar i{display:block;height:100%;background:var(--right)}
+.bet td .ev{display:block;color:var(--ink2);font-size:11.8px;margin-top:2px}
+.vd{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;border-top-left-radius:4px;background:var(--paper)}
+.vd.final{padding:16px 16px}.vd .badge{font-weight:700;padding:5px 11px;border-radius:7px;font-size:12px;animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.vd.ok .badge{background:var(--pass-bg);color:var(--pass)}.vd.bad .badge{background:var(--fail-bg);color:var(--fail)}.vd.final .badge{font-size:16px;padding:8px 14px}
+.vd small{display:block;color:var(--ink2)}.vd .lbl{font-weight:600}
+.think{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:center;animation:in .25s}
+.think .dots{display:inline-flex;gap:4px;padding:10px 12px;background:var(--soft);border:1px solid var(--line);border-radius:12px;border-top-left-radius:4px}
+.think .dots i{width:6px;height:6px;border-radius:50%;background:var(--ink3);animation:bounce 1.2s infinite}
+.think .dots i:nth-child(2){animation-delay:.15s}.think .dots i:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.think .lbl{font-size:12px;color:var(--ink3);margin-left:8px}
+.fin{text-align:center;color:var(--ink3);font-size:12px;padding:8px}
+@media(max-width:900px){.cols{grid-template-columns:1fr;height:auto}.feed{max-height:62vh}}
+</style>
+</head>
+<body>
+<header>
+  <h1><i></i>Standard agent vs TIB agent</h1>
+  <div class="mode" id="mode"><button data-m="live" class="on">● Live</button><button data-m="replay">Replay</button></div>
+  <select id="pick"></select>
+  <select id="model" title="model for both agents"></select>
+  <button id="run" class="run">▶ Run</button>
+  <button id="skip">Skip to end</button>
+  <span id="clock" class="clock"></span>
+  <div class="sp" id="speedbox">slower <input id="speed" type="range" min="1" max="10" value="4"> faster</div>
+  <div class="sp" id="livenote">real agents · real containers · real hidden tests</div>
+</header>
+<div class="task" id="task"><b>Task</b>Pick a sample and press Run.</div>
+<div class="cols">
+  <section class="col l"><h2><span class="av" id="avL">S</span>Standard agent <span class="sub">re-checks after the user replies</span><span class="status" id="stL"></span></h2><div class="feed" id="L"></div></section>
+  <section class="col r"><h2><span class="av" id="avR">T</span>TIB agent <span class="sub">bets before the user replies</span><span class="status" id="stR"></span></h2><div class="feed" id="R"></div></section>
+</div>
+<script src="cases.js"></script>
+<script>
+(function(){
+  const S=window.SAMPLES, $=id=>document.getElementById(id);
+  const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const el=(cls,html)=>{const d=document.createElement('div');d.className=cls;if(html!=null)d.innerHTML=html;return d;};
+  const pick=$('pick');
+
+  // ---- timing: every wait scales with the speed slider; 1 = leisurely, 10 = brisk
+  let run=0;  // run token; bumping it cancels in-flight streams
+  const k=()=>2.2/Number($('speed').value);            // multiplier (slider 4 ≈ 0.55)
+  const wait=(ms,tok)=>new Promise(r=>setTimeout(()=>r(tok===run),Math.max(0,ms*k())));
+
+  function setStatus(side,text,cls){const s=$('st'+side);s.textContent=text;s.className='status '+(cls||'');$('av'+side).classList.toggle('busy',!cls);}
+  function scroll(feed){feed.scrollTop=feed.scrollHeight;}
+  function msg(cls,icon){const m=el('msg k-'+cls,`<div class="ic">${icon}</div><div class="b"></div>`);return m;}
+  function think(label){return el('think',`<div></div><div><span class="dots"><i></i><i></i><i></i></span><span class="lbl">${label}</span></div>`);}
+
+  async function typeInto(node,text,tok,cps=55){ // type a command out
+    const caret=document.createElement('span');caret.className='caret';node.appendChild(document.createTextNode(''));node.appendChild(caret);
+    const tn=node.childNodes[node.childNodes.length-2];
+    const step=Math.max(1,Math.round(text.length/(cps*0.9)));  // keep long commands under ~1s
+    for(let i=0;i<text.length;i+=step){tn.textContent=text.slice(0,i+step);if(!await wait(18,tok))return false;}
+    caret.remove();return true;
+  }
+
+  // ---- renderers (instant) and streamers (animated) per step type
+  function renderStep(st){
+    if(st.t==='cmd'||st.t==='write'||st.t==='submit'){
+      const m=msg(st.t,'⌘');const term=el('term');
+      const label=st.t==='submit'?'submit':st.t==='write'?st.cmd:st.cmd;
+      term.appendChild(el('cmd',`<span class="ps">${st.t==='write'?'✎ ':st.t==='submit'?'▶ ':'$ '}</span>${esc(label)}${st.t==='write'?`<span class="tag">${esc(st.out)}</span>`:''}`));
+      if(st.t==='cmd')term.appendChild(el('out '+(st.rc?'err':'')+(st.out?'':' empty'),esc(st.out||'(no output)')));
+      m.lastChild.appendChild(term);return m;}
+    if(st.t==='agent'){const m=msg('agent','✦');m.lastChild.appendChild(el('agent',esc(st.text)));return m;}
+    if(st.t==='user'){const m=msg('user','U');m.lastChild.appendChild(el('bub',`<b>User</b>${esc(st.text)}`));return m;}
+    if(st.t==='harness'){const m=msg('harness','⚙');m.lastChild.appendChild(el('bub',`<b>harness</b> ${esc(st.text)}`));return m;}
+    if(st.t==='bet'){const m=msg('bet','✦');m.lastChild.appendChild(betTable(st,st.claims.length));return m;}
+    if(st.t==='verdict'){const m=msg('verdict','✓');m.lastChild.appendChild(verdictBox(st));return m;}
+    return el('agent',esc(JSON.stringify(st)));
+  }
+  function betTable(st,n){
+    const w=el('bet',`<div class="hd">Bet Card <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink3)">written before the user replies</span></div>`);
+    const t=document.createElement('table');
+    st.claims.slice(0,n).forEach(c=>{const tr=document.createElement('tr');const p=Number(c.p);
+      tr.innerHTML=`<td>${esc(c.id)}</td><td>${esc(c.requirement)}<span class="ev">${esc(c.evidence||'')}</span></td><td class="p"><span class="bar"><i style="width:${Math.round(p*100)}%"></i></span>${p.toFixed(2)}</td>`;t.appendChild(tr);});
+    w.appendChild(t);return w;
+  }
+  function verdictBox(st){const t=st.tests;return el(`vd ${st.ok?'ok':'bad'} ${st.final?'final':''}`,`<span class="badge">${st.ok?'PASS':'FAIL'}</span><div><span class="lbl">${esc(st.label)}</span>${t?`<small>${t.passed}/${t.total} hidden tests passing</small>`:''}</div>`);}
+
+  async function stream(side,steps,tok){
+    const feed=$(side);
+    for(let i=0;i<steps.length;i++){
+      const st=steps[i];
+      if(st.t==='cmd'||st.t==='write'||st.t==='submit'){
+        setStatus(side,'thinking…');const th=think('thinking');feed.appendChild(th);scroll(feed);
+        if(!await wait(500+Math.random()*500,tok))return;th.remove();
+        const m=msg(st.t,'⌘');const term=el('term');const cmd=el('cmd',`<span class="ps">${st.t==='write'?'✎ ':st.t==='submit'?'▶ ':'$ '}</span>`);term.appendChild(cmd);m.lastChild.appendChild(term);feed.appendChild(m);scroll(feed);
+        setStatus(side,st.t==='write'?'writing file…':st.t==='submit'?'submitting…':'typing command…');
+        if(!await typeInto(cmd,st.t==='submit'?'submit':st.cmd,tok))return;
+        if(st.t==='write')cmd.insertAdjacentHTML('beforeend',`<span class="tag">${esc(st.out)}</span>`);
+        if(st.t==='cmd'){
+          setStatus(side,'running…');const r=el('running',`<span class="spin"></span>running`);term.appendChild(r);scroll(feed);
+          const long=/pytest|go test|npm|make|cargo|build/.test(st.cmd);
+          if(!await wait((long?1500:450)+Math.random()*400,tok))return;r.remove();
+          term.appendChild(el('out '+(st.rc?'err':'')+(st.out?'':' empty'),esc(st.out||'(no output)')));scroll(feed);
+          if(!await wait(350,tok))return;
+        } else if(!await wait(st.t==='submit'?900:400,tok))return;
+      } else if(st.t==='agent'){
+        setStatus(side,'thinking…');const th=think('thinking');feed.appendChild(th);scroll(feed);
+        if(!await wait(700,tok))return;th.remove();
+        const m=msg('agent','✦');const b=el('agent','');m.lastChild.appendChild(b);feed.appendChild(m);
+        const words=st.text.split(/(\s+)/);for(let j=0;j<words.length;j+=2){b.textContent+=words[j]+(words[j+1]||'');scroll(feed);if(j%6===0&&!await wait(40,tok))return;}
+        if(!await wait(500,tok))return;
+      } else if(st.t==='user'){
+        setStatus(side,'waiting for user…');if(!await wait(1600,tok))return;
+        feed.appendChild(renderStep(st));scroll(feed);if(!await wait(1800,tok))return;
+      } else if(st.t==='harness'){
+        feed.appendChild(renderStep(st));scroll(feed);if(!await wait(900,tok))return;
+      } else if(st.t==='bet'){
+        setStatus(side,'writing Bet Card…');const th=think('writing Bet Card');feed.appendChild(th);scroll(feed);
+        if(!await wait(900,tok))return;th.remove();
+        const m=msg('bet','✦');feed.appendChild(m);
+        for(let n=1;n<=st.claims.length;n++){m.lastChild.innerHTML='';m.lastChild.appendChild(betTable(st,n));scroll(feed);if(!await wait(650,tok))return;}
+        if(!await wait(600,tok))return;
+      } else if(st.t==='verdict'){
+        setStatus(side,'running hidden tests…');const th=think('harness runs the hidden tests');feed.appendChild(th);scroll(feed);
+        if(!await wait(st.final?2200:1500,tok))return;th.remove();
+        feed.appendChild(renderStep(st));scroll(feed);
+        if(st.final){setStatus(side,st.ok?'✓ finished — PASS':'✗ finished — FAIL',st.ok?'ok':'bad');}
+        else if(!await wait(800,tok))return;
+      }
+    }
+  }
+
+  function reset(){run++;if(MODE==='live'){resetAll();return;}const s=S[pick.value];$('task').innerHTML=`<b>Task · ${esc(s.title)}</b>${esc(s.task)}`;for(const side of ['L','R']){$(side).innerHTML='';setStatus(side,'',' ');}}
+  function play(){reset();const tok=run,s=S[pick.value];stream('L',s.left,tok);stream('R',s.right,tok);}
+  function skip(){reset();const s=S[pick.value];for(const [side,steps] of [['L',s.left],['R',s.right]]){const f=$(side);steps.forEach(st=>f.appendChild(renderStep(st)));const last=steps[steps.length-1];setStatus(side,last.ok?'✓ finished — PASS':'✗ finished — FAIL',last.ok?'ok':'bad');f.style.scrollBehavior='auto';f.scrollTop=f.scrollHeight;f.style.scrollBehavior='';}}
+  // ---------------- live mode: real runs streamed from live_server.py
+  let MODE='live', TASKS=[], es=null, clockT=null;
+  const termOf=side=>{const ps=$(side).querySelectorAll('.msg.k-cmd .term');return ps[ps.length-1];};
+  function clock(start){clearInterval(clockT);const c=$('clock');if(!start){c.textContent='';return;}clockT=setInterval(()=>{const s=Math.floor((Date.now()-start)/1000);c.textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;},1000);}
+  function fillPicker(){pick.innerHTML='';if(MODE==='live'){TASKS.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=(t.featured?'★ ':'')+t.id+` · ${t.tests} tests`;pick.appendChild(o);});}
+    else S.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`${s.title} — ${s.model}`;pick.appendChild(o);});}
+  function setMode(m){MODE=m;document.querySelectorAll('#mode button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+    $('skip').style.display=m==='replay'?'':'none';$('speedbox').style.display=m==='replay'?'':'none';$('model').style.display=m==='live'?'':'none';$('livenote').style.display=m==='live'?'':'none';
+    fillPicker();reset();}
+  function liveThink(side,label){let th=$(side).querySelector('.think.live');if(!th){th=think(label);th.classList.add('live');$(side).appendChild(th);}else th.querySelector('.lbl').textContent=label;scroll($(side));}
+  function liveClear(side){const th=$(side).querySelector('.think.live');if(th)th.remove();}
+  function onEvent(ev){const side=ev.side,feed=$(side);
+    if(ev.t==='status'){setStatus(side,ev.text);if(ev.text.startsWith('running command'))liveClear(side);else liveThink(side,ev.text.replace('…',''));return;}
+    if(ev.t==='done'){liveClear(side);if(!$('st'+side).classList.contains('ok')&&!$('st'+side).classList.contains('bad'))setStatus(side,'finished',' ');return;}
+    liveClear(side);
+    if(ev.fill){const term=termOf(side);if(term){const r=term.querySelector('.running');if(r)r.remove();term.appendChild(el('out '+(ev.rc?'err':'')+(ev.out?'':' empty'),esc(ev.out||'(no output)')));scroll(feed);return;}}
+    const node=renderStep(ev);
+    if(ev.t==='cmd'&&ev.pending){const term=node.querySelector('.term');term.querySelector('.out')?.remove();term.appendChild(el('running',`<span class="spin"></span>running in container`));}
+    feed.appendChild(node);scroll(feed);
+    if(ev.t==='verdict'&&ev.final){setStatus(side,ev.ok?'✓ finished — PASS':'✗ finished — FAIL',ev.ok?'ok':'bad');}
+    else if(ev.t==='user'){setStatus(side,'user replied');}
+  }
+  async function playLive(){
+    if(es){es.close();es=null;}
+    run++;for(const side of ['L','R']){$(side).innerHTML='';setStatus(side,'starting container…');liveThink(side,'starting container');}
+    const t=TASKS.find(x=>x.id===pick.value);$('task').innerHTML=`<b>Task · ${esc(t.id)} · ${esc($('model').value)} · live</b>${esc(t.task)}`;
+    const r=await fetch(`/api/run?task=${encodeURIComponent(pick.value)}&model=${encodeURIComponent($('model').value)}`,{method:'POST'}).then(r=>r.json());
+    if(r.error){alert(r.error);return;}
+    history.replaceState(null,'',`?run=${r.run}`);
+    attach(r.run,Date.now());
+  }
+  function attach(id,start){
+    if(es){es.close();}
+    clock(start);
+    es=new EventSource(`/api/stream?run=${id}`);
+    es.onmessage=e=>{const ev=JSON.parse(e.data);if(!start&&ev.t_wall){start=ev.t_wall*1000;clock(start);}onEvent(ev);};
+    es.addEventListener('end',()=>{es.close();es=null;clearInterval(clockT);});
+    es.onerror=()=>{};  // EventSource auto-reconnects with Last-Event-ID
+  }
+  function resetAll(){if(es){es.close();es=null;}clock(null);if(MODE==='replay'){reset();}else{run++;for(const side of ['L','R']){$(side).innerHTML='';setStatus(side,'',' ');}const t=TASKS.find(x=>x.id===pick.value);if(t)$('task').innerHTML=`<b>Task · ${esc(t.id)}</b>${esc(t.task)}`;}}
+  $('run').onclick=()=>MODE==='live'?playLive():play();$('skip').onclick=skip;pick.onchange=resetAll;
+  document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+  fetch('/api/tasks').then(r=>r.json()).then(d=>{TASKS=d.tasks;d.models.forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;$('model').appendChild(o);});setMode('live');const q=new URLSearchParams(location.search).get('run');if(q){for(const side of ['L','R'])setStatus(side,'reconnecting…');attach(q,null);}})
+    .catch(()=>{$('mode').style.display='none';setMode('replay');});  // opened as a plain file: replay only
+})();
+</script>
+</body>
+</html>

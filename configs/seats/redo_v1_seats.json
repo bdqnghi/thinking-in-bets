@@ -1,0 +1,45 @@
+{
+  "schema": "redo_v1/seats/1",
+  "revision": "gemini-only-2026-09-27",
+  "note": "Gemini-only seats (PLAN.md 5.1, dated note 2026-09-27): the OpenAI key has no credit; every former gpt-5.5 seat moves to Gemini. Read at construction time by fsa.redo.llm_seats (host side; the in-trial overlay trigger reads it when its judge is first built). Environment overrides, recorded in every seat record: REDO_JUDGE_MODEL, REDO_JUDGE_EFFORT.",
+  "provider": {
+    "gemini": {
+      "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+      "api_key_env": "GEMINI_API_KEY",
+      "client": "openai SDK chat.completions against Gemini's OpenAI-compatible endpoint; response_format json_schema (strict) or json_object; reasoning_effort -> Gemini thinkingLevel",
+      "patient_retry": "transient errors (429, 500, 502, 503, 504, overload, timeout, connection): backoff 10, 20, 40, 60, 120, 180, 300, 300, 300 s (9 retries, +0-20 % jitter); invalid/missing JSON output: at most 4 retries (5, 15, 30, 60 s)"
+    }
+  },
+  "seats": {
+    "judge": {
+      "model": "gemini-3.5-flash",
+      "reasoning_effort": "high",
+      "serves": [
+        "SWE-Together per-intent judge v2 (analysis; configs/intents/swe-together/JUDGE_FREEZE.json)",
+        "SWE-Together in-trial overlay trigger (fsa.redo.intent_judge, v1 prompt) for new overlay trials",
+        "per-intent applicability decision (fsa.redo.intent_judge)",
+        "SWE-Together intent-to-check / intent-to-goal mapper (fsa.redo.swe_together.intent_map)",
+        "SWE-Interact no-dialogue LLM judge and in-trial overlay trigger (fsa.redo.swe_interact.judge)",
+        "SWE-Interact revelation tagger ('revealed by turn t'; fsa.redo.swe_interact.tagger)",
+        "E2 control tagger (fsa.redo.e2.items.tag_replies -> the revelation tagger)",
+        "SWE-Interact refactoring rubric grader, final verifier (EVAL_MODEL) and host-side per-snapshot rubric judge"
+      ],
+      "why": "not an agent rung (no self-grading) and its own per-model quota (measured 26 Sep: 16 concurrent short calls clean, 429 at 32)"
+    },
+    "swe_interact_user_sim": {
+      "model": "gemini-3.1-pro-preview",
+      "reasoning_effort": "high",
+      "note": "SWE-Together's official simulator model, so both benchmarks share one simulator family. Recorded deviation from SWE-Interact's official gpt-5.5. Same per-model quota as the SWE-Together simulator (429 at ~4 concurrent short calls); patient retry in the sidecar (SWI_SIM_RETRY=1)."
+    },
+    "swe_together_user_sim": {
+      "model": "gemini/gemini-3.1-pro-preview",
+      "note": "unchanged official seat"
+    },
+    "swe_together_correctness_judge": {
+      "model": null,
+      "status": "dropped",
+      "was": "codex/gpt-5.5 (substitute for the official Claude Opus agentic judge)",
+      "replacement": "final pass = the task's own tests/test.sh reward (the verifier result already in each trial) together with the frozen per-intent judge on the final snapshot (fsa.redo.metrics); Gate 1 depends on the per-intent judge only"
+    }
+  }
+}

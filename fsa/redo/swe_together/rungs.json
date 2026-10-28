@@ -1,0 +1,111 @@
+{
+  "schema": "redo_v1/swe-together-rungs/1",
+  "benchmark": {
+    "name": "swe-together",
+    "repo": "https://github.com/Togetherbench/SWE-Together",
+    "commit": "891d19eb4b3a64a47c3d49bbd066a311e0133254",
+    "subset": "configs/subsets/swe-together.json",
+    "patch": "third_party/patches/swe-together/redo_v1.patch"
+  },
+  "harness": {
+    "agent_type": "opencode",
+    "opencode_version": "1.18.29",
+    "reasoning_effort_flag": "high",
+    "reasoning_note": "opencode --variant=high on @ai-sdk/google sends generationConfig.thinkingConfig={includeThoughts:true, thinkingLevel:'high'}, maxOutputTokens=32000 (verified 2026-09-26 against a logging proxy for all three rung models; no variant also yields thinkingLevel 'high'). The benchmark wrapper's default reasoning_effort is 'high'; kept for every rung (gemini-3.8-flash cannot run with thinking off). opencode also makes one title-generation call per session (thinkingLevel 'low', temperature 0.5) that is not in step_finish accounting.",
+    "agent_timeout_sec": 4800,
+    "user_context_chars": 3000
+  },
+  "seats": {
+    "user_sim": {
+      "model": "gemini/gemini-3.1-pro-preview",
+      "backend": "native",
+      "client": "LiteLLM (host) via harbor.llms.lite_llm, temperature 0.5, tool_choice=required",
+      "reasoning": "provider default (harness sets no reasoning_effort / thinking config)",
+      "max_concurrent_calls_note": "quota ~4 concurrent short calls; patient retry in the local patch"
+    },
+    "tagger": {
+      "model": "gemini/gemini-3.1-pro-preview",
+      "backend": "native",
+      "client": "LiteLLM (host), temperature 0 (eval.user_behavior.tag_messages)",
+      "reasoning": "provider default",
+      "workers": 2
+    },
+    "intent_coverage": {
+      "model": "gemini/gemini-3.1-pro-preview",
+      "backend": "native",
+      "workers": 2
+    },
+    "judge": {
+      "model": null,
+      "status": "dropped",
+      "dropped_on": "2026-09-27",
+      "reason": "OpenAI key has no credit (results/redo_v1/OPENAI_CREDIT_STOP_20260926.json); user decision: Gemini-only seats",
+      "replacement": "final pass = the task's own tests/test.sh reward (the verifier result already in each trial) together with the frozen per-intent judge on the final snapshot (fsa.redo.metrics; configs/intents/swe-together/JUDGE_FREEZE.json). Gate 1 depends on the per-intent judge only. `run judge` passes --skip-correctness; the tagger and intent-coverage seats still run.",
+      "was": {
+        "model": "codex/gpt-5.5",
+        "backend": "codex",
+        "client": "codex exec in a fresh E2B sandbox of the task image (benchmark's JUDGE_VIA_CODEX path)",
+        "codex_cli_version": "0.133.0",
+        "reasoning_effort": "high",
+        "auth": "API-key auth.json (codex login --with-api-key) via SWT_CODEX_AUTH_JSON; never the host ChatGPT OAuth file",
+        "deviation": "official judge is Claude Opus (claude --print); no Anthropic key. Recorded deviation, calibrated in Stage 0 (PLAN.md 5.1, 5.4).",
+        "workers": 3
+      }
+    },
+    "intent_judge": {
+      "model": "gemini-3.5-flash",
+      "reasoning_effort": "high",
+      "backend": "Gemini OpenAI-compatible endpoint (fsa.redo.llm_seats), strict JSON schema, patient retry",
+      "config": "configs/seats/redo_v1_seats.json (judge seat); frozen analysis judge: configs/intents/swe-together/JUDGE_FREEZE.json",
+      "serves": "per-intent judge v2 (analysis), in-trial overlay trigger (fsa.redo.intent_judge, read at trial start), applicability, intent-to-check mapper",
+      "was": "gpt-5.5, effort medium (overlay trigger and v1 judge) until 2026-09-26"
+    }
+  },
+  "rungs": {
+    "W": {
+      "model": "gemini/gemini-3.5-flash-lite",
+      "opencode_model": "google/gemini-3.5-flash-lite",
+      "thinking": "thinkingLevel=high (opencode --variant=high)",
+      "stage0_max_concurrent_trials": 3,
+      "stage1_trial_cap": 8
+    },
+    "M": {
+      "model": "gemini/gemini-3.6-flash",
+      "opencode_model": "google/gemini-3.6-flash",
+      "thinking": "thinkingLevel=high (opencode --variant=high)",
+      "stage0_max_concurrent_trials": 3,
+      "stage1_trial_cap": 4
+    },
+    "S": {
+      "model": "gemini/gemini-3.8-flash",
+      "opencode_model": "google/gemini-3.8-flash",
+      "thinking": "thinkingLevel=high (opencode --variant=high); thinking cannot be disabled on this model",
+      "stage0_max_concurrent_trials": 1,
+      "stage1_trial_cap": 2
+    }
+  },
+  "sandboxes": {
+    "e2b": {
+      "env_type": "e2b",
+      "image": "official amd64 task image from task.toml (ghcr.io/togetherbench/multi-user-turn-codebench/<task>:<tag>) built into an E2B template tb-<task>__<dirhash8>",
+      "sandbox_timeout_sec": 3600,
+      "trial_budget_sec": 3000,
+      "agent_timeout_sec": 3300,
+      "deviation": "E2B account is on the hobby tier (sandbox lifetime <= 1 h, 'Timeout cannot be greater than 1 hours'). Official budget is TRIAL_BUDGET_SEC=5400 (90 min) with agent_timeout 4800; on E2B we run TRIAL_BUDGET_SEC=3000, agent_timeout 3300, sandbox 3600. Stage 0 only; Stage 1 trials run on local docker with the official budget."
+    },
+    "docker_arm64": {
+      "env_type": "docker",
+      "image_template": "bdqnghi/swe-together:{task}",
+      "note": "native arm64 rebuilds from ${SWE_BENCHMARK_ARM_DIR:-../swe_benchmark_arm} (gold-validated per task in swe_together/status.json); the judge still runs on E2B (official image)",
+      "trial_budget_sec": 5400,
+      "agent_timeout_sec": 4800
+    },
+    "docker_amd64": {
+      "env_type": "docker",
+      "note": "x86_64 hosts (x86 replicate, 2026-09-28): the task's official amd64 image from task.toml (ghcr.io/togetherbench/multi-user-turn-codebench/<task>:<tag>), run natively - no rebuild, no template; selected automatically on amd64 hosts (fsa.redo.swe_together.run.sandbox_key). Official budget.",
+      "trial_budget_sec": 5400,
+      "agent_timeout_sec": 4800
+    }
+  },
+  "stage1_caps_note": "Stage 1 starting concurrency from the Stage 0 token measurements (PLAN.md 5.2): W 8, M 4, S 2 concurrent trials; raise to W 16, M 6-8, S 5-6 only after the first batch shows no 429 (pilot --cap W=16,M=7,S=5, or edit stage1_trial_cap). Global container cap: pilot --max-total (14)."
+}

@@ -1,0 +1,140 @@
+{
+  "schema": "redo_v1/swe-interact-rungs/1",
+  "benchmark": {
+    "name": "swe-interact",
+    "repo": "https://github.com/scaleapi/SWE-Interact",
+    "commit": "b32f98c3b8f76ca65e84341d1f30e5af7135f85d",
+    "subset": "configs/subsets/swe-interact.replacements.json",
+    "subset_key": "effective_subset",
+    "arm64_patch": "third_party/patches/swe-interact/arm64.patch",
+    "arm64_patch_sha256": "3780e82bc9da302b01bf4d38a82b068b10734863ce6f9aec94f7855303790c17",
+    "arm64_patch_source": "${SWE_BENCHMARK_ARM_DIR:-../swe_benchmark_arm}/swe_interact/swe-interact-arm64.patch (copied verbatim 2026-09-26)",
+    "amd64_patch": "third_party/patches/swe-interact/amd64.patch",
+    "amd64_patch_sha256": "d0b2e3452518a1ec177b5847cf635916799b6bc9a8aa208eadfa2c57916b5dd8",
+    "amd64_patch_source": "generated from the pin by fsa/redo/swe_interact/amd64.py (`python -m fsa.redo.swe_interact.amd64 patch`, 2026-10-17, A5.13 (1)): task.toml docker_image of the 38 tasks of amd64.patch_tasks() (the 20 Stage-1 subset tasks + the 25 swebenchpro tasks of A5.11; 7 overlap) -> tib/swe-interact-amd64:<task> (tags over 128 characters: task[:119]-<sha256[:8]>)",
+    "amd64_patch_stage1_sha256": "76c5ee5b1b003e16e741f9f13097880b5cbcdc18958634824367aff98d8dee38",
+    "amd64_patch_stage1_source": "the layer-1 file in force 2026-09-28 .. 2026-10-17 (Stage 0/1/2 runs record it): amd64.expected_patch(subset_tasks()), the 20 subset tasks only; still reproduced byte for byte by that call (tests/test_redo_machine.py)",
+    "amd64_images": "built natively once by `python -m fsa.redo.swe_interact.amd64 build` (label tib.recipe_sha256 = sha256 of the recipe Dockerfile; build context = the task's environment/): deepswe and rf tasks = the published docker_image plus the task Dockerfile's instructions from its COPY repo_exec_server.py line on (for rf tasks that is the task Dockerfile verbatim, which starts FROM the published image); swebenchpro tasks = their own Dockerfile verbatim. Why: the benchmark's multi-turn run configs pass --force-build, and the published images lack repo_exec_server.py (the main container's command and health check) and the rf rubric verifier's dependencies, so they cannot start a multi-turn trial as published. rf_task-694b4b99829f00e24fd11889, rf_task-694b4b99829f00e24fd11891 and rf_task-696719205599a51110d4b40c (Debian 11) pin apt away from bullseye-security during their verifier-dependency step only (its pool returned 404 for python3-pip 20.3.4-4+deb11u2 on 2026-09-28; main-pool versions are installed instead; the pin file is removed afterwards). rf_task-694b4b99829f00e24fd11889 and rf_task-696719205599a51110d4b40c (no node/npm in the published image) also get Harbor's opencode system dependencies (curl bash coreutils nodejs npm) at build time, bullseye-security read from snapshot.debian.org at 2026-09-01 (index identical to the live one), because the pool no longer serves any Debian 11 file and the installer's trial-time apt step failed (2026-09-29); likewise swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12 (Debian 11, no node/npm; its sources name security.debian.org), found by auditing all subset images against the installer's check (command -v curl bash stdbuf node npm; the other images failing it are Debian 12, Alpine or Ubuntu 20.04, whose repositories still serve the packages). rf_task-694b4b99829f00e24fd11891 also preloads a Node module (NODE_OPTIONS += --require /opt/tib/node-cpu-quota.js) that makes os.availableParallelism()/os.cpus() report the container's CPU quota (cgroup v2 cpu.max): Node reports the host's CPUs, so on a 64-CPU host Jest started 63 workers for its full-suite verifier in an 8- or 16-CPU, 16 GiB container and swapped (2026-09-29).",
+    "redo_patch": "third_party/patches/swe-interact/redo_v1.patch",
+    "image_status": "${SWE_BENCHMARK_ARM_DIR:-../swe_benchmark_arm}/swe_interact/status.json"
+  },
+  "harbor": {
+    "version": "0.23.0",
+    "venv": "third_party/swe-interact/.venv",
+    "freeze": "third_party/patches/swe-interact/harbor-venv.freeze.txt",
+    "patch": "third_party/patches/swe-interact/harbor-0.23.0-multistep-log-ownership.patch",
+    "patch_sha256": "e8aba6b1f693c07c7514e647cbcc0001c08efcdbe529eadac64c071705e9f8f2",
+    "version_note": "The benchmark commit (2026-06-30) predates harbor 0.17; the README installs harbor from git main. 0.16.1 (the release current at the commit) and 0.23.0 both accept task schema 1.3 with [[steps]], multi_step_reward_strategy and environment.mcp_servers, and both run each step as a fresh agent session (0.23.0: resume_trajectory defaults to false, the published run configs do not set it; 0.16.1 has no resume). 0.23.0 is pinned because the arm64 task tree was validated with it (oracle + 5-step nop trial) and it needs only the one-hunk multistep log-ownership patch on local docker.",
+    "env_type": "docker",
+    "flags": [
+      "--no-force-build",
+      "-e",
+      "docker",
+      "-k",
+      "1",
+      "-n",
+      "1",
+      "--yes"
+    ],
+    "patches": [
+      {
+        "file": "third_party/patches/swe-interact/harbor-0.23.0-multistep-log-ownership.patch",
+        "why": "swe_benchmark_arm: chown logs before each step's outputs are archived (local docker, multi-step)"
+      },
+      {
+        "file": "third_party/patches/swe-interact/harbor-0.23.0-redo-v1.patch",
+        "why": "(1) reward.json {'reward': 0.0, 'error': '...'} from the final step's write_failure() is scored 0 instead of raising VerifierOutputParseError (Non-numeric reward) and failing the trial; (2) the stop-after-failed-step path also hands log ownership back before moving the agent dir (PermissionError in cleanup_empty_mount_dirs otherwise), and cleanup_empty_mount_dirs() catches PermissionError if a timed-out earlier step's lingering opencode process creates a root-owned git snapshot dir between prepare_logs_for_host() and docker compose down. (1)-(2a) seen on S_plumbing in Stage 0; (2b) seen on deepswe_returns-validated-error-accumulation S/stock/natural_r1 a1 (2026-09-29)."
+      }
+    ]
+  },
+  "harness": {
+    "agent_import_path": "fsa.redo.swe_interact.agent:RedoOpenCode",
+    "agent_base": "harbor.agents.installed.opencode:OpenCode (harbor 0.23.0)",
+    "opencode_version": "1.18.29",
+    "variant": "high",
+    "reasoning_note": "opencode --variant=high on @ai-sdk/google sends thinkingConfig {includeThoughts: true, thinkingLevel: 'high'} (verified for all three rung models against a logging proxy for SWE-Together, same opencode version); the published gemini-3p5-flash-high_opencode.sh passes no variant, which yields thinkingLevel 'high' too. The official config installs opencode@latest; pinned here to the SWE-Together version.",
+    "throttle_note": "RedoOpenCode re-issues a step attempt that only produced Gemini backpressure errors and resumes (opencode run --session, 'continue' message) a step interrupted by one, including the mid-stream 503 that surfaces as HTTP 400 'Requests ending with a model turn are not supported'; backoff 15..300 s; at most 8 consecutive retries of attempts that completed fewer than 5 model calls (an attempt with >= 5 resets the count; Stage 0 M/S ran with the first rule, 8 retries per step). Same markers and message as the SWE-Together wrapper."
+  },
+  "seats": {
+    "user_sim": {
+      "model": "gemini-3.1-pro-preview",
+      "env": {
+        "SIM_USER_MODEL": "gemini-3.1-pro-preview",
+        "LITELLM_BASE_URL": "https://generativelanguage.googleapis.com/v1beta/openai#",
+        "LITELLM_API_KEY": "$GEMINI_API_KEY"
+      },
+      "backend": "Gemini's OpenAI-compatible endpoint, called by the unchanged sidecar (LiteLLM provider openai/, the sidecar prefixes the model with 'openai/' and appends '/v1' to LITELLM_BASE_URL; the trailing '#' turns that '/v1' into a URL fragment, which the OpenAI client never sends, so requests go to .../v1beta/openai/chat/completions). No clone change. Verified 2026-09-27 with litellm 1.90.1: multi-round tool calls work; Gemini's thought signatures ride in tool_calls[].extra_content, which the sidecar's model_dump keeps and sends back.",
+      "client": "user-server sidecar (litellm==1.90.1, fastmcp==3.4.2 pinned), reasoning_effort=high (-> thinkingLevel high), max_tokens=32768, up to 6 private repo-inspection tool rounds per reply",
+      "patient_retry": "SWI_SIM_RETRY=1 (local patch): 10..300 s backoff, 9 retries on throttling/transient errors, before the upstream plain-completion fallback / last-resort reply",
+      "deviation": "2026-09-27 (Gemini-only seats): official SIM_USER_MODEL is gpt-5.5 (OpenAI); the OpenAI key has no credit. gemini-3.1-pro-preview is SWE-Together's official simulator, so both benchmarks now share one simulator model. Its per-minute quota is small (429 at ~4 concurrent short calls) and is shared with the SWE-Together simulator: expect sidecar retries; keep total concurrent simulator calls of both pilots low.",
+      "was": {
+        "model": "openai/gpt-5.5",
+        "LITELLM_BASE_URL": "https://api.openai.com",
+        "LITELLM_API_KEY": "$OPENAI_API_KEY",
+        "until": "2026-09-26"
+      }
+    },
+    "rubric_grader": {
+      "model": "gemini-3.5-flash",
+      "env": {
+        "EVAL_MODEL": "gemini-3.5-flash",
+        "OPENAI_API_BASE": "https://generativelanguage.googleapis.com/v1beta/openai/",
+        "OPENAI_API_KEY": "$GEMINI_API_KEY",
+        "EVAL_MAX_COMPLETION_TOKENS": "16384",
+        "EVAL_REASONING_EFFORT": "high"
+      },
+      "backend": "Gemini's OpenAI-compatible endpoint from inside the task container (evaluate_rubrics.py, openai SDK in /opt/venv); task.toml maps EVAL_API_KEY=${OPENAI_API_KEY}, EVAL_BASE_URL=${OPENAI_API_BASE}, so the runner sets OPENAI_API_KEY to the Gemini key in Harbor's environment (no OpenAI key is passed anywhere)",
+      "deviation": "official grader is anthropic/claude-opus-4-5-20251101 through a LiteLLM gateway; no Anthropic key. Until 2026-09-26 substituted by gpt-5.5; since 2026-09-27 (Gemini-only seats) by gemini-3.5-flash (the judge seat, not an agent rung). The local patch sends max_completion_tokens=16384 and reasoning_effort=high (upstream sends max_tokens=2048). Applies to the 7 rf_* subset tasks only.",
+      "was": {
+        "EVAL_MODEL": "gpt-5.5",
+        "OPENAI_API_BASE": "https://api.openai.com/v1",
+        "until": "2026-09-26"
+      }
+    }
+  },
+  "rungs": {
+    "W": {
+      "model": "google/gemini-3.5-flash-lite",
+      "litellm_model": "gemini/gemini-3.5-flash-lite",
+      "thinking": "thinkingLevel=high (opencode --variant=high)",
+      "stage0_max_concurrent_trials": 3,
+      "stage1_trial_cap": 6,
+      "stage1_trial_cap_after_swt": 8
+    },
+    "F": {
+      "model": "google/gemini-3.5-flash",
+      "litellm_model": "gemini/gemini-3.5-flash",
+      "thinking": "thinkingLevel=high (opencode --variant=high)",
+      "stage0_max_concurrent_trials": 2,
+      "stage1_trial_cap": 3,
+      "stage1_trial_cap_after_swt": 4
+    },
+    "M": {
+      "model": "google/gemini-3.6-flash",
+      "litellm_model": "gemini/gemini-3.6-flash",
+      "thinking": "thinkingLevel=high (opencode --variant=high)",
+      "stage0_max_concurrent_trials": 1,
+      "stage1_trial_cap": 1,
+      "stage1_trial_cap_after_swt": 4
+    },
+    "S": {
+      "model": "google/gemini-3.8-flash",
+      "litellm_model": "gemini/gemini-3.8-flash",
+      "thinking": "thinkingLevel=high (opencode --variant=high); thinking cannot be disabled on this model",
+      "stage0_max_concurrent_trials": 1,
+      "stage1_trial_cap": 1,
+      "stage1_trial_cap_after_swt": 2
+    },
+    "G": {
+      "model": "google/gemini-4.0-argon",
+      "litellm_model": "gemini/gemini-4.0-argon",
+      "variant": "low",
+      "thinking": "thinkingLevel=low (opencode --variant=low): 'high' exceeded 180 s on a one-line prompt and the harness has 1800 s per-exec caps",
+      "exploratory": "Exploratory frontier rung (Gemini 4.0 Argon).",
+      "stage0_max_concurrent_trials": 1,
+      "stage1_trial_cap": 2,
+      "stage1_trial_cap_after_swt": 2
+    }
+  },
+  "stage1_caps_note": "stage1_trial_cap: Stage 0 recommendation while the SWE-Together pilot shares the Gemini key (W 6, M 1, S 1); stage1_trial_cap_after_swt: once it has finished (W 8, M 4, S 2), pass --cap W=8,M=4,S=2; raise further only if a batch shows no 429. rf_* tasks: at most 2 concurrent (16 CPU / 16 GB each; pilot --max-rf)."
+}

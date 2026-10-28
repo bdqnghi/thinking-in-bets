@@ -1,0 +1,263 @@
+{
+ "benchmark": "swe-together",
+ "source_commit": "891d19eb4b3a64a47c3d49bbd066a311e0133254",
+ "seed": 20260926,
+ "size": 20,
+ "population": 109,
+ "strata": "category x intent-count bucket",
+ "replacement_rule": "a selected task is replaced only for an infrastructure reason recorded before any result (e.g. arm64 image fails gold validation), by the next task in its stratum's replacement list",
+ "selected": [
+  {
+   "task": "cli-task-2026-0",
+   "category": "bugfix",
+   "n_intents": 1,
+   "stratum": "bugfix/1-2"
+  },
+  {
+   "task": "cli-task-cd4662",
+   "category": "bugfix",
+   "n_intents": 2,
+   "stratum": "bugfix/1-2"
+  },
+  {
+   "task": "gemini-voyager-task-f519c2",
+   "category": "bugfix",
+   "n_intents": 2,
+   "stratum": "bugfix/1-2"
+  },
+  {
+   "task": "hyperswitch-8389",
+   "category": "bugfix",
+   "n_intents": 0,
+   "stratum": "bugfix/1-2"
+  },
+  {
+   "task": "dataclaw-windows-path-fix",
+   "category": "bugfix",
+   "n_intents": 3,
+   "stratum": "bugfix/3-4"
+  },
+  {
+   "task": "gemini-voyager-task-aa88f5",
+   "category": "bugfix",
+   "n_intents": 3,
+   "stratum": "bugfix/3-4"
+  },
+  {
+   "task": "cli-task-33e050",
+   "category": "bugfix",
+   "n_intents": 8,
+   "stratum": "bugfix/5+"
+  },
+  {
+   "task": "cli-task-408b8c",
+   "category": "bugfix",
+   "n_intents": 8,
+   "stratum": "bugfix/5+"
+  },
+  {
+   "task": "cli-task-4a9dde",
+   "category": "bugfix",
+   "n_intents": 23,
+   "stratum": "bugfix/5+"
+  },
+  {
+   "task": "cli-task-5a69ca",
+   "category": "bugfix",
+   "n_intents": 7,
+   "stratum": "bugfix/5+"
+  },
+  {
+   "task": "cli-task-c425e4",
+   "category": "bugfix",
+   "n_intents": 6,
+   "stratum": "bugfix/5+"
+  },
+  {
+   "task": "lock-code-manager-fix-7c955a",
+   "category": "bugfix",
+   "n_intents": 27,
+   "stratum": "bugfix/5+"
+  },
+  {
+   "task": "sd-scripts-reg-image-dedup",
+   "category": "bugfix",
+   "n_intents": 7,
+   "stratum": "bugfix/5+"
+  },
+  {
+   "task": "cli-task-b12319",
+   "category": "feature",
+   "n_intents": 1,
+   "stratum": "feature/1-2"
+  },
+  {
+   "task": "gemini-voyager-task-4bddaf",
+   "category": "feature",
+   "n_intents": 4,
+   "stratum": "feature/3-4"
+  },
+  {
+   "task": "desloppify-zone-classification",
+   "category": "feature",
+   "n_intents": 18,
+   "stratum": "feature/5+"
+  },
+  {
+   "task": "pi-mono-auto-d3b2130d",
+   "category": "feature",
+   "n_intents": 6,
+   "stratum": "feature/5+"
+  },
+  {
+   "task": "sd-scripts-fp8-lumina",
+   "category": "feature",
+   "n_intents": 7,
+   "stratum": "feature/5+"
+  },
+  {
+   "task": "vibecomfy-mcp-pr-integration",
+   "category": "feature",
+   "n_intents": 42,
+   "stratum": "feature/5+"
+  },
+  {
+   "task": "pi-mono-extensions-event-refactor",
+   "category": "refactor",
+   "n_intents": 17,
+   "stratum": "refactor/5+"
+  }
+ ],
+ "allocation": {
+  "bugfix/1-2": 4,
+  "bugfix/3-4": 2,
+  "bugfix/5+": 7,
+  "feature/1-2": 1,
+  "feature/3-4": 1,
+  "feature/5+": 4,
+  "refactor/1-2": 0,
+  "refactor/3-4": 0,
+  "refactor/5+": 1
+ },
+ "stratum_sizes": {
+  "bugfix/1-2": 20,
+  "bugfix/3-4": 9,
+  "bugfix/5+": 40,
+  "feature/1-2": 6,
+  "feature/3-4": 4,
+  "feature/5+": 20,
+  "refactor/1-2": 1,
+  "refactor/3-4": 2,
+  "refactor/5+": 7
+ },
+ "replacements": {
+  "bugfix/1-2": [
+   "no-magic-task-ce67d5",
+   "hyperswitch-8084",
+   "gemini-voyager-task-64c72f",
+   "triton-msvc-c4267-warnings",
+   "gemini-voyager-task-4a5730",
+   "cli-task-c4c7e9",
+   "cli-task-19def0",
+   "comfyui-gemma3-sliding-window",
+   "hyperswitch-8377",
+   "rudel-task-491983",
+   "cli-task-2f5833",
+   "hyperswitch-9430",
+   "comfyui-lumina2-lora-prefix",
+   "hyperswitch-9063",
+   "hyperswitch-8008",
+   "cli-task-577e8c"
+  ],
+  "bugfix/3-4": [
+   "cli-task-70c88c",
+   "rudel-task-d1ddb8",
+   "comfyui-lumina-axes-lens",
+   "reigh-preset-data-flow",
+   "comfyui-triton-windows-amd-fix",
+   "nunchaku-quantize-bugfix",
+   "sd-scripts-multiresolution-compat"
+  ],
+  "bugfix/5+": [
+   "pi-mono-auto-0467b78e",
+   "pi-mono-tool-execution-write-error",
+   "agent-swarm-task-ea4bd8",
+   "pi-mono-auto-a4fca584",
+   "pi-mono-auto-4439324b",
+   "pi-mono-auto-ec7037ba",
+   "pi-mono-auto-95de1efe",
+   "pi-mono-auto-e86a388c",
+   "cli-task-c01017",
+   "gemini-voyager-task-16a5c7",
+   "pi-mono-auto-90748a5d",
+   "pi-mono-parallel-tool-stall",
+   "pi-mono-auto-d8c68afc",
+   "cli-fix-2026-0",
+   "cli-task-30159a",
+   "pi-mono-auto-1b58dd4f",
+   "reigh-taskspane-lightbox-bug",
+   "pi-mono-auto-6f8288bb",
+   "cli-task-aa4038",
+   "cli-task-2a55af",
+   "cli-task-ea3f8f",
+   "cli-task-0ec2e9",
+   "pi-mono-auto-0750e8eb",
+   "cli-task-b3d2dd",
+   "pi-mono-auto-fcb17499",
+   "pi-mono-auto-cad40af4",
+   "pi-mono-auto-41636ae5",
+   "cli-task-726de6",
+   "cli-task-2c3e30",
+   "amytis-task-e3714e",
+   "cli-task-cf32cb",
+   "pi-mono-foreign-toolcall-fix",
+   "pi-mono-auto-0fa6d7bd"
+  ],
+  "feature/1-2": [
+   "hyperswitch-9465",
+   "hyperswitch-9437",
+   "rudel-task-468289",
+   "comfyui-jina-clip-v2-full",
+   "pi-mono-keybinding-scope"
+  ],
+  "feature/3-4": [
+   "gemini-voyager-task-72a86c",
+   "agent-swarm-task-4a881b",
+   "nunchaku-svdq-reconstruction"
+  ],
+  "feature/5+": [
+   "pi-mono-auto-93c17d3b",
+   "dataclaw-anonymizer-tests",
+   "dataclaw-test-coverage-fix",
+   "arr-monitor-add-processes-flag",
+   "mlx-lm-mambacache",
+   "openclaw-security-review-flow",
+   "unsloth-idefics3-finetune",
+   "sd-scripts-sdxl-multires-dedup",
+   "reigh-timeline-multiselect",
+   "light-protocol-implement-7adad1",
+   "gemini-voyager-task-c5c01d",
+   "rudel-task-8e0bd6",
+   "qwen3-moe-gguf-dequant",
+   "desloppify-treesitter-plugins",
+   "pi-mono-auto-cbb62cbe",
+   "banodoco-video-perf-optimize"
+  ],
+  "refactor/1-2": [
+   "hyperswitch-8338"
+  ],
+  "refactor/3-4": [
+   "cli-task-dbd2bf",
+   "cli-task-32ba47"
+  ],
+  "refactor/5+": [
+   "reigh-medialightbox-refactor",
+   "comfyui-newbie-lumina-refactor",
+   "reigh-stroke-overlay-refactor",
+   "reigh-timeline-mode-cleanup",
+   "cli-task-e5813e",
+   "reigh-radix-props-cleanup"
+  ]
+ },
+ "digest": "c9ada9db754bbf27710a59a347fb678d073336ef19f787f566ac0fde3d539eca"
+}

